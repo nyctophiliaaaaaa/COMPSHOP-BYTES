@@ -58,12 +58,7 @@ const handleLogin = () => {
           <span class="asterisk">*</span>
         </div>
         <div class="links">
-          <template v-if="isStaffMode">
-            <a href="#">Staff Recovery</a>
-          </template>
-          <template v-else>
-            <router-link to="/sign-up">Create Account</router-link>
-          </template>
+          <router-link to="/signup">{{ isStaffMode ? 'Staff Recovery' : 'Create Account' }}</router-link>
           <router-link to="/forgot-password">Forgot password?</router-link>
         </div>
         <button type="submit" class="login-btn">
@@ -141,7 +136,6 @@ input::placeholder { color: #bbb; }
   font-size: 1.2rem;
   pointer-events: none;
 }
-/* Eye Button Styles */
 .eye-btn {
   position: absolute;
   right: 40px;
@@ -156,15 +150,13 @@ input::placeholder { color: #bbb; }
   justify-content: center;
   font-size: 1.3rem; 
 }
-/* Slashed Eye Custom CSS */
 .slashed-eye {
     position: relative;
     display: inline-block;
 }
-/* FIXED SLASH SIZE */
 .slash {
     position: absolute;
-    width: 100%; /* Reduced from 120% to fit */
+    width: 100%; 
     height: 2px;
     background-color: #555;
     top: 50%;

@@ -48,7 +48,6 @@ const handleSignUp = () => {
             v-model="credentials.email" 
             type="email" 
             placeholder="Enter your email" 
-            required极速赛车群里的计划是真的吗
             required
           />
           <span class="asterisk">*</span>
@@ -141,13 +140,11 @@ h1 {
   margin-bottom: 1.5rem;
   position: relative;
 }
-.password-group input极速赛车群里的计划是真的吗
 .password-group input {
   padding-right: 50px;
 }
 input {
   width: 100%;
-  padding: 1rem 1.2rem;
   padding: 1rem 1.2rem;
   border: none;
   border-radius: 12px;

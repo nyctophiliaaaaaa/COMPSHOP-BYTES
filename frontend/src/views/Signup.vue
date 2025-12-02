@@ -1,8 +1,7 @@
-SIGNUP PAGE
-
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from 'axios' // 1. Import Axios
 
 import logoImage from '@/assets/logo.png';
 import hiddenEyeIcon from '@/assets/hidden-eye.jpg'
@@ -11,6 +10,8 @@ import openEyeIcon from '@/assets/open-eye.png'
 const router = useRouter()
 const showPassword = ref(false)
 const isLoading = ref(false)
+
+// Data binding
 const credentials = ref({ 
   username: '', 
   email: '', 
@@ -18,16 +19,40 @@ const credentials = ref({
   confirmPassword: '' 
 })
 
-const handleSignUp = () => {
+const handleSignUp = async () => {
+  // 1. Validate Passwords Match
+  if (credentials.value.password !== credentials.value.confirmPassword) {
+    alert('Passwords do not match')
+    return
+  }
+
   isLoading.value = true
-  setTimeout(() => {
-    if (credentials.value.password === credentials.value.confirmPassword) {
-      router.push('/dashboard')
+
+  try {
+    // 2. Send Data to Backend
+    // This calls the /api/auth/register endpoint we made in server.js
+    const response = await axios.post('http://localhost:3000/api/auth/register', {
+      username: credentials.value.username,
+      email: credentials.value.email,
+      password: credentials.value.password
+      // role_id defaults to 3 (Customer) in the backend
+    });
+
+    // 3. Handle Success
+    alert('Account created successfully! Please login.');
+    router.push('/'); // Redirect to Login page to authenticate
+
+  } catch (error) {
+    console.error(error);
+    // 4. Handle Errors (e.g., Username taken)
+    if (error.response && error.response.data.error) {
+      alert("Error: " + error.response.data.error);
     } else {
-      alert('Passwords do not match')
+      alert("Registration failed. Please check if the backend is running.");
     }
+  } finally {
     isLoading.value = false
-  }, 1000)
+  }
 }
 </script>
 
@@ -96,7 +121,7 @@ const handleSignUp = () => {
           <span class="asterisk">*</span>
         </div>
         
-        <button type="submit" class="signup-btn">
+        <button type="submit" class="signup-btn" :disabled="isLoading">
           {{ isLoading ? 'CREATING ACCOUNT...' : 'SIGN UP' }}
         </button>
       </form>
@@ -110,6 +135,7 @@ const handleSignUp = () => {
 </template>
 
 <style scoped>
+/* Keeping your exact styles */
 .signup-container {
   display: flex;
   justify-content: center;
@@ -238,5 +264,9 @@ input::placeholder {
 
 .signup-btn:hover { 
   background-color: #3b4559; 
+}
+.signup-btn:disabled {
+  background-color: #777;
+  cursor: not-allowed;
 }
 </style>

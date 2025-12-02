@@ -1,73 +1,82 @@
 <script setup>
-
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
 
+// Import static UI assets (Icons only)
 import categoriesIcon from '@/assets/categories-icon.jpg';
 import appLogo from '@/assets/logo.png';
 import searchMagnifyIcon from '@/assets/search.jpg';
-
 import nextIcon from '@/assets/nextarrow.png';
 import backIcon from '@/assets/backarrow.png';
-
-import pancitCantonImage from '@/assets/canton-chilimansi.png';
-import cantonCalamansiImage from '@/assets/canton-calamansi.png';
-import cantonSweetSpicyImage from '@/assets/canton-sweetnspicy.png';
-import buldakCarbonaraImage from '@/assets/buldak-carbonara.png';
-import buldak2xImage from '@/assets/buldak-2X.png';
-import buldakCheeseImage from '@/assets/buldak-cheese.png';
-import shinRamyunImage from '@/assets/shin-ramyun.png';
-import jinRamenImage from '@/assets/jin-ramen.png';
-import buldakRoseImage from '@/assets/buldak-rose.png';
-
-import tapsilogImage from '@/assets/tapsilog.png';
-import chickenImage from '@/assets/chicken.png';
-import sisigImage from '@/assets/sisig.png';
-import burgersteakImage from '@/assets/burgersteak.png';
-
-import cokeImage from '@/assets/coke.png';
-import dewImage from '@/assets/dew.png';
-import royalImage from '@/assets/royal.png';
-import waterImage from '@/assets/water.png';
-import nesteaImage from '@/assets/nestea.png';
 
 const router = useRouter();
 const searchQuery = ref('');
 const selectedCategory = ref('All Items');
 const sortBy = ref('Popular');
 const currentPage = ref(1);
-const stationName = ref('Station --');
+const stationName = ref('Guest'); // Default value
 const itemsPerPage = 14;
 
+// 1. Define Categories
 const categories = ['All Items', 'Instant Noodles', 'Meals', 'Beverages'];
 
-onMounted(() => {
-  const randomStation = Math.floor(Math.random() * 50) + 1;
-  stationName.value = `Station ${randomStation}`;
+// 2. State for Products
+const products = ref([]);
+const isLoading = ref(true);
+
+// 3. Helper to Map Database ID (1,2,3) to Category Names
+const categoryMap = {
+  1: 'Meals',
+  2: 'Instant Noodles',
+  3: 'Beverages'
+};
+
+onMounted(async () => {
+  // --- NEW LOGIC: GET USERNAME ---
+  // We get the name saved during the Login process
+  const currentUser = localStorage.getItem('username');
+  
+  if (currentUser) {
+    stationName.value = `Hi, ${currentUser}`;
+  } else {
+    stationName.value = 'Guest';
+  }
+  // -------------------------------
+
+  // 4. FETCH DATA FROM API
+  try {
+    const response = await axios.get('http://localhost:3000/api/menu');
+    
+    // Transform the data to match your frontend structure
+    products.value = response.data.map(item => ({
+      id: item.item_id,                
+      name: item.name,
+      price: item.price,
+      image_url: item.image_url,       
+      // Convert ID 1 -> 'Meals' so filters work
+      category: categoryMap[item.category_id] || 'Other' 
+    }));
+
+  } catch (error) {
+    console.error("Error fetching menu:", error);
+    // Optional: alert("Could not load menu. Is the backend running?");
+  } finally {
+    isLoading.value = false;
+  }
 });
 
-const products = ref([
-  { id: 1, name: 'Tapsilog', price: 60, category: 'Meals', image: tapsilogImage },
-  { id: 11, name: 'Fried Chicken w/ Rice', price: 85, category: 'Meals', image: chickenImage },
-  { id: 12, name: 'Pork Sisig w/ Rice', price: 90, category: 'Meals', image: sisigImage },  
-  { id: 13, name: 'Burger Steak', price: 75, category: 'Meals', image: burgersteakImage },         
+// 5. Logout Function
+const handleLogout = () => {
+  if(confirm("Are you sure you want to logout?")) {
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('username');
+    router.push('/');
+  }
+};
 
-  { id: 2, name: 'Pancit Canton - Chilimansi', price: 25, category: 'Instant Noodles', image: pancitCantonImage },
-  { id: 3, name: 'Pancit Canton - Calamansi', price: 25, category: 'Instant Noodles', image: cantonCalamansiImage },
-  { id: 4, name: 'Pancit Canton - Sweet & Spicy', price: 25, category: 'Instant Noodles', image: cantonSweetSpicyImage },
-  { id: 5, name: 'Buldak Carbonara', price: 65, category: 'Instant Noodles', image: buldakCarbonaraImage },
-  { id: 6, name: 'Buldak 2X Spicy', price: 65, category: 'Instant Noodles', image: buldak2xImage },
-  { id: 7, name: 'Buldak Cheese', price: 65, category: 'Instant Noodles', image: buldakCheeseImage },
-  { id: 8, name: 'Shin Ramyun', price: 55, category: 'Instant Noodles', image: shinRamyunImage },
-  { id: 9, name: 'Jin Ramen', price: 50, category: 'Instant Noodles', image: jinRamenImage },
-  { id: 10, name: 'Buldak Rose', price: 65, category: 'Instant Noodles', image: buldakRoseImage },
-
-  { id: 14, name: 'Coke', price: 25, category: 'Beverages', image: cokeImage },    
-  { id: 15, name: 'Mountain Dew', price: 25, category: 'Beverages', image: dewImage },    
-  { id: 16, name: 'Royal', price: 25, category: 'Beverages', image: royalImage },            
-  { id: 17, name: 'Bottled Water', price: 20, category: 'Beverages', image: waterImage },    
-  { id: 18, name: 'Nestea', price: 25, category: 'Beverages', image: nesteaImage },        
-]);
+// --- FILTERING & PAGINATION LOGIC ---
 
 const filteredProducts = computed(() => {
   let items = products.value.filter(p => {
@@ -118,10 +127,14 @@ watch([searchQuery, selectedCategory], () => {
 const addToCart = (item) => {
   let cart = JSON.parse(localStorage.getItem('myCart')) || [];
   const existingItem = cart.find(i => i.id === item.id);
+  
+  // Use a fallback image if image_url is missing
+  const itemImage = item.image_url ? `/images/${item.image_url}` : null;
+
   if (existingItem) {
     existingItem.quantity++;
   } else {
-    cart.push({ ...item, quantity: 1 });
+    cart.push({ ...item, image: itemImage, quantity: 1 });
   }
   localStorage.setItem('myCart', JSON.stringify(cart));
   alert(`${item.name} added to cart!`);
@@ -130,8 +143,8 @@ const addToCart = (item) => {
 const goToCart = () => {
   router.push('/cart');
 };
-
 </script>
+
 <template>
   <div class="compshop-container">
     <header class="top-bar">
@@ -141,15 +154,22 @@ const goToCart = () => {
       </div>
       <div class="user-actions">
         <span class="station-id">{{ stationName }}</span>
-        <button class="icon-btn" @click="goToCart">
+        
+        <button class="icon-btn" @click="goToCart" title="Cart">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
         </button>
 
-        <button class="icon-btn">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <button class="icon-btn logout-btn" @click="handleLogout" title="Logout">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
         </button>
+
       </div>
     </header>
+    
     <nav class="filter-bar">
       <div class="categories">
         <span class="cat-label">
@@ -171,9 +191,10 @@ const goToCart = () => {
         <img :src="searchMagnifyIcon" alt="Search" class="search-icon-img" />
       </div>
     </nav>
+    
     <main class="content-area">
       <div class="content-header">
-        <h2>All Items</h2>
+        <h2>{{ selectedCategory }}</h2>
         <div class="sort-wrapper">
           <label>Sort by:</label>
           <select v-model="sortBy">
@@ -184,10 +205,18 @@ const goToCart = () => {
         </div>
       </div>
 
-      <div class="product-grid">
+      <div v-if="isLoading" class="loading-state">
+        Loading Menu...
+      </div>
+
+      <div v-else class="product-grid">
         <div v-for="item in paginatedProducts" :key="item.id" class="product-card">
           <div class="image-container">
-            <img :src="item.image" :alt="item.name" />
+            <img 
+              :src="`/images/${item.image_url}`" 
+              :alt="item.name" 
+              @error="$event.target.src = '/images/placeholder.png'" 
+            />
           </div>
           <div class="card-details">
             <h3 class="product-name">{{ item.name }}</h3>
@@ -230,7 +259,6 @@ const goToCart = () => {
   </div>
 </template>
 
-
 <style scoped>
 .compshop-container {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -255,7 +283,7 @@ const goToCart = () => {
 .logo {
   display: flex;        
   align-items: center;
-  gap: 8px;            
+  gap: 8px;             
   font-size: 1.2rem;
   font-weight: 700;
   color: #2c3e50;
@@ -283,7 +311,21 @@ const goToCart = () => {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 2px;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.icon-btn:hover {
+  background-color: #f0f0f0;
+}
+
+/* Logout specific */
+.logout-btn {
+  color: #d9534f;
+}
+.logout-btn:hover {
+  background-color: #ffe6e6;
 }
 
 .filter-bar {
@@ -388,6 +430,13 @@ const goToCart = () => {
   margin-bottom: 1rem;
 }
 
+.loading-state {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+  color: #666;
+}
+
 .product-card {
   border: 1px solid #eee;
   border-radius: 8px;
@@ -470,7 +519,7 @@ const goToCart = () => {
   justify-content: center;
   gap: 15px;
   align-items: center;
-  margin-top: 2rem;    
+  margin-top: 2rem;     
 }
 
 .page-nav {
@@ -501,5 +550,4 @@ const goToCart = () => {
   height: 16px;
   width: auto;
 }
-
 </style>

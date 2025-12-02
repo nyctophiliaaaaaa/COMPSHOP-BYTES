@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from 'axios' // 1. Import Axios
 
 import logoImage from '@/assets/logo.png';
 import hiddenEyeIcon from '@/assets/hidden-eye.jpg'
@@ -17,27 +18,43 @@ const toggleMode = () => {
   credentials.value = { username: '', password: '' }
 }
 
-const handleLogin = () => {
+const handleLogin = async () => {
   isLoading.value = true
   
-  setTimeout(() => {
-    if (credentials.value.password === 'password') {
-      
-      if (isStaffMode.value) {
-        localStorage.setItem('userRole', 'staff');
-        router.push({ name: 'staff-dashboard' }); 
+  try {
+    // 2. Call your Node.js + Supabase API
+    const response = await axios.post('http://localhost:3000/api/auth/login', {
+      username: credentials.value.username,
+      password: credentials.value.password
+    });
 
-      } else {
-        localStorage.setItem('userRole', 'customer');
-        router.push({ name: 'dashboard' }); 
-      }
+    // 3. Extract data from backend response
+    const { user, message } = response.data;
+    const role = user.role; // 'Admin', 'Staff', or 'Customer'
 
+    // 4. Save session data
+    localStorage.setItem('userRole', role);
+    localStorage.setItem('userId', user.id);
+    localStorage.setItem('username', user.username);
+
+    // 5. Redirect based on Database Role
+    if (role === 'Admin' || role === 'Staff') {
+      router.push({ name: 'staff-dashboard' }); 
     } else {
-      alert('Invalid password (try "password")')
+      router.push({ name: 'dashboard' }); // Customer goes to Menu
     }
-    
+
+  } catch (error) {
+    // Handle Errors (Wrong password, etc.)
+    if (error.response && error.response.status === 401) {
+      alert('Invalid username or password.');
+    } else {
+      console.error(error);
+      alert('Server error. Is the backend running?');
+    }
+  } finally {
     isLoading.value = false
-  }, 1000)
+  }
 }
 </script>
 
@@ -56,7 +73,7 @@ const handleLogin = () => {
           <input 
             v-model="credentials.username" 
             type="text" 
-            :placeholder="isStaffMode ? 'Enter Staff ID' : 'Enter your username or email'" 
+            :placeholder="isStaffMode ? 'Enter Staff Username' : 'Enter your username'" 
             required
           />
           <span class="asterisk">*</span>
@@ -84,7 +101,7 @@ const handleLogin = () => {
           <router-link to="/forgot-password">Forgot password?</router-link>
         </div>
 
-        <button type="submit" class="login-btn">
+        <button type="submit" class="login-btn" :disabled="isLoading">
           {{ isLoading ? 'LOGGING IN...' : 'LOGIN' }}
         </button>
 
@@ -102,6 +119,7 @@ const handleLogin = () => {
 </template>
 
 <style scoped>
+/* Your CSS remains exactly the same */
 .login-container {
   display: flex;
   justify-content: center;
@@ -222,6 +240,11 @@ input::placeholder { color: #bbb; }
 
 .login-btn:hover { 
   background-color: #3b4559; 
+}
+
+.login-btn:disabled {
+  background-color: #999;
+  cursor: not-allowed;
 }
 
 .footer p {

@@ -27,24 +27,28 @@ router.beforeEach((to, from, next) => {
   const userRole = localStorage.getItem('userRole'); 
   const publicPages = ['login', 'signup', 'forgot-password', 'enter-code', 'set-new-password'];
   
-  if (publicPages.includes(to.name)) {
-    if (userRole === 'staff') {
+  // 1. If user is logged in and tries to go to a public page (Login), redirect them back
+  if (publicPages.includes(to.name) && userRole) {
+    if (userRole === 'Staff' || userRole === 'Admin') {
       return next({ name: 'staff-dashboard' });
-    } else if (userRole === 'customer') {
+    } else if (userRole === 'Customer') {
       return next({ name: 'dashboard' }); 
     }
-    return next(); 
   }
 
-  if (!userRole) {
+  // 2. If user is NOT logged in and tries to go to a protected page
+  if (!publicPages.includes(to.name) && !userRole) {
     return next({ name: 'login' });
   }
 
-  if (to.name === 'dashboard' && userRole === 'staff') {
+  // 3. Role-based Security
+  // If a Staff/Admin tries to go to Customer Menu
+  if (to.name === 'dashboard' && (userRole === 'Staff' || userRole === 'Admin')) {
     return next({ name: 'staff-dashboard' });
   }
 
-  if (to.name === 'staff-dashboard' && userRole !== 'staff') {
+  // If a Customer tries to go to Staff Dashboard
+  if (to.name === 'staff-dashboard' && userRole === 'Customer') {
     return next({ name: 'dashboard' });
   }
 

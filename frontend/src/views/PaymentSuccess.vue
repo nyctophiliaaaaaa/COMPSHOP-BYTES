@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import HeaderBar from '@/components/HeaderBar.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -31,13 +32,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="success-container">
-    <div class="navbar">
-        <div class="brand">🥡 CompShop Bytes</div>
-        <div class="nav-right">Station A12 🛒 👤</div>
-    </div>
-    
-    <div class="card">
+    <HeaderBar />
       <div class="check-circle">✔</div>
       
       <h2 v-if="isCod">Order Placed Successfully!</h2>

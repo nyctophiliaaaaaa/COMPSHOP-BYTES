@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import HeaderBar from '@/components/HeaderBar.vue'
 
 const router = useRouter()
 
@@ -78,10 +79,7 @@ const goBackToCart = () => {
 
 <template>
   <div class="checkout-container">
-    <div class="navbar">
-        <div class="brand">🥡 CompShop Bytes</div>
-        <div class="nav-right">Station {{ form.stationNumber || '...' }} 🛒 👤</div>
-    </div>
+      <HeaderBar />
 
     <!-- MOVED BACK BUTTON HERE (Small & Upper Left) -->
     <div class="back-btn-wrapper">
@@ -197,6 +195,9 @@ const goBackToCart = () => {
   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 .brand { font-weight: 700; font-size: 1.2rem; color: #2d3446; }
+
+/* Header styles copied from MenuPage for consistency */
+/* header styles are provided by the shared HeaderBar component */
 
 /* SMALL TOP BACK BUTTON STYLE */
 .back-btn-wrapper {

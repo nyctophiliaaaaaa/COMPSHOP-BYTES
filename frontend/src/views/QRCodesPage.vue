@@ -3,13 +3,16 @@ import { ref, computed, onMounted } from 'vue' // 🟢 ADDED: onMounted for stat
 import { useRouter, useRoute } from 'vue-router'
 
 // 🟢 NEW: Import logo and setup stationName for the header
-import appLogo from '@/assets/logo.png'; 
+// appLogo not needed here; HeaderBar renders the logo
 import gcashImg from '@/assets/gcash.png'
 import mayaImg from '@/assets/maya.png'
+import HeaderBar from '@/components/HeaderBar.vue'
 const stationName = ref('Station --'); 
 
 const router = useRouter()
 const route = useRoute()
+
+// HeaderBar component provides order-status, cart and logout
 
 // 1. Get the total amount from the route query
 // Use a default value of 0 if the query is missing or invalid
@@ -73,26 +76,7 @@ const goBackToCheckout = () => {
 <template>
   <div class="qr-container">
     
-    <header class="top-bar">
-      <div class="logo">
-        <img :src="appLogo" alt="Logo" class="logo-img" />
-        CompShop Bytes
-      </div>
-      <div class="user-info">
-        <span class="station-id">{{ stationName }}</span>
-        
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart">
-          <circle cx="9" cy="21" r="1"></circle>
-          <circle cx="20" cy="21" r="1"></circle>
-          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-        </svg>
-
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-          <circle cx="12" cy="7" r="4"></circle>
-        </svg>
-      </div>
-    </header>
+    <HeaderBar />
 
     <div class="back-btn-wrapper">
       <button @click="goBackToCheckout" class="top-back-btn">
@@ -160,39 +144,8 @@ const goBackToCheckout = () => {
 </template>
 
 <style scoped>
-/* 🟢 NEW/MODIFIED HEADER STYLES (Copied from Checkout Page) */
-.top-bar { 
-    background-color: white; 
-    padding: 1rem 2rem; 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-.logo { 
-    display: flex; 
-    align-items: center; 
-    gap: 10px; 
-    font-size: 1.5rem; 
-    font-weight: 700; 
-    color: #2c3e50; 
-}
-.logo-img { 
-    height: 40px; 
-    width: auto; 
-}
-.user-info { 
-    display: flex; 
-    align-items: center; 
-    gap: 15px; 
-    font-weight: 600; 
-    color: #555; 
-}
-.user-info svg { 
-    color: #333; 
-    width: 24px; 
-    height: 24px; 
-}
+/* Header styles (match MenuPage) */
+/* header styles are provided by the shared HeaderBar component */
 
 /* 🔴 Removed original .header, .brand, and .nav-right styles */
 

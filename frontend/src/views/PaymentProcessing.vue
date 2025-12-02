@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import HeaderBar from '@/components/HeaderBar.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -23,10 +24,7 @@ onMounted(() => {
 
 <template>
   <div class="process-container">
-    <div class="navbar">
-        <div class="brand">🥡 CompShop Bytes</div>
-        <div class="nav-right">Station A12 🛒 👤</div>
-    </div>
+    <HeaderBar />
     
     <div class="card">
       <div class="spinner"></div>
@@ -45,8 +43,8 @@ onMounted(() => {
 
 <style scoped>
 .process-container { min-height: 100vh; background-color: #f5f5f5; display: flex; flex-direction: column; }
-.navbar { background: white; padding: 1rem 2rem; display: flex; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-.brand { font-weight: 700; font-size: 1.2rem; color: #2d3446; }
+.navbar { /* removed; HeaderBar provides header */ }
+.brand { /* removed; HeaderBar provides brand styles */ }
 .card { background: white; margin: 3rem auto; padding: 4rem 2rem; text-align: center; max-width: 600px; width: 90%; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
 .spinner { width: 60px; height: 60px; border: 6px solid #e0e0e0; border-top: 6px solid #888; border-radius: 50%; margin: 0 auto 2rem; animation: spin 1s linear infinite; }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }

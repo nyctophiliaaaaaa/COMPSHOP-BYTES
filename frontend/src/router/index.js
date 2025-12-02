@@ -8,6 +8,9 @@ import SetNewPasswordView from '../views/SetNewPassword.vue'
 import MenuPage from '../views/MenuPage.vue'
 import CartPage from '../views/CartPage.vue'
 import StaffDashboard from '../views/StaffDashboard.vue'
+import CheckoutView from '../views/Checkout.vue'
+import PaymentProcessingView from '../views/PaymentProcessing.vue'
+import PaymentSuccessView from '../views/PaymentSuccess.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,7 +22,10 @@ const router = createRouter({
     { path: '/set-new-password', name: 'set-new-password', component: SetNewPasswordView }, 
     { path: '/dashboard', name: 'dashboard', component: MenuPage },
     { path: '/staff-dashboard', name: 'staff-dashboard', component: StaffDashboard },
-    { path: '/cart', name: 'cart', component: CartPage }
+    { path: '/cart', name: 'cart', component: CartPage },
+    { path: '/checkout', name: 'checkout', component: CheckoutView },
+    { path: '/payment-processing', name: 'payment-processing', component: PaymentProcessingView },
+    { path: '/payment-success', name: 'payment-success', component: PaymentSuccessView }
   ]
 })
 

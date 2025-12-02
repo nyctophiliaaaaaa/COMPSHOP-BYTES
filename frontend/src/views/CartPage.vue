@@ -58,13 +58,7 @@ const handleCheckout = () => {
     return;
   }
 
-  const confirm = window.confirm(`Proceed to payment for ₱${subtotal.value.toFixed(2)}?`);
-  if (confirm) {
-    cartItems.value = [];
-    saveCart();
-    alert('Order placed successfully! Thank you for purchasing.');
-    router.push('/dashboard');
-  }
+  router.push('/checkout');
 };
 </script>
 

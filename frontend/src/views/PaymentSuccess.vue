@@ -11,6 +11,9 @@ const isCod = computed(() => route.query.method === 'cod')
 const totalAmount = computed(() => parseFloat(route.query.total || 0).toFixed(2))
 
 onMounted(() => {
+  // Clear the cart on success
+  localStorage.removeItem('myCart')
+
   setTimeout(() => {
     // 🟢 FORWARD TOTAL TO DASHBOARD
     router.push({ 

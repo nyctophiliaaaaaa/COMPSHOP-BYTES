@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import axios from 'axios';
 
 // Import static UI assets (Icons only)
@@ -10,7 +10,19 @@ import searchMagnifyIcon from '@/assets/search.jpg';
 import nextIcon from '@/assets/nextarrow.png';
 import backIcon from '@/assets/backarrow.png';
 
+// Import Order Status Popup
+import OrderStatusPopup from '@/components/OrderStatus.vue';
+
 const router = useRouter();
+const route = useRoute();
+
+// Show popup if URL has ?orderPlaced=true
+const showOrderStatus = ref(route.query.orderPlaced === 'true');
+
+const toggleOrderStatus = () => {
+  showOrderStatus.value = !showOrderStatus.value;
+};
+
 const searchQuery = ref('');
 const selectedCategory = ref('All Items');
 const sortBy = ref('Popular');
@@ -147,6 +159,10 @@ const goToCart = () => {
 
 <template>
   <div class="compshop-container">
+    
+    <!-- Order Status Popup -->
+    <OrderStatusPopup v-if="showOrderStatus" />
+
     <header class="top-bar">
       <div class="logo">
         <img :src="appLogo" alt="Logo" class="logo-img" />
@@ -157,6 +173,10 @@ const goToCart = () => {
         
         <button class="icon-btn" @click="goToCart" title="Cart">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        </button>
+
+        <button class="icon-btn" @click="toggleOrderStatus" title="Order Status">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
         </button>
 
         <button class="icon-btn logout-btn" @click="handleLogout" title="Logout">

@@ -186,15 +186,6 @@ const goBackToCart = () => {
   background-color: #f5f5f5;
   padding-bottom: 100px;
 }
-.navbar {
-  background: white;
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
-.brand { font-weight: 700; font-size: 1.2rem; color: #2d3446; }
 
 /* Header styles copied from MenuPage for consistency */
 /* header styles are provided by the shared HeaderBar component */

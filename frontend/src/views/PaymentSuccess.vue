@@ -58,7 +58,6 @@ onMounted(() => {
 
 <style scoped>
 .success-container { min-height: 100vh; background-color: #f5f5f5; display: flex; flex-direction: column; }
-.navbar { background: white; padding: 1rem 2rem; display: flex; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
 .card { background: white; margin: 3rem auto; padding: 4rem 2rem; text-align: center; max-width: 600px; width: 90%; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #ddd; }
 .check-circle { width: 80px; height: 80px; background-color: #ffcc66; color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 3rem; margin: 0 auto 1.5rem; }
 h2 { margin-bottom: 1.5rem; color: #000; font-weight: 700; font-size: 1.8rem; }

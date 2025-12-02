@@ -32,26 +32,27 @@ onMounted(() => {
 </script>
 
 <template>
-    <HeaderBar />
-      <div class="check-circle">✔</div>
-      
+  <div class="success-container">
+      <HeaderBar />
+
+      <div class="card">
+        <div class="check-circle">✔</div>
+
       <h2 v-if="isCod">Order Placed Successfully!</h2>
       <h2 v-else>Payment Successful!</h2>
 
       <div v-if="isCod" class="cod-details">
-        <p><strong>Payment Method:</strong><br>Cash on Delivery</p>
-        <p><strong>Total:</strong><br>₱ {{ totalAmount }}</p>
+        <p><strong>Payment Method:</strong><br/>Cash on Delivery</p>
+        <p><strong>Total:</strong><br/>₱ {{ totalAmount }}</p>
       </div>
-      
+
       <p v-else class="sub-title">Your order is now confirmed.</p>
-      
+
       <h3>Order #A12-4391</h3>
 
       <p v-if="!isCod" class="description">We've received your payment and started preparing your order.</p>
-      
-      <div class="redirect-box">
-        Redirecting to Dashboard...
-      </div>
+
+      <div class="redirect-box">Redirecting to Dashboard...</div>
     </div>
   </div>
 </template>

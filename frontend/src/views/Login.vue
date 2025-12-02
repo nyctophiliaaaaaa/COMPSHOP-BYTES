@@ -1,5 +1,3 @@
-LOGIN PAGE
-
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -13,31 +11,48 @@ const isStaffMode = ref(false)
 const showPassword = ref(false)
 const isLoading = ref(false)
 const credentials = ref({ username: '', password: '' })
+
 const toggleMode = () => {
   isStaffMode.value = !isStaffMode.value
   credentials.value = { username: '', password: '' }
 }
+
 const handleLogin = () => {
   isLoading.value = true
+  
   setTimeout(() => {
+    // 1. Password Check
     if (credentials.value.password === 'password') {
-      router.push('/dashboard')
+      
+      // 2. ROLE CHECK: Are we in Staff Mode?
+      if (isStaffMode.value) {
+        // STAFF: Save role and go to Staff Dashboard
+        localStorage.setItem('userRole', 'staff');
+        router.push({ name: 'staff-dashboard' }); 
+      } else {
+        // CUSTOMER: Save role and go to Menu
+        localStorage.setItem('userRole', 'customer');
+        router.push({ name: 'dashboard' }); 
+      }
+
     } else {
       alert('Invalid password (try "password")')
     }
+    
     isLoading.value = false
   }, 1000)
 }
 </script>
+
 <template>
   <div class="login-container">
     <div class="card">
       
       <div class="header">
         <img :src="logoImage" alt="Logo" class="logo-img" />
-   
         <h1>{{ isStaffMode ? 'Staff Login' : 'Login' }}</h1>
       </div>
+
       <form @submit.prevent="handleLogin">
         
         <div class="input-group">
@@ -49,6 +64,7 @@ const handleLogin = () => {
           />
           <span class="asterisk">*</span>
         </div>
+
         <div class="input-group password-group">
           <input 
             v-model="credentials.password" 
@@ -62,29 +78,33 @@ const handleLogin = () => {
               alt="Toggle Password" 
               class="eye-icon-img" 
             />
-</button>
+          </button>
           <span class="asterisk">*</span>
         </div>
+
         <div class="links">
           <router-link to="/signup">{{ isStaffMode ? 'Staff Recovery' : 'Create Account' }}</router-link>
           <router-link to="/forgot-password">Forgot password?</router-link>
         </div>
+
         <button type="submit" class="login-btn">
           {{ isLoading ? 'LOGGING IN...' : 'LOGIN' }}
         </button>
+
       </form>
+
       <div class="footer">
         <p>{{ isStaffMode ? 'Not a staff member?' : 'Are you a staff member?' }}</p>
         <a href="#" @click.prevent="toggleMode" class="staff-link">
             {{ isStaffMode ? 'Click here for Customer Login' : 'Click here to Login' }}
         </a>
       </div>
+
     </div>
   </div>
 </template>
 
 <style scoped>
-
 .login-container {
   display: flex;
   justify-content: center;
@@ -147,6 +167,7 @@ input {
 }
 
 input::placeholder { color: #bbb; }
+
 .asterisk {
   position: absolute;
   right: 15px;
@@ -219,5 +240,4 @@ input::placeholder { color: #bbb; }
   font-size: 1rem;
   cursor: pointer;
 }
-
 </style>

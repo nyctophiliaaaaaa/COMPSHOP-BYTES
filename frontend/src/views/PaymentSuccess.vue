@@ -12,7 +12,9 @@ const totalAmount = computed(() => parseFloat(route.query.total || 0).toFixed(2)
 
 onMounted(() => {
   // Clear the cart on success
-  localStorage.removeItem('myCart')
+  const userId = localStorage.getItem('userId')
+  const cartKey = userId ? `cart_${userId}` : 'myCart'
+  localStorage.removeItem(cartKey)
 
   setTimeout(() => {
     // 🟢 FORWARD TOTAL TO DASHBOARD

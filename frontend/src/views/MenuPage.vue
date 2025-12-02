@@ -137,7 +137,10 @@ watch([searchQuery, selectedCategory], () => {
 });
 
 const addToCart = (item) => {
-  let cart = JSON.parse(localStorage.getItem('myCart')) || [];
+  const userId = localStorage.getItem('userId');
+  const cartKey = userId ? `cart_${userId}` : 'myCart';
+  
+  let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
   const existingItem = cart.find(i => i.id === item.id);
   
   // Use a fallback image if image_url is missing
@@ -148,7 +151,7 @@ const addToCart = (item) => {
   } else {
     cart.push({ ...item, image: itemImage, quantity: 1 });
   }
-  localStorage.setItem('myCart', JSON.stringify(cart));
+  localStorage.setItem(cartKey, JSON.stringify(cart));
   alert(`${item.name} added to cart!`);
 };
 

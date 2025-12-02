@@ -8,7 +8,10 @@ const router = useRouter()
 const cartItems = ref([])
 
 onMounted(() => {
-  const storedCart = localStorage.getItem('myCart')
+  const userId = localStorage.getItem('userId')
+  const cartKey = userId ? `cart_${userId}` : 'myCart'
+
+  const storedCart = localStorage.getItem(cartKey)
   if (storedCart) {
     cartItems.value = JSON.parse(storedCart)
   }

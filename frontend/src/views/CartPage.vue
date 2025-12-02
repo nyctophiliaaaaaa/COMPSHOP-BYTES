@@ -7,16 +7,25 @@ import appLogo from '@/assets/logo.png';
 const router = useRouter();
 
 const cartItems = ref([]);
-const stationName = ref('Station --'); 
+const stationName = ref('Guest'); 
 
 onMounted(() => {
-  const storedCart = localStorage.getItem('myCart');
+  const userId = localStorage.getItem('userId');
+  const cartKey = userId ? `cart_${userId}` : 'myCart';
+
+  const storedCart = localStorage.getItem(cartKey);
   if (storedCart) {
     cartItems.value = JSON.parse(storedCart);
   }
 
-  const randomStation = Math.floor(Math.random() * 50) + 1;
-  stationName.value = `Station ${randomStation}`;
+  // Get the username from localStorage (saved during login)
+  const currentUser = localStorage.getItem('username');
+  
+  if (currentUser) {
+    stationName.value = `Hi, ${currentUser}`;
+  } else {
+    stationName.value = 'Guest';
+  }
 });
 
 const totalItems = computed(() => {
@@ -28,7 +37,9 @@ const subtotal = computed(() => {
 });
 
 const saveCart = () => {
-  localStorage.setItem('myCart', JSON.stringify(cartItems.value));
+  const userId = localStorage.getItem('userId');
+  const cartKey = userId ? `cart_${userId}` : 'myCart';
+  localStorage.setItem(cartKey, JSON.stringify(cartItems.value));
 };
 
 const increaseQty = (item) => {

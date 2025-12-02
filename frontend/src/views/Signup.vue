@@ -1,6 +1,13 @@
+SIGNUP PAGE
+
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+
+import logoImage from '@/assets/logo.png';
+import hiddenEyeIcon from '@/assets/hidden-eye.jpg'
+import openEyeIcon from '@/assets/open-eye.png'
+
 const router = useRouter()
 const showPassword = ref(false)
 const isLoading = ref(false)
@@ -10,6 +17,7 @@ const credentials = ref({
   password: '', 
   confirmPassword: '' 
 })
+
 const handleSignUp = () => {
   isLoading.value = true
   setTimeout(() => {
@@ -22,12 +30,13 @@ const handleSignUp = () => {
   }, 1000)
 }
 </script>
+
 <template>
   <div class="signup-container">
     <div class="card">
       
       <div class="header">
-        <span class="icon">🥡</span> 
+        <img :src="logoImage" alt="Logo" class="logo-img" />
         <h1>Sign Up</h1>
       </div>
       
@@ -60,13 +69,12 @@ const handleSignUp = () => {
             placeholder="Enter your password" 
             required
           />
-  
           <button type="button" class="eye-btn" @click="showPassword = !showPassword">
-            <span v-if="showPassword" class="slashed-eye">
-                👁️
-                <div class="slash"></div>
-            </span>
-            <span v-else>👁️</span>
+            <img 
+              :src="showPassword ? openEyeIcon : hiddenEyeIcon" 
+              alt="Toggle Password" 
+              class="eye-icon-img" 
+            />
           </button>
           <span class="asterisk">*</span>
         </div>
@@ -79,11 +87,11 @@ const handleSignUp = () => {
             required
           />
           <button type="button" class="eye-btn" @click="showPassword = !showPassword">
-            <span v-if="showPassword" class="slashed-eye">
-                👁️
-                <div class="slash"></div>
-            </span>
-            <span v-else>👁️</span>
+            <img 
+              :src="showPassword ? openEyeIcon : hiddenEyeIcon" 
+              alt="Toggle Password" 
+              class="eye-icon-img" 
+            />
           </button>
           <span class="asterisk">*</span>
         </div>
@@ -100,6 +108,7 @@ const handleSignUp = () => {
     </div>
   </div>
 </template>
+
 <style scoped>
 .signup-container {
   display: flex;
@@ -108,6 +117,7 @@ const handleSignUp = () => {
   min-height: 100vh;
   background-color: white; 
 }
+
 .card {
   background-color: #e6e6e6;
   width: 100%;
@@ -117,32 +127,38 @@ const handleSignUp = () => {
   text-align: center;
   box-shadow: 0 4px 20px rgba(0,0,0,0.05);
 }
+
 .header {
   margin-bottom: 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 5px;
+  gap: 10px;
 }
-.icon {
-  font-size: 2.5rem; 
-  line-height: 1;
+
+.logo-img {
+  width: 50px; 
+  height: auto;
+  object-fit: contain;
 }
+
 h1 {
   font-size: 2.5rem; 
   font-weight: 400; 
   color: #2c3e50;
   margin: 0;
   line-height: 1;
-  min-width: 200px; 
 }
+
 .input-group {
   margin-bottom: 1.5rem;
   position: relative;
 }
+
 .password-group input {
   padding-right: 50px;
 }
+
 input {
   width: 100%;
   padding: 1rem 1.2rem;
@@ -153,7 +169,11 @@ input {
   outline: none;
   color: #555;
 }
-input::placeholder { color: #bbb; }
+
+input::placeholder {
+   color: #bbb; 
+}
+
 .asterisk {
   position: absolute;
   right: 15px;
@@ -162,6 +182,7 @@ input::placeholder { color: #bbb; }
   font-size: 1.2rem;
   pointer-events: none;
 }
+
 .eye-btn {
   position: absolute;
   right: 40px;
@@ -171,25 +192,15 @@ input::placeholder { color: #bbb; }
   border: none;
   cursor: pointer;
   padding: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.3rem; 
+  display: flex;    
+  align-items: center; 
 }
-.slashed-eye {
-    position: relative;
-    display: inline-block;
+
+.eye-icon-img {
+  width: 24px; 
+  height: auto;
 }
-.slash {
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    background-color: #555;
-    top: 50%;
-    left: 0;
-    transform: rotate(45deg);
-    pointer-events: none;
-}
+
 .footer {
   display: flex;
   flex-direction: column;
@@ -198,16 +209,19 @@ input::placeholder { color: #bbb; }
   margin-top: 2rem;
   font-size: 0.9rem;
 }
+
 .footer p {
   color: #000;
   margin: 0;
   font-weight: 500;
 }
+
 .footer a {
   color: #0044cc;
   text-decoration: underline;
   font-weight: 500;
 }
+
 .signup-btn {
   width: 100%;
   padding: 1rem;
@@ -221,5 +235,8 @@ input::placeholder { color: #bbb; }
   letter-spacing: 0.5px;
   margin-bottom: 0.5rem;
 }
-.signup-btn:hover { background-color: #3b4559; }
+
+.signup-btn:hover { 
+  background-color: #3b4559; 
+}
 </style>

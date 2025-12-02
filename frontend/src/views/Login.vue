@@ -21,16 +21,13 @@ const handleLogin = () => {
   isLoading.value = true
   
   setTimeout(() => {
-    // 1. Password Check
     if (credentials.value.password === 'password') {
       
-      // 2. ROLE CHECK: Are we in Staff Mode?
       if (isStaffMode.value) {
-        // STAFF: Save role and go to Staff Dashboard
         localStorage.setItem('userRole', 'staff');
         router.push({ name: 'staff-dashboard' }); 
+
       } else {
-        // CUSTOMER: Save role and go to Menu
         localStorage.setItem('userRole', 'customer');
         router.push({ name: 'dashboard' }); 
       }

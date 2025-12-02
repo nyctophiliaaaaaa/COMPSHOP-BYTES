@@ -11,6 +11,7 @@ import StaffDashboard from '../views/StaffDashboard.vue'
 import CheckoutView from '../views/Checkout.vue'
 import PaymentProcessingView from '../views/PaymentProcessing.vue'
 import PaymentSuccessView from '../views/PaymentSuccess.vue'
+import QRCodesPage from '../views/QRCodesPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,6 +24,7 @@ const router = createRouter({
     { path: '/dashboard', name: 'dashboard', component: MenuPage },
     { path: '/staff-dashboard', name: 'staff-dashboard', component: StaffDashboard },
     { path: '/cart', name: 'cart', component: CartPage },
+    { path: '/qr-codes', name: 'qr-codes', component: QRCodesPage },
     { path: '/checkout', name: 'checkout', component: CheckoutView },
     { path: '/payment-processing', name: 'payment-processing', component: PaymentProcessingView },
     { path: '/payment-success', name: 'payment-success', component: PaymentSuccessView }

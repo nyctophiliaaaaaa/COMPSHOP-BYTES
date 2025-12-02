@@ -56,8 +56,14 @@ const handlePlaceOrder = () => {
       path: '/payment-success', 
       query: { method: 'cod', total: total.value } 
     })
+  } else if (form.value.paymentMethod === 'qrph') {
+    // QRPH (GCash/Maya) -> route to the QR codes view where user can scan/confirm
+    router.push({ 
+      path: '/qr-codes', 
+      query: { method: 'qrph', total: total.value } 
+    })
   } else {
-    // GCash/Maya -> Go to Processing first
+    // Fallback: go to processing (preserves previous behavior for other methods)
     router.push({ 
       name: 'payment-processing', 
       query: { method: form.value.paymentMethod, total: total.value } 
@@ -150,38 +156,12 @@ const goBackToCart = () => {
               <input type="radio" id="cod" value="cod" v-model="form.paymentMethod" />
               <label for="cod">Cash On Delivery</label>
             </div>
-
-            <!-- GCASH -->
-            <div class="radio-option">
-              <input type="radio" id="gcash" value="gcash" v-model="form.paymentMethod" />
-              <label for="gcash">GCash (QR)</label>
-            </div>
-            <!-- GCash QR Popup -->
-            <div v-if="form.paymentMethod === 'gcash'" class="qr-box">
-               <div class="qr-code">
-                 <div class="qr-placeholder">🔳</div> 
-               </div>
-               <div class="qr-text">
-                 <strong>Scan this QR using GCash</strong><br>
-                 Open your GCash app → Scan QR → Confirm payment
-               </div>
-            </div>
-
-            <!-- MAYA -->
-            <div class="radio-option">
-              <input type="radio" id="maya" value="maya" v-model="form.paymentMethod" />
-              <label for="maya">Maya (QR)</label>
-            </div>
-            <!-- Maya QR Popup -->
-            <div v-if="form.paymentMethod === 'maya'" class="qr-box">
-               <div class="qr-code">
-                 <div class="qr-placeholder">🔳</div>
-               </div>
-               <div class="qr-text">
-                 <strong>Scan this QR using Maya</strong><br>
-                 Open your Maya app → Scan QR → Confirm payment
-               </div>
-            </div>
+                    <!-- QRPH (combined GCash/Maya) -->
+                    <div class="radio-option">
+                      <input type="radio" id="qrph" value="qrph" v-model="form.paymentMethod" />
+                      <label for="qrph">QRPH (GCash / Maya)</label>
+                    </div>
+                    <!-- NOTE: Selecting QRPH will route to the QR codes page; no inline scan UI here -->
 
           </div>
 

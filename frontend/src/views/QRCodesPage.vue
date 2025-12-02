@@ -4,6 +4,8 @@ import { useRouter, useRoute } from 'vue-router'
 
 // 🟢 NEW: Import logo and setup stationName for the header
 import appLogo from '@/assets/logo.png'; 
+import gcashImg from '@/assets/gcash.png'
+import mayaImg from '@/assets/maya.png'
 const stationName = ref('Station --'); 
 
 const router = useRouter()
@@ -21,16 +23,18 @@ const referenceNumber = ref('')
 
 // 3. Simulated account details for the QR codes
 const gcashAccount = {
-  name: 'Juan Dela Cruz',
-  number: '0917-XXX-XXXX',
-  qrPlaceholder: '💰',
+  name: 'Juan De** **uz',
+  number: '0917-XXX-XXXX'
 }
 
 const mayaAccount = {
-  name: 'Maria Santos',
-  number: '0918-XXX-XXXX',
-  qrPlaceholder: '💳',
+  name: 'Maria *****s',
+  number: '0918-XXX-XXXX'
 }
+
+// Image sources: allow override via query params (e.g. ?gcash=/path/to.png&maya=/path/to.png)
+const gcashQrSrc = computed(() => route.query.gcash || gcashImg)
+const mayaQrSrc = computed(() => route.query.maya || mayaImg)
 
 // 🟢 NEW: Set up the station name on mount for the header
 onMounted(() => {
@@ -108,7 +112,7 @@ const goBackToCheckout = () => {
         <div class="qr-card gcash-card">
           <h3 class="qr-title">GCash</h3>
           <div class="qr-placeholder-box">
-            <span class="qr-icon">{{ gcashAccount.qrPlaceholder }}</span>
+            <img :src="gcashQrSrc" alt="GCash QR" class="qr-image" />
           </div>
           <div class="account-details">
             <p>Recipient: <strong>{{ gcashAccount.name }}</strong></p>
@@ -119,7 +123,7 @@ const goBackToCheckout = () => {
         <div class="qr-card maya-card">
           <h3 class="qr-title">Maya</h3>
           <div class="qr-placeholder-box">
-            <span class="qr-icon">{{ mayaAccount.qrPlaceholder }}</span>
+            <img :src="mayaQrSrc" alt="Maya QR" class="qr-image" />
           </div>
           <div class="account-details">
             <p>Recipient: <strong>{{ mayaAccount.name }}</strong></p>
@@ -291,9 +295,10 @@ const goBackToCheckout = () => {
   border-radius: 6px;
 }
 
-.qr-icon {
-  font-size: 4rem;
-  color: #777;
+.qr-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
 
 .account-details p {

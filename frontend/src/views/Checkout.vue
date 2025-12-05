@@ -11,7 +11,13 @@ const cartItems = ref([])
 
 onMounted(() => {
   const userId = localStorage.getItem('userId')
+  const username = localStorage.getItem('username')
   const cartKey = userId ? `cart_${userId}` : 'myCart'
+
+  // Set the username automatically
+  if (username) {
+    form.value.name = username
+  }
 
   const storedCart = localStorage.getItem(cartKey)
   if (storedCart) {
@@ -139,7 +145,7 @@ const goBackToCart = () => {
           
           <div class="form-group">
             <label>Name</label>
-            <input v-model="form.name" type="text" placeholder="Enter your name" />
+            <input v-model="form.name" type="text" readonly class="readonly-input" />
           </div>
 
           <div class="form-group">
@@ -150,23 +156,24 @@ const goBackToCart = () => {
           <div class="form-group">
             <label>Payment Method</label>
             
-            <!-- COD -->
-            <div class="radio-option">
-              <input type="radio" id="cod" value="cod" v-model="form.paymentMethod" />
-              <label for="cod">Cash On Delivery</label>
+            <div class="payment-options">
+              <!-- COD -->
+              <label class="payment-box" :class="{ selected: form.paymentMethod === 'cod' }">
+                <input type="radio" value="cod" v-model="form.paymentMethod" />
+                <span class="payment-label">Cash On Delivery</span>
+              </label>
+              
+              <!-- QRPH (combined GCash/Maya) -->
+              <label class="payment-box" :class="{ selected: form.paymentMethod === 'qrph' }">
+                <input type="radio" value="qrph" v-model="form.paymentMethod" />
+                <span class="payment-label">QRPH (GCash / Maya)</span>
+              </label>
             </div>
-                    <!-- QRPH (combined GCash/Maya) -->
-                    <div class="radio-option">
-                      <input type="radio" id="qrph" value="qrph" v-model="form.paymentMethod" />
-                      <label for="qrph">QRPH (GCash / Maya)</label>
-                    </div>
-                    <!-- NOTE: Selecting QRPH will route to the QR codes page; no inline scan UI here -->
-
           </div>
 
           <div class="form-group">
             <label>Notes (Optional)</label>
-            <textarea v-model="form.notes" rows="3" placeholder="Any special requests?"></textarea>
+            <textarea v-model="form.notes" rows="3" placeholder="Any special requests?" class="notes-textarea"></textarea>
           </div>
 
         </div>
@@ -315,10 +322,13 @@ h3 {
 .grand-total { 
   font-weight: 700; 
   font-size: clamp(0.95rem, 1.2vw, 1.15rem); 
-  color: #333; 
+  color: #2d3446; 
   margin-top: clamp(0.6rem, 1.2vw, 1.1rem); 
   border-top: 1px solid #eee; 
   padding-top: clamp(0.6rem, 1.2vw, 1.1rem); 
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 184, 77, 0.15) 50%, transparent 100%);
+  padding: clamp(0.6rem, 1vw, 0.9rem);
+  border-radius: clamp(4px, 0.5vw, 6px);
 }
 
 /* Form */
@@ -342,19 +352,65 @@ input, textarea {
 
 input:focus, textarea:focus { border-color: #ffb84d; }
 
-.radio-option { 
-  display: flex; 
-  align-items: center; 
-  gap: clamp(6px, 1vw, 12px); 
-  margin-bottom: clamp(0.5rem, 1vw, 0.9rem); 
-  cursor: pointer; 
+/* Readonly input styling */
+.readonly-input {
+  background-color: #f0f0f0;
+  color: #555;
+  cursor: not-allowed;
 }
 
-input[type="radio"] { 
-  width: auto; 
-  transform: scale(clamp(1, 1.2, 1.3)); 
-  cursor: pointer; 
-  accent-color: #2d3446; 
+.readonly-input:focus {
+  border-color: #ddd;
+}
+
+/* Notes textarea - scrollable but not resizable */
+.notes-textarea {
+  resize: none;
+  overflow-y: auto;
+  max-height: 120px;
+}
+
+/* Payment Box Styles */
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.5rem, 1vw, 0.75rem);
+}
+
+.payment-box {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 1.2vw, 14px);
+  padding: clamp(0.75rem, 1.2vw, 1rem) clamp(1rem, 1.5vw, 1.25rem);
+  border: 2px solid #e0e0e0;
+  border-radius: clamp(6px, 0.8vw, 10px);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: #fff;
+}
+
+.payment-box:hover {
+  border-color: #ccc;
+  background-color: #fafafa;
+}
+
+.payment-box.selected {
+  border-color: #ffb84d;
+  background-color: rgba(255, 184, 77, 0.08);
+}
+
+.payment-box input[type="radio"] {
+  width: auto;
+  margin: 0;
+  transform: scale(1.2);
+  cursor: pointer;
+  accent-color: #ffb84d;
+}
+
+.payment-label {
+  font-size: clamp(0.85rem, 1vw, 0.95rem);
+  font-weight: 500;
+  color: #333;
 }
 
 /* QR Styles */

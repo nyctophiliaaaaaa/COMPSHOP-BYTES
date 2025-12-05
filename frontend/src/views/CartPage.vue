@@ -150,8 +150,8 @@ const handleCheckout = () => {
 .cart-container {
   min-height: 100vh;
   background-color: #f0f2f5;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: clamp(14px, 1vw + 10px, 16px);
+  font-family: var(--font-primary);
+  font-size: var(--text-base);
 }
 
 /* header styles provided by HeaderBar component */
@@ -172,11 +172,11 @@ const handleCheckout = () => {
 }
 
 .back-link {
-  color: #333;
+  color: var(--color-text-primary);
   text-decoration: none;
-  font-weight: 800; 
-  font-size: clamp(0.75rem, 1vw, 0.95rem);
-  letter-spacing: 0.5px;
+  font-weight: var(--weight-bold); 
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-wide);
   display: inline-flex;
   align-items: center;
   gap: clamp(5px, 0.8vw, 10px);
@@ -193,8 +193,8 @@ const handleCheckout = () => {
 }
 
 .arrow {
-  font-size: clamp(0.9rem, 1.2vw, 1.15rem);
-  font-weight: bold;
+  font-size: var(--text-md);
+  font-weight: var(--weight-bold);
 }
 
 .main-cart-card {
@@ -214,10 +214,10 @@ const handleCheckout = () => {
 }
 
 .cart-header-row h2 {
-  font-size: clamp(1.3rem, 2vw, 1.9rem);
-  color: #333;
+  font-size: var(--text-2xl);
+  color: var(--color-text-primary);
   margin: 0;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
 }
 
 .header-right {
@@ -227,9 +227,9 @@ const handleCheckout = () => {
 }
 
 .item-count-label {
-  font-size: clamp(1rem, 1.5vw, 1.4rem); 
-  font-weight: 700;  
-  color: #333;
+  font-size: var(--text-lg); 
+  font-weight: var(--weight-bold);  
+  color: var(--color-text-primary);
 }
 
 .divider {
@@ -282,15 +282,15 @@ const handleCheckout = () => {
 }
 
 .details h3 {
-  font-size: clamp(0.9rem, 1.2vw, 1.15rem);
+  font-size: var(--text-md);
   margin: 0 0 clamp(3px, 0.5vw, 6px) 0;
-  color: #333;
-  font-weight: 700;
+  color: var(--color-text-primary);
+  font-weight: var(--weight-bold);
 }
 
 .cat-text {
-  font-size: clamp(0.75rem, 1vw, 0.95rem);
-  color: #888;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
 }
 
 .qty-control {
@@ -317,15 +317,16 @@ const handleCheckout = () => {
   border: none;
   background: transparent;
   padding: 0;
-  color: #333;
-  font-weight: 600;
-  font-size: clamp(0.85rem, 1vw, 1rem);
+  color: var(--color-text-primary);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-base);
+  font-family: var(--font-primary);
 }
 
 .price {
-  font-weight: 700;
-  color: #333;
-  font-size: clamp(1rem, 1.3vw, 1.25rem);
+  font-weight: var(--weight-bold);
+  color: var(--color-text-primary);
+  font-size: var(--text-lg);
   min-width: clamp(65px, 8vw, 100px);
   text-align: right;
 }
@@ -368,30 +369,31 @@ const handleCheckout = () => {
 }
 
 .total-label {
-  font-size: clamp(1rem, 1.3vw, 1.25rem);
-  color: #555;
-  font-weight: 600;
+  font-size: var(--text-lg);
+  color: var(--color-text-secondary);
+  font-weight: var(--weight-semibold);
   text-align: left;
 }
 
 .total-amount {
-  font-size: clamp(1.2rem, 1.7vw, 1.6rem);
-  font-weight: 800;
-  color: #333;
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-text-primary);
   text-align: right;
 }
 
 .checkout-btn {
   padding: clamp(10px, 1.5vw, 16px) clamp(28px, 4vw, 45px);
   background-color: #2d3446;
-  color: white;
+  color: var(--color-text-inverse);
   border: none;
   border-radius: clamp(4px, 0.6vw, 8px); 
-  font-weight: 700;
-  letter-spacing: 1px;
+  font-weight: var(--weight-bold);
+  font-family: var(--font-primary);
+  letter-spacing: var(--tracking-wide);
   cursor: pointer;
   transition: all 0.2s ease; 
-  font-size: clamp(0.85rem, 1.1vw, 1.05rem);
+  font-size: var(--text-base);
   box-shadow: 0 4px 10px rgba(45, 52, 70, 0.3);
 }
 

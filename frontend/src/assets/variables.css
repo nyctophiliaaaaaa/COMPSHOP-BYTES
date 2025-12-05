@@ -1,0 +1,88 @@
+/* ========================================
+   GLOBAL CSS VARIABLES FOR CONSISTENT STYLING
+   ======================================== */
+
+:root {
+  /* Colors */
+  --color-primary: #ff6b4a;
+  --color-primary-hover: #e55a3a;
+  --color-secondary: #2d3446;
+  --color-secondary-hover: #3b4559;
+  --color-accent: #ffb84d;
+  --color-accent-hover: #ffa31a;
+  --color-success: #00A950;
+  --color-success-hover: #008f44;
+  --color-danger: #ff4d4d;
+  --color-danger-hover: #e63939;
+  
+  /* Text Colors */
+  --color-text-primary: #333;
+  --color-text-secondary: #555;
+  --color-text-muted: #888;
+  --color-text-light: #aaa;
+  
+  /* Background Colors */
+  --color-bg-primary: #fff;
+  --color-bg-secondary: #f5f5f5;
+  --color-bg-tertiary: #f0f2f5;
+  --color-bg-card: #e6e6e6;
+  
+  /* Border Colors */
+  --color-border: #eee;
+  --color-border-dark: #ddd;
+  --color-border-input: #ccc;
+  
+  /* Responsive Font Sizes */
+  --font-size-xs: clamp(0.7rem, 0.85vw, 0.8rem);
+  --font-size-sm: clamp(0.75rem, 0.95vw, 0.9rem);
+  --font-size-base: clamp(0.85rem, 1vw, 1rem);
+  --font-size-md: clamp(0.9rem, 1.1vw, 1.05rem);
+  --font-size-lg: clamp(1rem, 1.3vw, 1.2rem);
+  --font-size-xl: clamp(1.2rem, 1.6vw, 1.5rem);
+  --font-size-2xl: clamp(1.4rem, 2vw, 1.8rem);
+  --font-size-3xl: clamp(1.6rem, 2.5vw, 2.2rem);
+  
+  /* Responsive Spacing */
+  --space-xs: clamp(0.25rem, 0.4vw, 0.4rem);
+  --space-sm: clamp(0.4rem, 0.6vw, 0.6rem);
+  --space-md: clamp(0.6rem, 1vw, 1rem);
+  --space-lg: clamp(1rem, 1.5vw, 1.5rem);
+  --space-xl: clamp(1.5rem, 2.5vw, 2.5rem);
+  --space-2xl: clamp(2rem, 3.5vw, 3.5rem);
+  
+  /* Border Radius */
+  --radius-sm: clamp(4px, 0.4vw, 6px);
+  --radius-md: clamp(6px, 0.6vw, 8px);
+  --radius-lg: clamp(8px, 1vw, 12px);
+  --radius-xl: clamp(12px, 1.5vw, 20px);
+  --radius-full: 9999px;
+  
+  /* Shadows */
+  --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 4px 20px rgba(0, 0, 0, 0.1);
+  
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.2s ease;
+  --transition-slow: 0.3s ease;
+  
+  /* Container widths */
+  --container-sm: clamp(400px, 45vw, 520px);
+  --container-md: clamp(600px, 65vw, 900px);
+  --container-lg: clamp(800px, 80vw, 1200px);
+  --container-xl: clamp(1000px, 90vw, 1400px);
+  
+  /* Component specific */
+  --header-height: clamp(50px, 6vw, 70px);
+  --footer-height: clamp(60px, 8vw, 90px);
+  --card-padding: clamp(1rem, 2vw, 2rem);
+  --input-padding: clamp(0.6rem, 1vw, 1rem);
+  --btn-padding-x: clamp(1rem, 2vw, 2rem);
+  --btn-padding-y: clamp(0.5rem, 0.8vw, 0.9rem);
+}
+
+/* Font family */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}

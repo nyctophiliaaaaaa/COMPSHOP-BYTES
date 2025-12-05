@@ -144,22 +144,21 @@ const handleLogin = async () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: clamp(4px, 0.8vw, 8px);
+  gap: clamp(8px, 1.2vw, 14px);
 }
 
 .logo-img {
-  width: clamp(40px, 5vw, 65px); 
+  width: clamp(38px, 5vw, 55px); 
   height: auto;
   object-fit: contain;
 }
 
 h1 {
-  font-size: clamp(1.6rem, 3vw, 2.5rem); 
-  font-weight: 400; 
-  color: #2c3e50;
+  font-size: var(--text-2xl); 
+  font-weight: var(--weight-semibold); 
+  color: var(--color-text-primary);
   margin: 0;
-  line-height: 1;
-  min-width: clamp(140px, 15vw, 200px); 
+  line-height: var(--leading-tight);
 }
 
 .input-group {
@@ -176,13 +175,14 @@ input {
   padding: clamp(0.7rem, 1.3vw, 1.1rem) clamp(0.9rem, 1.5vw, 1.3rem);
   border: none;
   border-radius: clamp(8px, 1.2vw, 12px);
-  font-size: clamp(0.85rem, 1vw, 1rem);
+  font-size: var(--text-base);
+  font-family: var(--font-primary);
   background: white;
   outline: none;
-  color: #555;
+  color: var(--color-text-secondary);
 }
 
-input::placeholder { color: #bbb; }
+input::placeholder { color: var(--color-text-light); }
 
 .asterisk {
   position: absolute;
@@ -215,29 +215,30 @@ input::placeholder { color: #bbb; }
   display: flex;
   justify-content: space-between;
   margin-bottom: clamp(1.2rem, 2.5vw, 2rem);
-  font-size: clamp(0.75rem, 1vw, 0.95rem);
+  font-size: var(--text-sm);
   padding: 0 clamp(3px, 0.5vw, 6px);
   flex-wrap: wrap;
   gap: clamp(0.5rem, 1vw, 1rem);
 }
 
 .links a {
-  color: #000;
+  color: var(--color-text-primary);
   text-decoration: underline;
-  font-weight: 500;
+  font-weight: var(--weight-medium);
 }
 
 .login-btn {
   width: 100%;
   padding: clamp(0.7rem, 1.3vw, 1.1rem);
   background-color: #2d3446;
-  color: white;
+  color: var(--color-text-inverse);
   border: none;
   border-radius: clamp(6px, 1vw, 10px);
-  font-size: clamp(0.9rem, 1.2vw, 1.15rem);
-  font-weight: 600;
+  font-size: var(--text-md);
+  font-family: var(--font-primary);
+  font-weight: var(--weight-semibold);
   cursor: pointer;
-  letter-spacing: 0.5px;
+  letter-spacing: var(--tracking-wide);
   margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
 }
 
@@ -252,15 +253,15 @@ input::placeholder { color: #bbb; }
 
 .footer p {
   margin-bottom: clamp(0.15rem, 0.3vw, 0.25rem);
-  color: #000;
-  font-size: clamp(0.85rem, 1vw, 1rem);
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
 }
 
 .staff-link {
   color: #0044cc;
   text-decoration: underline;
-  font-weight: 500;
-  font-size: clamp(0.85rem, 1vw, 1rem);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-sm);
   cursor: pointer;
 }
 

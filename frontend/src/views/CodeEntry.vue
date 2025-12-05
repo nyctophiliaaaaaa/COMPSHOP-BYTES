@@ -151,29 +151,29 @@ const goBack = () => router.push('/forgot-password')
   display: flex; 
   justify-content: center; 
   align-items: center; 
-  gap: clamp(10px, 1.5vw, 18px); 
+  gap: clamp(8px, 1.2vw, 14px); 
   margin-top: clamp(0.6rem, 1.2vw, 1.1rem); 
   margin-bottom: clamp(1rem, 2vw, 1.8rem); 
 }
 
 .logo-img { 
-  width: clamp(35px, 4.5vw, 55px); 
+  width: clamp(38px, 5vw, 55px); 
   height: auto; 
   object-fit: contain; 
 }
 
 .header h1 { 
-  font-size: clamp(1.3rem, 2vw, 1.9rem); 
-  font-weight: 700; 
-  color: #000; 
+  font-size: var(--text-2xl); 
+  font-weight: var(--weight-semibold); 
+  color: var(--color-text-primary); 
   margin: 0; 
 }
 
 .description { 
-  color: #666; 
-  font-size: clamp(0.85rem, 1.1vw, 1.05rem); 
+  color: var(--color-text-muted); 
+  font-size: var(--text-base); 
   margin-bottom: clamp(1.5rem, 3vw, 2.8rem); 
-  line-height: 1.5; 
+  line-height: var(--leading-normal); 
 }
 
 .input-group { 
@@ -186,19 +186,20 @@ const goBack = () => router.push('/forgot-password')
   padding: clamp(0.8rem, 1.5vw, 1.3rem); 
   border: none; 
   border-radius: clamp(8px, 1.2vw, 12px); 
-  font-size: clamp(0.9rem, 1.2vw, 1.15rem); 
+  font-size: var(--text-md); 
+  font-family: var(--font-primary);
   background: white; 
   outline: none; 
-  color: #333; 
+  color: var(--color-text-primary); 
   text-align: center; 
   letter-spacing: 0.5em; 
-  font-weight: 600; 
+  font-weight: var(--weight-semibold); 
 }
 
 .code-input::placeholder { 
-  color: #aaa; 
+  color: var(--color-text-light); 
   letter-spacing: normal; 
-  font-weight: 400; 
+  font-weight: var(--weight-regular); 
 }
 
 .asterisk { 
@@ -215,13 +216,14 @@ const goBack = () => router.push('/forgot-password')
   width: 100%; 
   padding: clamp(0.7rem, 1.4vw, 1.2rem); 
   background-color: #2d3446; 
-  color: white; 
+  color: var(--color-text-inverse); 
   border: none; 
   border-radius: clamp(6px, 1vw, 10px); 
-  font-size: clamp(0.9rem, 1.2vw, 1.15rem); 
-  font-weight: 700; 
+  font-size: var(--text-md); 
+  font-family: var(--font-primary);
+  font-weight: var(--weight-semibold); 
   cursor: pointer; 
-  letter-spacing: 0.5px; 
+  letter-spacing: var(--tracking-wide); 
   margin-bottom: clamp(1rem, 2vw, 1.8rem); 
   transition: background-color 0.3s; 
 }
@@ -229,21 +231,21 @@ const goBack = () => router.push('/forgot-password')
 .continue-btn:hover { background-color: #3b4559; }
 
 .resend-section { 
-  font-size: clamp(0.8rem, 1vw, 1rem); 
-  color: #666; 
+  font-size: var(--text-sm); 
+  color: var(--color-text-muted); 
   margin-top: clamp(0.6rem, 1.2vw, 1.1rem); 
 }
 
-.countdown-text { color: #666; }
+.countdown-text { color: var(--color-text-muted); }
 
 .resend-link { 
-  color: #2d3446; 
+  color: var(--color-text-primary); 
   text-decoration: none; 
 }
 
 .resend-link strong { 
   text-decoration: underline; 
-  font-weight: 600; 
+  font-weight: var(--weight-semibold); 
 }
 
 .resend-link:hover strong { color: #0044cc; }

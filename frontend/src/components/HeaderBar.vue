@@ -61,60 +61,76 @@ const stationName = (() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: clamp(0.5rem, 1vw, 0.85rem) clamp(1rem, 3vw, 2.5rem);
-  border-bottom: 1px solid #eee;
+  padding: var(--space-sm, clamp(0.4rem, 0.6vw, 0.6rem)) var(--space-lg, clamp(1rem, 1.5vw, 1.5rem));
+  border-bottom: 1px solid var(--color-border, #eee);
   flex-shrink: 0;
+  background-color: var(--color-bg-primary, #fff);
 }
 
 .logo {
   display: flex;
   align-items: center;
-  gap: clamp(6px, 1vw, 12px);
-  font-size: clamp(1rem, 1.5vw, 1.5rem);
-  font-weight: 700;
-  color: #2c3e50;
+  gap: clamp(6px, 0.8vw, 12px);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-text-primary);
 }
 
 .logo-img { 
-  height: clamp(28px, 3vw, 45px); 
+  height: clamp(28px, 3vw, 42px); 
   width: auto; 
 }
 
 .user-actions { 
   display: flex; 
   align-items: center; 
-  gap: clamp(8px, 1.2vw, 14px); 
+  gap: clamp(8px, 1vw, 14px); 
 }
 
 .station-id { 
-  font-weight: 700; 
-  color: #555; 
+  font-weight: var(--weight-bold); 
+  color: var(--color-text-secondary); 
   margin-right: clamp(4px, 0.5vw, 8px); 
-  font-size: clamp(0.8rem, 1vw, 1.05rem);
+  font-size: var(--text-sm);
 }
 
 .icon-btn { 
   background: none; 
   border: none; 
   cursor: pointer; 
-  padding: clamp(4px, 0.5vw, 8px); 
-  border-radius: 6px; 
-  transition: background 0.15s;
+  padding: var(--space-xs, clamp(4px, 0.5vw, 8px)); 
+  border-radius: var(--radius-sm, 6px); 
+  transition: background var(--transition-fast, 0.15s ease);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .icon-btn svg {
-  width: clamp(16px, 1.5vw, 22px);
-  height: clamp(16px, 1.5vw, 22px);
+  width: clamp(18px, 1.5vw, 24px);
+  height: clamp(18px, 1.5vw, 24px);
 }
 
-.icon-btn:hover { background-color: #f0f0f0; }
-.logout-btn { color: #d9534f; }
-.logout-btn:hover { background-color: #ffe6e6; }
+.icon-btn:hover { 
+  background-color: var(--color-bg-secondary, #f0f0f0); 
+}
+
+.logout-btn { 
+  color: var(--color-danger, #d9534f); 
+}
+
+.logout-btn:hover { 
+  background-color: #ffe6e6; 
+}
 
 /* Responsive breakpoints */
 @media (max-width: 768px) {
   .station-id {
     display: none;
+  }
+  
+  .logo {
+    font-size: 1rem;
   }
 }
 
@@ -123,12 +139,13 @@ const stationName = (() => {
     padding: 0.5rem 1rem;
   }
   
-  .logo {
-    font-size: 0.95rem;
-  }
-  
   .logo-img {
     height: 24px;
+  }
+  
+  .icon-btn svg {
+    width: 18px;
+    height: 18px;
   }
 }
 </style>

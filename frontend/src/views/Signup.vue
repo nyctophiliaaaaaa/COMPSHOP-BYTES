@@ -160,21 +160,21 @@ const handleSignUp = async () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: clamp(6px, 1vw, 12px);
+  gap: clamp(8px, 1.2vw, 14px);
 }
 
 .logo-img {
-  width: clamp(35px, 4.5vw, 55px); 
+  width: clamp(38px, 5vw, 55px); 
   height: auto;
   object-fit: contain;
 }
 
 h1 {
-  font-size: clamp(1.6rem, 3vw, 2.5rem); 
-  font-weight: 400; 
-  color: #2c3e50;
+  font-size: var(--text-2xl); 
+  font-weight: var(--weight-semibold); 
+  color: var(--color-text-primary);
   margin: 0;
-  line-height: 1;
+  line-height: var(--leading-tight);
 }
 
 .input-group {
@@ -191,14 +191,15 @@ input {
   padding: clamp(0.7rem, 1.3vw, 1.1rem) clamp(0.9rem, 1.5vw, 1.3rem);
   border: none;
   border-radius: clamp(8px, 1.2vw, 12px);
-  font-size: clamp(0.85rem, 1vw, 1rem);
+  font-size: var(--text-base);
+  font-family: var(--font-primary);
   background: white;
   outline: none;
-  color: #555;
+  color: var(--color-text-secondary);
 }
 
 input::placeholder {
-   color: #bbb; 
+   color: var(--color-text-light); 
 }
 
 .asterisk {
@@ -234,32 +235,33 @@ input::placeholder {
   align-items: center;
   gap: clamp(0.3rem, 0.6vw, 0.5rem);
   margin-top: clamp(1.2rem, 2.5vw, 2rem);
-  font-size: clamp(0.8rem, 1vw, 0.95rem);
+  font-size: var(--text-sm);
 }
 
 .footer p {
-  color: #000;
+  color: var(--color-text-primary);
   margin: 0;
-  font-weight: 500;
+  font-weight: var(--weight-medium);
 }
 
 .footer a {
   color: #0044cc;
   text-decoration: underline;
-  font-weight: 500;
+  font-weight: var(--weight-medium);
 }
 
 .signup-btn {
   width: 100%;
   padding: clamp(0.7rem, 1.3vw, 1.1rem);
   background-color: #2d3446;
-  color: white;
+  color: var(--color-text-inverse);
   border: none;
   border-radius: clamp(6px, 1vw, 10px);
-  font-size: clamp(0.9rem, 1.2vw, 1.15rem);
-  font-weight: 600;
+  font-size: var(--text-md);
+  font-family: var(--font-primary);
+  font-weight: var(--weight-semibold);
   cursor: pointer;
-  letter-spacing: 0.5px;
+  letter-spacing: var(--tracking-wide);
   margin-bottom: clamp(0.3rem, 0.6vw, 0.5rem);
 }
 

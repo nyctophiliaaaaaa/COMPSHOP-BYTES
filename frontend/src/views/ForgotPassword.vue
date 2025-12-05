@@ -99,29 +99,29 @@ const goBack = () => {
 .header { 
   display: flex; 
   align-items: center; 
-  gap: clamp(10px, 1.5vw, 18px); 
+  gap: clamp(8px, 1.2vw, 14px); 
   margin-top: clamp(0.6rem, 1.2vw, 1.1rem); 
   margin-bottom: clamp(0.6rem, 1.2vw, 1.1rem); 
 }
 
 .logo-img { 
-  width: clamp(35px, 4.5vw, 55px); 
+  width: clamp(38px, 5vw, 55px); 
   height: auto; 
   object-fit: contain; 
 }
 
 .header h1 { 
-  font-size: clamp(1.3rem, 2vw, 1.9rem); 
-  font-weight: 700; 
-  color: #000; 
+  font-size: var(--text-2xl); 
+  font-weight: var(--weight-semibold); 
+  color: var(--color-text-primary); 
   margin: 0; 
 }
 
 .description { 
-  color: #666; 
-  font-size: clamp(0.85rem, 1.1vw, 1.05rem); 
+  color: var(--color-text-muted); 
+  font-size: var(--text-base); 
   margin-bottom: clamp(1.5rem, 3vw, 2.8rem); 
-  line-height: 1.5; 
+  line-height: var(--leading-normal); 
 }
 
 .input-group { 
@@ -133,25 +133,27 @@ input {
   padding: clamp(0.7rem, 1.3vw, 1.1rem); 
   border: 1px solid #ccc; 
   border-radius: clamp(6px, 0.8vw, 10px); 
-  font-size: clamp(0.85rem, 1.1vw, 1.05rem); 
+  font-size: var(--text-base); 
+  font-family: var(--font-primary);
   background: white; 
   outline: none; 
-  color: #333; 
+  color: var(--color-text-primary); 
 }
 
-input::placeholder { color: #aaa; }
+input::placeholder { color: var(--color-text-light); }
 
 .submit-btn { 
   width: 100%; 
   padding: clamp(0.7rem, 1.3vw, 1.1rem); 
   background-color: #2d3446; 
-  color: white; 
+  color: var(--color-text-inverse); 
   border: none; 
   border-radius: clamp(6px, 1vw, 10px); 
-  font-size: clamp(0.9rem, 1.2vw, 1.15rem); 
-  font-weight: 700; 
+  font-size: var(--text-md); 
+  font-family: var(--font-primary);
+  font-weight: var(--weight-semibold); 
   cursor: pointer; 
-  letter-spacing: 0.5px; 
+  letter-spacing: var(--tracking-wide); 
 }
 
 .submit-btn:hover { background-color: #3b4559; }

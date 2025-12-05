@@ -144,29 +144,24 @@ const goBackToCheckout = () => {
 </template>
 
 <style scoped>
-/* Header styles (match MenuPage) */
+/* Responsive QR Codes Page */
 /* header styles are provided by the shared HeaderBar component */
-
-/* 🔴 Removed original .header, .brand, and .nav-right styles */
-
-
-/* 🔴 CHANGE: Removed numeric-specific CSS rules (not needed for type="text") */
 
 .qr-container {
   min-height: 100vh;
   background-color: #f5f5f5;
-  padding-bottom: 100px;
+  padding-bottom: clamp(80px, 12vw, 120px);
+  font-size: clamp(14px, 1vw + 10px, 16px);
 }
-/* .header { ... } - REMOVED */
 
 /* Back Button */
 .back-btn-wrapper {
   display: flex;
   justify-content: flex-start; 
-  padding-top: 1.5rem;
-  max-width: 1000px; 
+  padding-top: clamp(1rem, 2vw, 1.8rem);
+  max-width: clamp(800px, 75vw, 1050px); 
   margin: 0 auto; 
-  padding-left: 2rem; 
+  padding-left: clamp(1rem, 2.5vw, 2.5rem); 
 }
 
 .top-back-btn {
@@ -174,77 +169,83 @@ const goBackToCheckout = () => {
   border: none;
   color: #555;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: clamp(0.8rem, 1vw, 0.95rem);
   cursor: pointer;
   display: flex;
   align-items: center;
   padding: 0;
 }
+
 .top-back-btn:hover {
   color: #2d3446;
   text-decoration: underline;
 }
 
 .content-wrapper { 
-  max-width: 1000px; 
+  max-width: clamp(800px, 75vw, 1050px); 
   margin: 0 auto; 
-  padding: 2rem; 
+  padding: clamp(1.2rem, 2.5vw, 2.5rem); 
 }
+
 .page-title { 
-  margin-bottom: 1rem; 
+  margin-bottom: clamp(0.6rem, 1.2vw, 1.1rem); 
   color: #333; 
   text-align: center;
+  font-size: clamp(1.3rem, 2vw, 1.8rem);
 }
+
 .instruction-text {
   text-align: center;
   color: #555;
-  margin-bottom: 2rem;
-  font-size: 1rem;
+  margin-bottom: clamp(1.2rem, 2.5vw, 2.2rem);
+  font-size: clamp(0.85rem, 1.1vw, 1.05rem);
 }
 
 /* QR Grid Layout */
 .qr-grid {
   display: flex;
   justify-content: center;
-  gap: 3rem;
-  margin-bottom: 3rem;
+  gap: clamp(1.5rem, 3.5vw, 3.5rem);
+  margin-bottom: clamp(1.8rem, 4vw, 3.5rem);
 }
+
 @media (max-width: 768px) {
   .qr-grid { 
     flex-direction: column; 
     align-items: center; 
-    gap: 2rem;
+    gap: clamp(1.2rem, 2.5vw, 2.2rem);
   }
 }
 
 .qr-card {
   background: white;
-  padding: 2rem;
-  border-radius: 8px;
+  padding: clamp(1.2rem, 2.5vw, 2.5rem);
+  border-radius: clamp(6px, 0.8vw, 10px);
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   width: 100%;
-  max-width: 350px;
+  max-width: clamp(260px, 30vw, 370px);
   text-align: center;
 }
-.gcash-card { border-top: 5px solid #00A950; } /* GCash color */
-.maya-card { border-top: 5px solid #20A69A; } /* Maya color */
+
+.gcash-card { border-top: 5px solid #00A950; }
+.maya-card { border-top: 5px solid #20A69A; }
 
 .qr-title {
   margin-top: 0;
   color: #444;
-  font-size: 1.5rem;
-  margin-bottom: 1.5rem;
+  font-size: clamp(1.1rem, 1.6vw, 1.55rem);
+  margin-bottom: clamp(1rem, 2vw, 1.8rem);
 }
 
 .qr-placeholder-box {
   background: #eee;
   border: 1px dashed #ccc;
-  width: 200px;
-  height: 200px;
+  width: clamp(140px, 18vw, 220px);
+  height: clamp(140px, 18vw, 220px);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 1.5rem;
+  margin: 0 auto clamp(1rem, 2vw, 1.8rem);
   border-radius: 6px;
 }
 
@@ -255,72 +256,99 @@ const goBackToCheckout = () => {
 }
 
 .account-details p {
-  margin: 0.5rem 0;
-  font-size: 0.95rem;
+  margin: clamp(0.3rem, 0.6vw, 0.5rem) 0;
+  font-size: clamp(0.8rem, 1vw, 1rem);
   color: #666;
 }
 
 /* Confirmation Section (Reference Number Input) */
 .confirmation-section {
-  max-width: 600px;
+  max-width: clamp(420px, 50vw, 620px);
   margin: 0 auto;
-  padding: 2rem;
+  padding: clamp(1.2rem, 2.5vw, 2.5rem);
   background: white;
-  border-radius: 8px;
+  border-radius: clamp(6px, 0.8vw, 10px);
   box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
+
 .confirmation-section h3 {
     text-align: center;
     color: #2d3446;
-    margin-bottom: 1.5rem;
+    margin-bottom: clamp(1rem, 2vw, 1.8rem);
+    font-size: clamp(1rem, 1.3vw, 1.2rem);
 }
-.form-group { margin-bottom: 1rem; }
-label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: #666; }
+
+.form-group { margin-bottom: clamp(0.6rem, 1.2vw, 1.1rem); }
+
+label { 
+  display: block; 
+  margin-bottom: clamp(0.3rem, 0.6vw, 0.5rem); 
+  font-size: clamp(0.8rem, 1vw, 0.95rem); 
+  color: #666; 
+}
+
 .ref-input { 
   width: 100%; 
-  padding: 0.8rem; 
+  padding: clamp(0.5rem, 1vw, 0.9rem); 
   border: 1px solid #ddd; 
-  border-radius: 6px; 
-  font-size: 1rem; 
+  border-radius: clamp(4px, 0.6vw, 8px); 
+  font-size: clamp(0.85rem, 1.1vw, 1.05rem); 
   outline: none; 
 }
+
 .ref-input:focus { border-color: #ffb84d; }
+
 .ref-note {
-    font-size: 0.8rem;
+    font-size: clamp(0.7rem, 0.85vw, 0.85rem);
     color: #b73225;
-    margin-top: 0.5rem;
+    margin-top: clamp(0.3rem, 0.6vw, 0.5rem);
     text-align: center;
 }
 
 /* Sticky Footer */
 .bottom-bar {
   position: fixed;
-  bottom: 0; left: 0; width: 100%;
-  background: #2d3446; /* Dark background for bottom bar */
-  padding: 1.5rem 2rem;
+  bottom: 0; 
+  left: 0; 
+  width: 100%;
+  background: #2d3446;
+  padding: clamp(1rem, 2vw, 1.8rem) clamp(1.2rem, 2.5vw, 2.5rem);
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
 }
+
 .bar-total { 
-  font-size: 1.2rem; 
+  font-size: clamp(0.95rem, 1.3vw, 1.25rem); 
   color: white; 
 }
+
 .confirm-btn {
-  background-color: #00A950; /* GCash/Success inspired color */
+  background-color: #00A950;
   color: white;
   border: none;
-  padding: 0.8rem 2rem;
+  padding: clamp(0.5rem, 1vw, 0.9rem) clamp(1.2rem, 2.5vw, 2.5rem);
   font-weight: 700;
   border-radius: 25px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: clamp(0.85rem, 1.1vw, 1.05rem);
   transition: background 0.2s;
 }
+
 .confirm-btn:hover:not(:disabled) { background-color: #008f44; }
+
 .confirm-btn:disabled {
   background-color: #999;
   cursor: not-allowed;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 480px) {
+  .bottom-bar {
+    flex-direction: column;
+    gap: 0.8rem;
+    padding: 1rem;
+  }
 }
 </style>

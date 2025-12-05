@@ -61,7 +61,7 @@ const stationName = (() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 2rem; /* increased size */
+  padding: clamp(0.5rem, 1vw, 0.85rem) clamp(1rem, 3vw, 2.5rem);
   border-bottom: 1px solid #eee;
   flex-shrink: 0;
 }
@@ -69,18 +69,66 @@ const stationName = (() => {
 .logo {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 1.4rem; /* slightly larger */
+  gap: clamp(6px, 1vw, 12px);
+  font-size: clamp(1rem, 1.5vw, 1.5rem);
   font-weight: 700;
   color: #2c3e50;
 }
 
-.logo-img { height: 40px; width: auto; } /* larger logo */
+.logo-img { 
+  height: clamp(28px, 3vw, 45px); 
+  width: auto; 
+}
 
-.user-actions { display: flex; align-items: center; gap: 12px; }
-.station-id { font-weight: 700; color: #555; margin-right: 6px; font-size: 1rem }
-.icon-btn { background:none; border:none; cursor:pointer; padding:6px; border-radius:6px; transition:background 0.15s }
-.icon-btn:hover { background-color:#f0f0f0 }
-.logout-btn { color:#d9534f }
-.logout-btn:hover { background-color:#ffe6e6 }
+.user-actions { 
+  display: flex; 
+  align-items: center; 
+  gap: clamp(8px, 1.2vw, 14px); 
+}
+
+.station-id { 
+  font-weight: 700; 
+  color: #555; 
+  margin-right: clamp(4px, 0.5vw, 8px); 
+  font-size: clamp(0.8rem, 1vw, 1.05rem);
+}
+
+.icon-btn { 
+  background: none; 
+  border: none; 
+  cursor: pointer; 
+  padding: clamp(4px, 0.5vw, 8px); 
+  border-radius: 6px; 
+  transition: background 0.15s;
+}
+
+.icon-btn svg {
+  width: clamp(16px, 1.5vw, 22px);
+  height: clamp(16px, 1.5vw, 22px);
+}
+
+.icon-btn:hover { background-color: #f0f0f0; }
+.logout-btn { color: #d9534f; }
+.logout-btn:hover { background-color: #ffe6e6; }
+
+/* Responsive breakpoints */
+@media (max-width: 768px) {
+  .station-id {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .top-bar {
+    padding: 0.5rem 1rem;
+  }
+  
+  .logo {
+    font-size: 0.95rem;
+  }
+  
+  .logo-img {
+    height: 24px;
+  }
+}
 </style>

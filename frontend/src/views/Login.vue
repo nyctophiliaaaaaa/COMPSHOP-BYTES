@@ -119,63 +119,64 @@ const handleLogin = async () => {
 </template>
 
 <style scoped>
-/* Your CSS remains exactly the same */
+/* Responsive Login Page */
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: white; 
+  background-color: white;
+  padding: clamp(1rem, 3vw, 2rem);
 }
 
 .card {
   background-color: #e6e6e6;
   width: 100%;
-  max-width: 480px;
-  padding: 3rem 2.5rem;
-  border-radius: 20px;
+  max-width: clamp(320px, 40vw, 480px);
+  padding: clamp(2rem, 4vw, 3.5rem) clamp(1.5rem, 3vw, 2.5rem);
+  border-radius: clamp(12px, 2vw, 20px);
   text-align: center;
   box-shadow: 0 4px 20px rgba(0,0,0,0.05);
 }
 
 .header {
-  margin-bottom: 2rem;
+  margin-bottom: clamp(1.2rem, 2.5vw, 2rem);
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 5px;
+  gap: clamp(4px, 0.8vw, 8px);
 }
 
 .logo-img {
-  width: 60px; 
+  width: clamp(40px, 5vw, 65px); 
   height: auto;
   object-fit: contain;
 }
 
 h1 {
-  font-size: 2.5rem; 
+  font-size: clamp(1.6rem, 3vw, 2.5rem); 
   font-weight: 400; 
   color: #2c3e50;
   margin: 0;
   line-height: 1;
-  min-width: 200px; 
+  min-width: clamp(140px, 15vw, 200px); 
 }
 
 .input-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: clamp(1rem, 2vw, 1.5rem);
   position: relative;
 }
 
 .password-group input {
-  padding-right: 50px;
+  padding-right: clamp(40px, 5vw, 55px);
 }
 
 input {
   width: 100%;
-  padding: 1rem 1.2rem;
+  padding: clamp(0.7rem, 1.3vw, 1.1rem) clamp(0.9rem, 1.5vw, 1.3rem);
   border: none;
-  border-radius: 12px;
-  font-size: 0.95rem;
+  border-radius: clamp(8px, 1.2vw, 12px);
+  font-size: clamp(0.85rem, 1vw, 1rem);
   background: white;
   outline: none;
   color: #555;
@@ -185,37 +186,39 @@ input::placeholder { color: #bbb; }
 
 .asterisk {
   position: absolute;
-  right: 15px;
-  top: 18px;
+  right: clamp(10px, 1.5vw, 18px);
+  top: clamp(14px, 1.8vw, 20px);
   color: #ff4d4d;
-  font-size: 1.2rem;
+  font-size: clamp(0.9rem, 1.2vw, 1.2rem);
   pointer-events: none;
 }
 
 .eye-btn {
   position: absolute;
-  right: 40px;
+  right: clamp(30px, 4vw, 45px);
   top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
   cursor: pointer;
-  padding: 5px;
+  padding: clamp(3px, 0.5vw, 6px);
   display: flex;    
   align-items: center; 
 }
 
 .eye-icon-img {
-  width: 24px; 
+  width: clamp(18px, 2vw, 26px); 
   height: auto;
 }
 
 .links {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 2rem;
-  font-size: 0.9rem;
-  padding: 0 5px;
+  margin-bottom: clamp(1.2rem, 2.5vw, 2rem);
+  font-size: clamp(0.75rem, 1vw, 0.95rem);
+  padding: 0 clamp(3px, 0.5vw, 6px);
+  flex-wrap: wrap;
+  gap: clamp(0.5rem, 1vw, 1rem);
 }
 
 .links a {
@@ -226,16 +229,16 @@ input::placeholder { color: #bbb; }
 
 .login-btn {
   width: 100%;
-  padding: 1rem;
+  padding: clamp(0.7rem, 1.3vw, 1.1rem);
   background-color: #2d3446;
   color: white;
   border: none;
-  border-radius: 10px;
-  font-size: 1.1rem;
+  border-radius: clamp(6px, 1vw, 10px);
+  font-size: clamp(0.9rem, 1.2vw, 1.15rem);
   font-weight: 600;
   cursor: pointer;
   letter-spacing: 0.5px;
-  margin-bottom: 2.5rem;
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
 }
 
 .login-btn:hover { 
@@ -248,16 +251,25 @@ input::placeholder { color: #bbb; }
 }
 
 .footer p {
-  margin-bottom: 0.2rem;
+  margin-bottom: clamp(0.15rem, 0.3vw, 0.25rem);
   color: #000;
-  font-size: 1rem;
+  font-size: clamp(0.85rem, 1vw, 1rem);
 }
 
 .staff-link {
   color: #0044cc;
   text-decoration: underline;
   font-weight: 500;
-  font-size: 1rem;
+  font-size: clamp(0.85rem, 1vw, 1rem);
   cursor: pointer;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 480px) {
+  .links {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
 }
 </style>

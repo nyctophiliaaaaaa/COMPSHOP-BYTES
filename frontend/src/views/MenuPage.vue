@@ -236,6 +236,11 @@ const goToCart = () => {
 </template>
 
 <style scoped>
+/* CSS Custom Properties for responsive scaling */
+:root {
+  --base-font-size: clamp(14px, 1vw + 10px, 16px);
+}
+
 .compshop-container {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
@@ -245,13 +250,14 @@ const goToCart = () => {
   background-color: #fff;
   display: flex;
   flex-direction: column;
+  font-size: clamp(14px, 1vw + 10px, 16px);
 }
 
 .top-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 1.5rem;
+  padding: clamp(0.4rem, 1vw, 0.6rem) clamp(1rem, 2vw, 1.5rem);
   border-bottom: 1px solid #eee;
   flex-shrink: 0;
 }
@@ -259,35 +265,35 @@ const goToCart = () => {
 .logo {
   display: flex;        
   align-items: center;
-  gap: 8px;             
-  font-size: 1.2rem;
+  gap: clamp(6px, 0.5vw, 10px);             
+  font-size: clamp(1rem, 1.5vw, 1.3rem);
   font-weight: 700;
   color: #2c3e50;
 }
 
 .logo-img {
-  height: 30px;
+  height: clamp(24px, 2.5vw, 35px);
   width: auto;          
 }
 
 .user-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: clamp(8px, 1vw, 12px);
 }
 
 .station-id {
   font-weight: 600;
   color: #555;
-  margin-right: 5px;
-  font-size: 0.9rem;
+  margin-right: clamp(3px, 0.5vw, 6px);
+  font-size: clamp(0.8rem, 1vw, 0.95rem);
 }
 
 .icon-btn {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 4px;
+  padding: clamp(3px, 0.3vw, 5px);
   border-radius: 4px;
   transition: background 0.2s;
 }
@@ -308,37 +314,40 @@ const goToCart = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.8rem 1.5rem;
+  padding: clamp(0.5rem, 1vw, 0.9rem) clamp(1rem, 2vw, 1.5rem);
   flex-shrink: 0;
+  flex-wrap: wrap;
+  gap: clamp(0.5rem, 1vw, 1rem);
 }
 
 .categories {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: clamp(6px, 1vw, 12px);
+  flex-wrap: wrap;
 }
 
 .cat-label {
   font-weight: 700;
   display: flex;
   align-items: center;
-  gap: 5px;
-  font-size: 0.9rem;
+  gap: clamp(3px, 0.5vw, 6px);
+  font-size: clamp(0.8rem, 1vw, 0.95rem);
 }
 
 .cat-icon {
-  width: 20px;
-  height: 20px;
+  width: clamp(16px, 1.5vw, 22px);
+  height: clamp(16px, 1.5vw, 22px);
 }
 
 .cat-btn {
   border: none;
   background: none;
-  font-size: 0.9rem;
+  font-size: clamp(0.8rem, 1vw, 0.95rem);
   font-weight: 600;
   color: #555;
   cursor: pointer;
-  padding: 4px 8px;
+  padding: clamp(3px, 0.4vw, 5px) clamp(6px, 0.8vw, 10px);
 }
 
 .cat-btn.active {
@@ -352,25 +361,25 @@ const goToCart = () => {
 }
 
 .search-wrapper input {
-  padding: 6px 30px 6px 10px;
+  padding: clamp(5px, 0.6vw, 8px) clamp(24px, 2.5vw, 35px) clamp(5px, 0.6vw, 8px) clamp(8px, 1vw, 12px);
   border: 1px solid #ddd;
   border-radius: 4px;
-  width: 200px;
-  font-size: 0.9rem;
+  width: clamp(150px, 15vw, 250px);
+  font-size: clamp(0.8rem, 1vw, 0.95rem);
 }
 
 .search-icon-img {
   position: absolute;
-  right: 8px;
+  right: clamp(6px, 0.7vw, 10px);
   top: 50%;
   transform: translateY(-50%);
-  width: 16px;  
+  width: clamp(14px, 1.2vw, 18px);  
   height: auto;
   cursor: pointer;
 }
 
 .content-area {
-  padding: 0 1.5rem 1rem;
+  padding: 0 clamp(1rem, 2vw, 1.5rem) clamp(0.8rem, 1vw, 1.2rem);
   flex-grow: 1;
   overflow-y: auto;
 }
@@ -379,43 +388,44 @@ const goToCart = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.8rem;
+  margin-bottom: clamp(0.5rem, 1vw, 1rem);
 }
 
 .content-header h2 {
-  font-size: 1.1rem;
+  font-size: clamp(1rem, 1.3vw, 1.2rem);
   margin: 0;
 }
 
 .sort-wrapper label {
-  font-size: 0.85rem;
+  font-size: clamp(0.75rem, 0.9vw, 0.9rem);
 }
 
 .sort-wrapper select {
-  padding: 3px;
+  padding: clamp(2px, 0.3vw, 4px);
   border: 1px solid #ddd;
   border-radius: 4px;
-  margin-left: 5px;
-  font-size: 0.85rem;
+  margin-left: clamp(3px, 0.5vw, 6px);
+  font-size: clamp(0.75rem, 0.9vw, 0.9rem);
 }
 
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1rem;
+  /* Responsive grid: smaller cards on small screens, larger on big screens */
+  grid-template-columns: repeat(auto-fill, minmax(clamp(140px, 12vw, 200px), 1fr));
+  gap: clamp(0.6rem, 1.2vw, 1.2rem);
+  margin-bottom: clamp(0.8rem, 1vw, 1.2rem);
 }
 
 .loading-state {
   text-align: center;
-  padding: 2rem;
-  font-size: 1.2rem;
+  padding: clamp(1.5rem, 2vw, 2.5rem);
+  font-size: clamp(1rem, 1.3vw, 1.3rem);
   color: #666;
 }
 
 .product-card {
   border: 1px solid #eee;
-  border-radius: 8px;
+  border-radius: clamp(6px, 0.6vw, 10px);
   overflow: hidden;
   transition: box-shadow 0.2s;
   background: white;
@@ -431,12 +441,13 @@ const goToCart = () => {
 
 .image-container {
   width: 100%;
-  height: 120px;
+  /* Responsive height based on viewport */
+  height: clamp(90px, 10vw, 140px);
   background-color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px;          
+  padding: clamp(6px, 0.8vw, 12px);          
 }
 
 .image-container img {
@@ -448,13 +459,13 @@ const goToCart = () => {
 }
 
 .card-details {
-  padding: 0.8rem;
+  padding: clamp(0.5rem, 0.8vw, 1rem);
 }
 
 .product-name {
-  font-size: 0.9rem;
+  font-size: clamp(0.8rem, 1vw, 0.95rem);
   font-weight: 700;
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 clamp(0.3rem, 0.5vw, 0.6rem) 0;
   min-height: 2.5em;
   line-height: 1.2;
 }
@@ -469,21 +480,21 @@ const goToCart = () => {
 .price {
   color: #f59e0b;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: clamp(0.85rem, 1.1vw, 1.05rem);
 }
 
 .add-btn {
   background-color: #ff6b4a;
   color: white;
   border: none;
-  padding: 5px 12px;
+  padding: clamp(4px, 0.4vw, 6px) clamp(8px, 1vw, 14px);
   border-radius: 4px;
   cursor: pointer;
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: clamp(0.75rem, 0.9vw, 0.9rem);
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: clamp(2px, 0.3vw, 4px);
 }
 
 .add-btn:hover {
@@ -493,28 +504,28 @@ const goToCart = () => {
 .pagination {
   display: flex;
   justify-content: center;
-  gap: 15px;
+  gap: clamp(10px, 1.2vw, 18px);
   align-items: center;
-  margin-top: 2rem;     
+  margin-top: clamp(1.2rem, 2vw, 2.5rem);     
 }
 
 .page-nav {
   border: none;
   background: none;
-  padding: 5px 10px;
+  padding: clamp(4px, 0.4vw, 6px) clamp(8px, 1vw, 12px);
   cursor: pointer;
   color: #777;
-  font-size: 1rem;
+  font-size: clamp(0.85rem, 1vw, 1.05rem);
   font-weight: bold;
 }
 
 .page-num {
   border: none;
   background: none;
-  padding: 5px 10px;
+  padding: clamp(4px, 0.4vw, 6px) clamp(8px, 1vw, 12px);
   cursor: pointer;
   color: #777;
-  font-size: 1rem;
+  font-size: clamp(0.85rem, 1vw, 1.05rem);
 }
 
 .page-num.active {
@@ -523,7 +534,100 @@ const goToCart = () => {
 }
 
 .nav-icon {
-  height: 16px;
+  height: clamp(12px, 1.3vw, 18px);
   width: auto;
+}
+
+/* ========== RESPONSIVE BREAKPOINTS ========== */
+
+/* Small laptops / tablets (1024px and below) */
+@media (max-width: 1024px) {
+  .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+  
+  .filter-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .search-wrapper {
+    width: 100%;
+  }
+  
+  .search-wrapper input {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+/* Tablets (768px and below) */
+@media (max-width: 768px) {
+  .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 0.6rem;
+  }
+  
+  .categories {
+    flex-wrap: wrap;
+  }
+  
+  .cat-btn {
+    font-size: 0.8rem;
+    padding: 4px 8px;
+  }
+}
+
+/* Mobile phones (480px and below) */
+@media (max-width: 480px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+  
+  .image-container {
+    height: 80px;
+  }
+  
+  .card-details {
+    padding: 0.5rem;
+  }
+  
+  .product-name {
+    font-size: 0.75rem;
+    min-height: 2em;
+  }
+  
+  .price {
+    font-size: 0.8rem;
+  }
+  
+  .add-btn {
+    padding: 4px 8px;
+    font-size: 0.7rem;
+  }
+}
+
+/* Large screens (1440px and above) */
+@media (min-width: 1440px) {
+  .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+  
+  .image-container {
+    height: 150px;
+  }
+}
+
+/* Extra large screens (1920px and above) */
+@media (min-width: 1920px) {
+  .compshop-container {
+    max-width: 1920px;
+    margin: 0 auto;
+  }
+  
+  .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
 }
 </style>

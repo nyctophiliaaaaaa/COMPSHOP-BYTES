@@ -94,18 +94,122 @@ const goBack = () => router.push('/enter-code')
 </template>
 
 <style scoped>
-.container { display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: white; }
-.card { position: relative; background-color: #e6e6e6; width: 100%; max-width: 500px; padding: 3rem 2.5rem; border-radius: 20px; text-align: left; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
-.back-btn { position: absolute; top: 20px; left: 20px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #333; padding: 5px; }
-.header { display: flex; align-items: center; gap: 15px; margin-top: 1rem; margin-bottom: 1rem; }
-.logo-img { width: 50px; height: auto; object-fit: contain; }
-.header h1 { font-size: 1.8rem; font-weight: 700; color: #000; margin: 0; }
-.description { color: #666; font-size: 1rem; margin-bottom: 2.5rem; line-height: 1.5; }
-.input-group { margin-bottom: 1.5rem; position: relative; }
-input { width: 100%; padding: 1rem; border: none; border-radius: 12px; font-size: 0.95rem; background: white; outline: none; color: #555; }
-.submit-btn { width: 100%; padding: 1rem; background-color: #2d3446; color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: 700; cursor: pointer; letter-spacing: 0.5px; margin-top: 2rem; }
-.submit-btn:disabled { background-color: #777; cursor: not-allowed; }
-.password-group input { padding-right: 50px; }
-.eye-btn { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; padding: 5px; display: flex; align-items: center; justify-content: center; }
-.eye-icon-img { width: 24px; height: auto; }
+/* Responsive Set New Password Page */
+.container { 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  min-height: 100vh; 
+  background-color: white;
+  padding: clamp(1rem, 3vw, 2rem);
+}
+
+.card { 
+  position: relative; 
+  background-color: #e6e6e6; 
+  width: 100%; 
+  max-width: clamp(340px, 42vw, 520px); 
+  padding: clamp(2rem, 4vw, 3.5rem) clamp(1.5rem, 3vw, 2.8rem); 
+  border-radius: clamp(12px, 2vw, 20px); 
+  text-align: left; 
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05); 
+}
+
+.back-btn { 
+  position: absolute; 
+  top: clamp(14px, 2vw, 22px); 
+  left: clamp(14px, 2vw, 22px); 
+  background: none; 
+  border: none; 
+  font-size: clamp(1.2rem, 1.8vw, 1.6rem); 
+  cursor: pointer; 
+  color: #333; 
+  padding: clamp(3px, 0.5vw, 6px); 
+}
+
+.header { 
+  display: flex; 
+  align-items: center; 
+  gap: clamp(10px, 1.5vw, 18px); 
+  margin-top: clamp(0.6rem, 1.2vw, 1.1rem); 
+  margin-bottom: clamp(0.6rem, 1.2vw, 1.1rem); 
+}
+
+.logo-img { 
+  width: clamp(35px, 4.5vw, 55px); 
+  height: auto; 
+  object-fit: contain; 
+}
+
+.header h1 { 
+  font-size: clamp(1.3rem, 2vw, 1.9rem); 
+  font-weight: 700; 
+  color: #000; 
+  margin: 0; 
+}
+
+.description { 
+  color: #666; 
+  font-size: clamp(0.85rem, 1.1vw, 1.05rem); 
+  margin-bottom: clamp(1.5rem, 3vw, 2.8rem); 
+  line-height: 1.5; 
+}
+
+.input-group { 
+  margin-bottom: clamp(1rem, 2vw, 1.8rem); 
+  position: relative; 
+}
+
+input { 
+  width: 100%; 
+  padding: clamp(0.7rem, 1.3vw, 1.1rem); 
+  border: none; 
+  border-radius: clamp(8px, 1.2vw, 12px); 
+  font-size: clamp(0.8rem, 1vw, 1rem); 
+  background: white; 
+  outline: none; 
+  color: #555; 
+}
+
+.submit-btn { 
+  width: 100%; 
+  padding: clamp(0.7rem, 1.3vw, 1.1rem); 
+  background-color: #2d3446; 
+  color: white; 
+  border: none; 
+  border-radius: clamp(6px, 1vw, 10px); 
+  font-size: clamp(0.9rem, 1.2vw, 1.15rem); 
+  font-weight: 700; 
+  cursor: pointer; 
+  letter-spacing: 0.5px; 
+  margin-top: clamp(1.2rem, 2.5vw, 2.2rem); 
+}
+
+.submit-btn:disabled { 
+  background-color: #777; 
+  cursor: not-allowed; 
+}
+
+.password-group input { 
+  padding-right: clamp(40px, 5vw, 55px); 
+}
+
+.eye-btn { 
+  position: absolute; 
+  right: clamp(8px, 1vw, 12px); 
+  top: 50%; 
+  transform: translateY(-50%); 
+  background: none; 
+  border: none; 
+  cursor: pointer; 
+  padding: clamp(3px, 0.5vw, 6px); 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+}
+
+.eye-icon-img { 
+  width: clamp(18px, 2vw, 26px); 
+  height: auto; 
+}
 </style>

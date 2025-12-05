@@ -146,40 +146,41 @@ const handleCheckout = () => {
 </template>
 
 <style scoped>
-
+/* Responsive Cart Page */
 .cart-container {
   min-height: 100vh;
   background-color: #f0f2f5;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: clamp(14px, 1vw + 10px, 16px);
 }
 
 /* header styles provided by HeaderBar component */
 
 .main-content {
-  padding: 2rem;
+  padding: clamp(1rem, 2.5vw, 2.5rem);
   display: flex;
   justify-content: center;
 }
 
 .cart-wrapper {
   width: 100%;
-  max-width: 900px; 
+  max-width: clamp(600px, 70vw, 950px); 
 }
 
 .top-nav-row {
-  margin-bottom: 1.5rem;
+  margin-bottom: clamp(1rem, 2vw, 1.8rem);
 }
 
 .back-link {
   color: #333;
   text-decoration: none;
   font-weight: 800; 
-  font-size: 0.9rem;
+  font-size: clamp(0.75rem, 1vw, 0.95rem);
   letter-spacing: 0.5px;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 20px; 
+  gap: clamp(5px, 0.8vw, 10px);
+  padding: clamp(8px, 1vw, 12px) clamp(14px, 2vw, 22px); 
   background-color: white;
   border-radius: 30px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
@@ -192,28 +193,28 @@ const handleCheckout = () => {
 }
 
 .arrow {
-  font-size: 1.1rem;
+  font-size: clamp(0.9rem, 1.2vw, 1.15rem);
   font-weight: bold;
 }
 
 .main-cart-card {
   background-color: white;
-  border-radius: 4px; 
+  border-radius: clamp(4px, 0.5vw, 6px); 
   box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-  padding: 2.5rem;
-  min-height: 500px;
+  padding: clamp(1.5rem, 3vw, 3rem);
+  min-height: clamp(350px, 45vw, 520px);
 }
 
 .cart-header-row {
   display: flex;
   justify-content: space-between; 
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: clamp(0.6rem, 1.2vw, 1.1rem);
   width: 100%; 
 }
 
 .cart-header-row h2 {
-  font-size: 1.8rem;
+  font-size: clamp(1.3rem, 2vw, 1.9rem);
   color: #333;
   margin: 0;
   font-weight: 700;
@@ -226,7 +227,7 @@ const handleCheckout = () => {
 }
 
 .item-count-label {
-  font-size: 1.3rem; 
+  font-size: clamp(1rem, 1.5vw, 1.4rem); 
   font-weight: 700;  
   color: #333;
 }
@@ -234,15 +235,15 @@ const handleCheckout = () => {
 .divider {
   height: 1px;
   background-color: #eee;
-  margin-bottom: 2rem;
+  margin-bottom: clamp(1.2rem, 2.5vw, 2.2rem);
   width: 100%;
 }
 
 .cart-item-card {
   background-color: white;
-  border-radius: 4px;        
-  padding: 1.5rem 2rem;      
-  margin-bottom: 1.5rem;     
+  border-radius: clamp(4px, 0.5vw, 6px);        
+  padding: clamp(1rem, 2vw, 1.8rem) clamp(1.2rem, 2.5vw, 2.2rem);      
+  margin-bottom: clamp(1rem, 2vw, 1.6rem);     
   box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
   display: flex;
   align-items: center;
@@ -253,24 +254,24 @@ const handleCheckout = () => {
 .item-left {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: clamp(12px, 2vw, 22px);
   flex: 1;
 }
 
 .item-right {
   display: flex;
   align-items: center;
-  gap: 40px; 
+  gap: clamp(20px, 4vw, 45px); 
 }
 
 .img-wrapper {
-  width: 70px;
-  height: 70px;
+  width: clamp(50px, 6vw, 80px);
+  height: clamp(50px, 6vw, 80px);
   background-color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4px; 
+  border-radius: clamp(4px, 0.5vw, 6px); 
   border: 1px solid #eee;
 }
 
@@ -281,14 +282,14 @@ const handleCheckout = () => {
 }
 
 .details h3 {
-  font-size: 1.1rem;
-  margin: 0 0 5px 0;
+  font-size: clamp(0.9rem, 1.2vw, 1.15rem);
+  margin: 0 0 clamp(3px, 0.5vw, 6px) 0;
   color: #333;
   font-weight: 700;
 }
 
 .cat-text {
-  font-size: 0.9rem;
+  font-size: clamp(0.75rem, 1vw, 0.95rem);
   color: #888;
 }
 
@@ -296,35 +297,36 @@ const handleCheckout = () => {
   display: flex;
   align-items: center;
   background-color: #f9f9f9; 
-  border-radius: 4px; 
-  padding: 5px;
+  border-radius: clamp(4px, 0.5vw, 6px); 
+  padding: clamp(3px, 0.5vw, 6px);
 }
 
 .qty-control button {
   background: none;
   border: none;
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 1.3vw, 1.3rem);
   color: #555;
   cursor: pointer;
-  padding: 0 12px;
+  padding: 0 clamp(8px, 1.2vw, 14px);
   font-weight: bold;
 }
 
 .qty-control input {
-  width: 30px;
+  width: clamp(24px, 3vw, 35px);
   text-align: center;
   border: none;
   background: transparent;
   padding: 0;
   color: #333;
   font-weight: 600;
+  font-size: clamp(0.85rem, 1vw, 1rem);
 }
 
 .price {
   font-weight: 700;
   color: #333;
-  font-size: 1.2rem;
-  min-width: 90px;
+  font-size: clamp(1rem, 1.3vw, 1.25rem);
+  min-width: clamp(65px, 8vw, 100px);
   text-align: right;
 }
 
@@ -333,7 +335,7 @@ const handleCheckout = () => {
   border: none;
   color: #aaa;
   cursor: pointer;
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 1.3vw, 1.25rem);
   transition: color 0.2s;
 }
 
@@ -342,18 +344,18 @@ const handleCheckout = () => {
 }
 
 .empty-cart {
-  padding: 4rem 0;
+  padding: clamp(2.5rem, 5vw, 4.5rem) 0;
   text-align: center;
   color: #888;
-  font-size: 1.3rem;
+  font-size: clamp(1rem, 1.5vw, 1.35rem);
 }
 
 .cart-footer {
   display: flex;
   flex-direction: column; 
   align-items: flex-end;
-  margin-top: 2rem;
-  padding-top: 1rem;
+  margin-top: clamp(1.2rem, 2.5vw, 2.2rem);
+  padding-top: clamp(0.6rem, 1.2vw, 1.1rem);
   border-top: 1px solid #eee; 
 }
 
@@ -361,35 +363,35 @@ const handleCheckout = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 300px;
-  margin-bottom: 1rem;
+  width: clamp(220px, 28vw, 320px);
+  margin-bottom: clamp(0.6rem, 1.2vw, 1.1rem);
 }
 
 .total-label {
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 1.3vw, 1.25rem);
   color: #555;
   font-weight: 600;
   text-align: left;
 }
 
 .total-amount {
-  font-size: 1.5rem;
+  font-size: clamp(1.2rem, 1.7vw, 1.6rem);
   font-weight: 800;
   color: #333;
   text-align: right;
 }
 
 .checkout-btn {
-  padding: 14px 40px;
+  padding: clamp(10px, 1.5vw, 16px) clamp(28px, 4vw, 45px);
   background-color: #2d3446;
   color: white;
   border: none;
-  border-radius: 6px; 
+  border-radius: clamp(4px, 0.6vw, 8px); 
   font-weight: 700;
   letter-spacing: 1px;
   cursor: pointer;
   transition: all 0.2s ease; 
-  font-size: 1rem;
+  font-size: clamp(0.85rem, 1.1vw, 1.05rem);
   box-shadow: 0 4px 10px rgba(45, 52, 70, 0.3);
 }
 
@@ -398,22 +400,41 @@ const handleCheckout = () => {
   color: #333; 
 }
 
+/* Responsive breakpoints */
 @media (max-width: 768px) {
   .cart-item-card {
     flex-direction: column;
     align-items: flex-start;
-    padding: 1.5rem;
+    padding: clamp(1rem, 2vw, 1.5rem);
   }
   .item-right {
     width: 100%;
     justify-content: space-between;
-    margin-top: 1.5rem;
+    margin-top: clamp(1rem, 2vw, 1.5rem);
   }
   .cart-footer {
     align-items: center;
   }
   .total-row-display {
     width: 100%; 
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    padding: 1rem;
+  }
+  
+  .main-cart-card {
+    padding: 1.2rem;
+  }
+  
+  .item-right {
+    gap: 15px;
+  }
+  
+  .price {
+    min-width: 50px;
   }
 }
 </style>

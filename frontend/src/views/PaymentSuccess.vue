@@ -58,13 +58,79 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.success-container { min-height: 100vh; background-color: #f5f5f5; display: flex; flex-direction: column; }
-.card { background: white; margin: 3rem auto; padding: 4rem 2rem; text-align: center; max-width: 600px; width: 90%; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #ddd; }
-.check-circle { width: 80px; height: 80px; background-color: #ffcc66; color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 3rem; margin: 0 auto 1.5rem; }
-h2 { margin-bottom: 1.5rem; color: #000; font-weight: 700; font-size: 1.8rem; }
-h3 { margin-bottom: 2rem; font-size: 1.4rem; color: #000; font-weight: 600; }
-.cod-details p { margin-bottom: 1rem; color: #000; font-size: 1rem; }
-.sub-title { color: #333; margin-bottom: 2rem; }
-.description { color: #666; font-size: 0.95rem; margin-bottom: 3rem; }
-.redirect-box { border: 1px solid #ffcc80; color: #333; padding: 0.8rem 2rem; border-radius: 20px; display: inline-block; font-size: 0.9rem; margin-top: 1rem; }
+/* Responsive Payment Success Page */
+.success-container { 
+  min-height: 100vh; 
+  background-color: #f5f5f5; 
+  display: flex; 
+  flex-direction: column;
+  font-size: clamp(14px, 1vw + 10px, 16px);
+}
+
+.card { 
+  background: white; 
+  margin: clamp(1.5rem, 4vw, 3.5rem) auto; 
+  padding: clamp(2rem, 5vw, 4.5rem) clamp(1.2rem, 2.5vw, 2.5rem); 
+  text-align: center; 
+  max-width: clamp(400px, 50vw, 620px); 
+  width: 90%; 
+  border-radius: clamp(8px, 1.2vw, 14px); 
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+  border: 1px solid #ddd; 
+}
+
+.check-circle { 
+  width: clamp(55px, 7vw, 90px); 
+  height: clamp(55px, 7vw, 90px); 
+  background-color: #ffcc66; 
+  color: white; 
+  border-radius: 50%; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  font-size: clamp(2rem, 3.5vw, 3.5rem); 
+  margin: 0 auto clamp(1rem, 2vw, 1.8rem); 
+}
+
+h2 { 
+  margin-bottom: clamp(1rem, 2vw, 1.8rem); 
+  color: #000; 
+  font-weight: 700; 
+  font-size: clamp(1.3rem, 2vw, 1.9rem); 
+}
+
+h3 { 
+  margin-bottom: clamp(1.2rem, 2.5vw, 2.2rem); 
+  font-size: clamp(1.1rem, 1.6vw, 1.5rem); 
+  color: #000; 
+  font-weight: 600; 
+}
+
+.cod-details p { 
+  margin-bottom: clamp(0.6rem, 1.2vw, 1.1rem); 
+  color: #000; 
+  font-size: clamp(0.85rem, 1.1vw, 1.05rem); 
+}
+
+.sub-title { 
+  color: #333; 
+  margin-bottom: clamp(1.2rem, 2.5vw, 2.2rem);
+  font-size: clamp(0.9rem, 1.1vw, 1.05rem);
+}
+
+.description { 
+  color: #666; 
+  font-size: clamp(0.8rem, 1vw, 1rem); 
+  margin-bottom: clamp(1.8rem, 4vw, 3.5rem); 
+}
+
+.redirect-box { 
+  border: 1px solid #ffcc80; 
+  color: #333; 
+  padding: clamp(0.5rem, 1vw, 0.9rem) clamp(1.2rem, 2.5vw, 2.5rem); 
+  border-radius: 20px; 
+  display: inline-block; 
+  font-size: clamp(0.75rem, 1vw, 0.95rem); 
+  margin-top: clamp(0.6rem, 1.2vw, 1.1rem); 
+}
 </style>

@@ -135,41 +135,42 @@ const handleSignUp = async () => {
 </template>
 
 <style scoped>
-/* Keeping your exact styles */
+/* Responsive Signup Page */
 .signup-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: white; 
+  background-color: white;
+  padding: clamp(1rem, 3vw, 2rem);
 }
 
 .card {
   background-color: #e6e6e6;
   width: 100%;
-  max-width: 480px;
-  padding: 3rem 2.5rem;
-  border-radius: 20px;
+  max-width: clamp(320px, 40vw, 480px);
+  padding: clamp(2rem, 4vw, 3.5rem) clamp(1.5rem, 3vw, 2.5rem);
+  border-radius: clamp(12px, 2vw, 20px);
   text-align: center;
   box-shadow: 0 4px 20px rgba(0,0,0,0.05);
 }
 
 .header {
-  margin-bottom: 2rem;
+  margin-bottom: clamp(1.2rem, 2.5vw, 2rem);
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: clamp(6px, 1vw, 12px);
 }
 
 .logo-img {
-  width: 50px; 
+  width: clamp(35px, 4.5vw, 55px); 
   height: auto;
   object-fit: contain;
 }
 
 h1 {
-  font-size: 2.5rem; 
+  font-size: clamp(1.6rem, 3vw, 2.5rem); 
   font-weight: 400; 
   color: #2c3e50;
   margin: 0;
@@ -177,20 +178,20 @@ h1 {
 }
 
 .input-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: clamp(1rem, 2vw, 1.5rem);
   position: relative;
 }
 
 .password-group input {
-  padding-right: 50px;
+  padding-right: clamp(40px, 5vw, 55px);
 }
 
 input {
   width: 100%;
-  padding: 1rem 1.2rem;
+  padding: clamp(0.7rem, 1.3vw, 1.1rem) clamp(0.9rem, 1.5vw, 1.3rem);
   border: none;
-  border-radius: 12px;
-  font-size: 0.95rem;
+  border-radius: clamp(8px, 1.2vw, 12px);
+  font-size: clamp(0.85rem, 1vw, 1rem);
   background: white;
   outline: none;
   color: #555;
@@ -202,28 +203,28 @@ input::placeholder {
 
 .asterisk {
   position: absolute;
-  right: 15px;
-  top: 18px;
+  right: clamp(10px, 1.5vw, 18px);
+  top: clamp(14px, 1.8vw, 20px);
   color: #ff4d4d;
-  font-size: 1.2rem;
+  font-size: clamp(0.9rem, 1.2vw, 1.2rem);
   pointer-events: none;
 }
 
 .eye-btn {
   position: absolute;
-  right: 40px;
+  right: clamp(30px, 4vw, 45px);
   top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
   cursor: pointer;
-  padding: 5px;
+  padding: clamp(3px, 0.5vw, 6px);
   display: flex;    
   align-items: center; 
 }
 
 .eye-icon-img {
-  width: 24px; 
+  width: clamp(18px, 2vw, 26px); 
   height: auto;
 }
 
@@ -231,9 +232,9 @@ input::placeholder {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  margin-top: 2rem;
-  font-size: 0.9rem;
+  gap: clamp(0.3rem, 0.6vw, 0.5rem);
+  margin-top: clamp(1.2rem, 2.5vw, 2rem);
+  font-size: clamp(0.8rem, 1vw, 0.95rem);
 }
 
 .footer p {
@@ -250,21 +251,22 @@ input::placeholder {
 
 .signup-btn {
   width: 100%;
-  padding: 1rem;
+  padding: clamp(0.7rem, 1.3vw, 1.1rem);
   background-color: #2d3446;
   color: white;
   border: none;
-  border-radius: 10px;
-  font-size: 1.1rem;
+  border-radius: clamp(6px, 1vw, 10px);
+  font-size: clamp(0.9rem, 1.2vw, 1.15rem);
   font-weight: 600;
   cursor: pointer;
   letter-spacing: 0.5px;
-  margin-bottom: 0.5rem;
+  margin-bottom: clamp(0.3rem, 0.6vw, 0.5rem);
 }
 
 .signup-btn:hover { 
   background-color: #3b4559; 
 }
+
 .signup-btn:disabled {
   background-color: #777;
   cursor: not-allowed;

@@ -13,3 +13,32 @@ body {
   font-family: 'Poppins', sans-serif;
   color: #333;
 }
+
+
+.cart-notification-stack {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 9999;
+  align-items: flex-end;
+}
+.cart-notification {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  font-size: 1rem;
+  min-width: 220px;
+  margin: 0;
+}
+.cart-notif-img {
+  width: 40px;
+  height: 60px;
+  object-fit: cover;
+  margin-right: 12px;
+}

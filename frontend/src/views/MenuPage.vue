@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import axios from 'axios';
+import { addToCart } from '@/utils/cart.js';
 
 // Import static UI assets (Icons only)
 import categoriesIcon from '@/assets/categories-icon.jpg';
@@ -131,23 +132,8 @@ watch([searchQuery, selectedCategory], () => {
   currentPage.value = 1;
 });
 
-const addToCart = (item) => {
-  const userId = localStorage.getItem('userId');
-  const cartKey = userId ? `cart_${userId}` : 'myCart';
-  
-  let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
-  const existingItem = cart.find(i => i.id === item.id);
-  
-  // Use a fallback image if image_url is missing
-  const itemImage = item.image_url ? `/images/${item.image_url}` : null;
-
-  if (existingItem) {
-    existingItem.quantity++;
-  } else {
-    cart.push({ ...item, image: itemImage, quantity: 1 });
-  }
-  localStorage.setItem(cartKey, JSON.stringify(cart));
-  alert(`${item.name} added to cart!`);
+const addToCartHandler = (item) => {
+  addToCart(item);
 };
 
 const goToCart = () => {

@@ -1,15 +1,24 @@
 // Universal Add to Cart + Notification for all components
 export function addToCart(itemData) {
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    // Use the same cart key pattern as CartPage.vue
+    const userId = localStorage.getItem('userId');
+    const cartKey = userId ? `cart_${userId}` : 'myCart';
+    
+    let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
     const existingItem = cart.find(item => item.id === itemData.id);
 
     if (existingItem) {
         existingItem.quantity++;
     } else {
-        cart.push({ ...itemData, quantity: 1 });
+        // Build cart item with image path for CartPage display
+        cart.push({ 
+            ...itemData, 
+            quantity: 1,
+            image: `/images/${itemData.image_url}` // CartPage expects 'image' property
+        });
     }
 
-    localStorage.setItem('cart', JSON.stringify(cart));
+    localStorage.setItem(cartKey, JSON.stringify(cart));
     showAddToCartNotification(itemData);
     // Optionally: emit event or call updateCartDisplay()
 }

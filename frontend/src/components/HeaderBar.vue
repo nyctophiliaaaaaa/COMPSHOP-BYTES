@@ -3,13 +3,21 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import appLogo from '@/assets/logo.png'
 import OrderStatusPopup from '@/components/OrderStatus.vue'
+import { confirm } from '@/utils/toast.js'
 
 const router = useRouter()
 const showOrderStatus = ref(false)
 const toggleOrderStatus = () => { showOrderStatus.value = !showOrderStatus.value }
 const goToCart = () => { router.push('/cart') }
-const handleLogout = () => {
-  if (confirm('Are you sure you want to logout?')) {
+const handleLogout = async () => {
+  const confirmed = await confirm('Are you sure you want to logout?', {
+    title: 'Logout',
+    confirmText: 'Logout',
+    cancelText: 'Cancel',
+    type: 'warning'
+  })
+  
+  if (confirmed) {
     localStorage.removeItem('userRole')
     localStorage.removeItem('userId')
     localStorage.removeItem('username')

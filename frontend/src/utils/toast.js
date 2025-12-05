@@ -93,6 +93,104 @@ function removeToast(toast) {
   }, 300);
 }
 
+/**
+ * Show a confirm dialog (replaces native confirm())
+ * @param {string} message - The message to display
+ * @param {Object} options - Optional settings
+ * @returns {Promise<boolean>} - Resolves true if confirmed, false if cancelled
+ */
+export function showConfirm(message, options = {}) {
+  const {
+    title = 'Confirm',
+    confirmText = 'Yes',
+    cancelText = 'Cancel',
+    type = 'warning' // 'warning', 'danger', 'info'
+  } = options;
+
+  return new Promise((resolve) => {
+    // Create overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'confirm-overlay';
+    
+    // Type colors
+    const colors = {
+      warning: '#f59e0b',
+      danger: '#ef4444',
+      info: '#3b82f6'
+    };
+    
+    const iconColor = colors[type] || colors.warning;
+    
+    // Icons
+    const icons = {
+      warning: `<svg viewBox="0 0 24 24" fill="none" stroke="${iconColor}" stroke-width="2">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>`,
+      danger: `<svg viewBox="0 0 24 24" fill="none" stroke="${iconColor}" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="15" y1="9" x2="9" y2="15"/>
+        <line x1="9" y1="9" x2="15" y2="15"/>
+      </svg>`,
+      info: `<svg viewBox="0 0 24 24" fill="none" stroke="${iconColor}" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="16" x2="12" y2="12"/>
+        <line x1="12" y1="8" x2="12.01" y2="8"/>
+      </svg>`
+    };
+
+    overlay.innerHTML = `
+      <div class="confirm-modal">
+        <div class="confirm-icon">${icons[type] || icons.warning}</div>
+        <h3 class="confirm-title">${title}</h3>
+        <p class="confirm-message">${message}</p>
+        <div class="confirm-actions">
+          <button class="confirm-btn confirm-btn-cancel">${cancelText}</button>
+          <button class="confirm-btn confirm-btn-confirm confirm-btn-${type}">${confirmText}</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    // Trigger animation
+    requestAnimationFrame(() => {
+      overlay.classList.add('confirm-show');
+    });
+
+    // Handle buttons
+    const confirmBtn = overlay.querySelector('.confirm-btn-confirm');
+    const cancelBtn = overlay.querySelector('.confirm-btn-cancel');
+
+    const close = (result) => {
+      overlay.classList.remove('confirm-show');
+      overlay.classList.add('confirm-hide');
+      setTimeout(() => {
+        overlay.remove();
+        resolve(result);
+      }, 200);
+    };
+
+    confirmBtn.addEventListener('click', () => close(true));
+    cancelBtn.addEventListener('click', () => close(false));
+    
+    // Close on overlay click
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) close(false);
+    });
+    
+    // Close on Escape key
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        document.removeEventListener('keydown', handleEscape);
+        close(false);
+      }
+    };
+    document.addEventListener('keydown', handleEscape);
+  });
+}
+
 // Convenience methods
 export const toast = {
   success: (message, duration) => showToast(message, 'success', duration),
@@ -100,5 +198,7 @@ export const toast = {
   warning: (message, duration) => showToast(message, 'warning', duration),
   info: (message, duration) => showToast(message, 'info', duration)
 };
+
+export const confirm = showConfirm;
 
 export default toast;

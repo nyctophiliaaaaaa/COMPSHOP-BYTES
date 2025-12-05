@@ -1,7 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios' // 1. Import Axios
+import axios from 'axios'
+import toast from '@/utils/toast.js'
 
 import logoImage from '@/assets/logo.png';
 import hiddenEyeIcon from '@/assets/hidden-eye.jpg'
@@ -47,10 +48,10 @@ const handleLogin = async () => {
   } catch (error) {
     // Handle Errors (Wrong password, etc.)
     if (error.response && error.response.status === 401) {
-      alert('Invalid username or password.');
+      toast.error('Invalid username or password.');
     } else {
       console.error(error);
-      alert('Server error. Is the backend running?');
+      toast.error('Server error. Is the backend running?');
     }
   } finally {
     isLoading.value = false

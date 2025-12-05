@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue' // 🟢 ADDED: onMounted for stationName
 import { useRouter, useRoute } from 'vue-router'
+import toast from '@/utils/toast.js'
 
 // 🟢 NEW: Import logo and setup stationName for the header
 // appLogo not needed here; HeaderBar renders the logo
@@ -52,7 +53,7 @@ const handlePaymentSent = () => {
 
   // 🟢 CHANGE: Validation for exactly 12 characters (alphanumeric or any character)
   if (ref.length !== 12) {
-    alert('The Transaction Reference Number must be exactly 12 characters long.')
+    toast.warning('The Transaction Reference Number must be exactly 12 characters long.')
     return
   }
 

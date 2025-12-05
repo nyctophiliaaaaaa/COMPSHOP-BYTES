@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import toast from '@/utils/toast.js';
 
 import HeaderBar from '@/components/HeaderBar.vue'
 
@@ -65,7 +66,7 @@ const goBack = () => {
 
 const handleCheckout = () => {
   if (cartItems.value.length === 0) {
-    alert('Your cart is empty.');
+    toast.warning('Your cart is empty.');
     return;
   }
 

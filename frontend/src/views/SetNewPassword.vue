@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
+import toast from '@/utils/toast.js'
 
 import logoImage from '@/assets/logo.png';
 import hiddenEyeIcon from '@/assets/hidden-eye.jpg';
@@ -15,14 +16,14 @@ const isLoading = ref(false)
 
 const handleResetPassword = async () => {
   if (newPassword.value !== confirmPassword.value) {
-    alert('Passwords do not match.')
+    toast.warning('Passwords do not match.')
     return
   }
   
   const email = localStorage.getItem('resetEmail')
   
   if (!email) {
-      alert("Session expired.");
+      toast.error("Session expired.");
       router.push('/forgot-password');
       return;
   }
@@ -36,12 +37,12 @@ const handleResetPassword = async () => {
       newPassword: newPassword.value
     })
 
-    alert('Password has been successfully reset! Redirecting to login.')
+    toast.success('Password has been successfully reset! Redirecting to login.')
     localStorage.removeItem('resetEmail') // Clean up
     router.push('/') // Back to Login
   } catch (error) {
     console.error(error)
-    alert('Failed to reset password. Please try again.')
+    toast.error('Failed to reset password. Please try again.')
   } finally {
     isLoading.value = false
   }

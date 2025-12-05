@@ -1,7 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios' // 1. Import Axios
+import axios from 'axios'
+import toast from '@/utils/toast.js'
 
 import logoImage from '@/assets/logo.png';
 import hiddenEyeIcon from '@/assets/hidden-eye.jpg'
@@ -22,7 +23,7 @@ const credentials = ref({
 const handleSignUp = async () => {
   // 1. Validate Passwords Match
   if (credentials.value.password !== credentials.value.confirmPassword) {
-    alert('Passwords do not match')
+    toast.warning('Passwords do not match')
     return
   }
 
@@ -39,16 +40,16 @@ const handleSignUp = async () => {
     });
 
     // 3. Handle Success
-    alert('Account created successfully! Please login.');
+    toast.success('Account created successfully! Please login.');
     router.push('/'); // Redirect to Login page to authenticate
 
   } catch (error) {
     console.error(error);
     // 4. Handle Errors (e.g., Username taken)
     if (error.response && error.response.data.error) {
-      alert("Error: " + error.response.data.error);
+      toast.error("Error: " + error.response.data.error);
     } else {
-      alert("Registration failed. Please check if the backend is running.");
+      toast.error("Registration failed. Please check if the backend is running.");
     }
   } finally {
     isLoading.value = false

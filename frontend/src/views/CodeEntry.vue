@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
+import toast from '@/utils/toast.js'
 
 import logoImage from '@/assets/logo.png';
 
@@ -25,14 +26,14 @@ onUnmounted(() => clearInterval(timer))
 
 const handleVerifyCode = async () => {
     if (code.value.length < 4) {
-        alert('Please enter a valid code')
+        toast.warning('Please enter a valid code')
         return
     }
 
     const email = localStorage.getItem('resetEmail') // Get email from Step 1
     
     if (!email) {
-      alert("Session expired. Please start over.");
+      toast.error("Session expired. Please start over.");
       router.push('/forgot-password');
       return;
     }
@@ -45,11 +46,11 @@ const handleVerifyCode = async () => {
       })
 
       // If success
-      alert('Code verified! Proceeding to set new password.')
+      toast.success('Code verified! Proceeding to set new password.')
       router.push('/set-new-password') 
     } catch (error) {
       console.error(error)
-      alert('Invalid code. Check your terminal again.')
+      toast.error('Invalid code. Check your terminal again.')
     }
 }
 
@@ -58,10 +59,10 @@ const resendCode = async () => {
     if (countdown.value === 0 && email) {
         try {
             await axios.post('http://localhost:3000/api/auth/forgot-password', { email })
-            alert('New code sent! Check backend terminal.')
+            toast.success('New code sent! Check backend terminal.')
             startTimer()
         } catch (e) {
-            alert('Failed to resend code.')
+            toast.error('Failed to resend code.')
         }
     }
 }

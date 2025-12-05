@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
+import toast from '@/utils/toast.js'
 
 import logoImage from '@/assets/logo.png';
 
@@ -21,11 +22,11 @@ const handleSendCode = async () => {
     localStorage.setItem('resetEmail', email.value)
     
     // 3. Notify user (Simulation)
-    alert('Code generated! Please check your VS Code Terminal (Backend).') 
+    toast.success('Code generated! Please check your VS Code Terminal (Backend).') 
     router.push('/enter-code') 
   } catch (error) {
     console.error(error)
-    alert('Error: Email not found or server issue.')
+    toast.error('Error: Email not found or server issue.')
   } finally {
     isLoading.value = false
   }

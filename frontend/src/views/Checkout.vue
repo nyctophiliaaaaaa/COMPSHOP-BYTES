@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import HeaderBar from '@/components/HeaderBar.vue'
+import toast from '@/utils/toast.js'
 
 const router = useRouter()
 
@@ -39,13 +40,13 @@ const total = computed(() => subtotal.value + serviceFee + tax)
 const handlePlaceOrder = () => {
   // 1. Validation
   if (!form.value.name || !form.value.stationNumber) {
-    alert('Please fill in your name and station number.')
+    toast.warning('Please fill in your name and station number.')
     return
   }
 
   // 2. Empty Cart Check
   if (cartItems.value.length === 0) {
-    alert('Your cart is empty.')
+    toast.warning('Your cart is empty.')
     router.push('/cart')
     return
   }

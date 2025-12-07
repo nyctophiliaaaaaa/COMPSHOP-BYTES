@@ -1,10 +1,8 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue' // 🟢 ADDED: onMounted for stationName
+import { ref, computed, onMounted } from 'vue' 
 import { useRouter, useRoute } from 'vue-router'
 import toast from '@/utils/toast.js'
 
-// 🟢 NEW: Import logo and setup stationName for the header
-// appLogo not needed here; HeaderBar renders the logo
 import gcashImg from '@/assets/gcash.png'
 import mayaImg from '@/assets/maya.png'
 import HeaderBar from '@/components/HeaderBar.vue'
@@ -13,51 +11,41 @@ const stationName = ref('Station --');
 const router = useRouter()
 const route = useRoute()
 
-// HeaderBar component provides order-status, cart and logout
-
-// 1. Get the total amount from the route query
-// Use a default value of 0 if the query is missing or invalid
 const totalAmount = computed(() => {
   const total = parseFloat(route.query.total)
   return isNaN(total) ? 0.00 : total
 })
 
-// 2. State for the user-entered reference number
 const referenceNumber = ref('')
 
-// 3. Simulated account details for the QR codes
+
 const gcashAccount = {
-  name: 'Juan De** **uz',
+  name: 'C******p B***s',
   number: '0917-XXX-XXXX'
 }
 
 const mayaAccount = {
-  name: 'Maria *****s',
+  name: 'C******p B***s',
   number: '0918-XXX-XXXX'
 }
 
-// Image sources: allow override via query params (e.g. ?gcash=/path/to.png&maya=/path/to.png)
 const gcashQrSrc = computed(() => route.query.gcash || gcashImg)
 const mayaQrSrc = computed(() => route.query.maya || mayaImg)
 
-// 🟢 NEW: Set up the station name on mount for the header
 onMounted(() => {
   const randomStation = Math.floor(Math.random() * 50) + 1;
   stationName.value = `Station ${randomStation}`;
 })
 
 
-// 4. Handle "Payment Sent" button click
 const handlePaymentSent = () => {
   const ref = referenceNumber.value.trim()
 
-  // 🟢 CHANGE: Validation for exactly 12 characters (alphanumeric or any character)
   if (ref.length !== 12) {
     toast.warning('The Transaction Reference Number must be exactly 12 characters long.')
     return
   }
 
-  // For demonstration, we route to a success page
   router.push({ 
     path: '/payment-success', 
     query: { 
@@ -68,7 +56,6 @@ const handlePaymentSent = () => {
   })
 }
 
-// 5. Navigation
 const goBackToCheckout = () => {
   router.push('/checkout') 
 }
@@ -145,8 +132,6 @@ const goBackToCheckout = () => {
 </template>
 
 <style scoped>
-/* Responsive QR Codes Page */
-/* header styles are provided by the shared HeaderBar component */
 
 .qr-container {
   min-height: 100vh;
@@ -155,7 +140,6 @@ const goBackToCheckout = () => {
   font-size: clamp(14px, 1vw + 10px, 16px);
 }
 
-/* Back Button */
 .back-btn-wrapper {
   display: flex;
   justify-content: flex-start; 
@@ -202,7 +186,6 @@ const goBackToCheckout = () => {
   font-size: clamp(0.85rem, 1.1vw, 1.05rem);
 }
 
-/* QR Grid Layout */
 .qr-grid {
   display: flex;
   justify-content: center;
@@ -262,7 +245,6 @@ const goBackToCheckout = () => {
   color: #666;
 }
 
-/* Confirmation Section (Reference Number Input) */
 .confirmation-section {
   max-width: clamp(420px, 50vw, 620px);
   margin: 0 auto;
@@ -306,7 +288,6 @@ label {
     text-align: center;
 }
 
-/* Sticky Footer */
 .bottom-bar {
   position: fixed;
   bottom: 0; 
@@ -337,14 +318,15 @@ label {
   transition: background 0.2s;
 }
 
-.confirm-btn:hover:not(:disabled) { background-color: #008f44; }
+.confirm-btn:hover:not(:disabled) { 
+  background-color: #008f44; 
+}
 
 .confirm-btn:disabled {
   background-color: #999;
   cursor: not-allowed;
 }
 
-/* Responsive breakpoints */
 @media (max-width: 480px) {
   .bottom-bar {
     flex-direction: column;

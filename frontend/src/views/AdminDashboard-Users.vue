@@ -96,9 +96,6 @@
 import { ref, computed } from 'vue';
 import AdminSidebar from '../components/AdminSidebar.vue'; 
 
-// --- MOCK DATA ---
-// NOTE: For date sorting, the date needs to be parsable (e.g., 'YYYY-MM-DD' or a standard string format)
-// The dates below are in Month Day, Year format which is fine for display but requires parsing for true sorting.
 const rawUsers = [
     { fullName: 'John Smith', username: 'jonny77', password: 'jons123', status: 'Inactive', role: 'Admin', joinedDate: 'March 12, 2023', lastActive: '1 minute ago' },
     { fullName: 'Olivia Bennett', username: 'olly69', password: 'olly123', status: 'Active', role: 'User', joinedDate: 'June 27, 2022', lastActive: '1 month ago' },
@@ -115,17 +112,13 @@ const rawUsers = [
 
 const users = ref(rawUsers);
 
-// --- STATE FOR FILTERS AND SORTING ---
 const searchQuery = ref('');
 const filterRole = ref('');
 const filterStatus = ref('');
 const sortDate = ref('recent'); // Default sort: recent
 
-// --- COMPUTED PROPERTY FOR FILTERING AND SORTING ---
 const filteredUsers = computed(() => {
     let list = users.value;
-
-    // 1. SEARCH FILTER
     if (searchQuery.value) {
         const query = searchQuery.value.toLowerCase();
         list = list.filter(user => 
@@ -133,8 +126,6 @@ const filteredUsers = computed(() => {
             user.username.toLowerCase().includes(query)
         );
     }
-
-    // 2. ROLE FILTER
     if (filterRole.value) {
         list = list.filter(user => user.role === filterRole.value);
     }
@@ -143,10 +134,6 @@ const filteredUsers = computed(() => {
     if (filterStatus.value) {
         list = list.filter(user => user.status === filterStatus.value);
     }
-
-    // 4. DATE SORTING
-    // NOTE: This sorting relies on JavaScript's Date.parse, which can be inconsistent 
-    // for non-standard date formats. For simplicity, we assume the mock dates are valid.
     list.sort((a, b) => {
         const dateA = Date.parse(a.joinedDate);
         const dateB = Date.parse(b.joinedDate);
@@ -164,20 +151,12 @@ const filteredUsers = computed(() => {
     return list;
 });
 
-// --- ACTION METHODS ---
 const handleExport = () => {
     alert(`Exporting ${filteredUsers.value.length} users with current filters...`);
-    // In a real application, you would generate a CSV/Excel file here.
 }
 </script>
 
 <style scoped>
-/* NOTE: The <style> section remains the same as provided in the previous step. 
-         No CSS changes are necessary for functionality. */
-
-/* ======================================= */
-/* LAYOUT AND GLOBAL STYLES (MATCHING ADMIN THEME) */
-/* ======================================= */
 .kds-container {
     --color-dashboard-bg: #f5f5f5;
     --color-brand-primary: #ff724c;
@@ -204,10 +183,6 @@ const handleExport = () => {
     margin-top: 0;
     margin-bottom: 1.5rem;
 }
-
-/* ======================================= */
-/* ACTIONS & FILTERS */
-/* ======================================= */
 .user-management-actions {
     display: flex;
     justify-content: space-between;
@@ -277,9 +252,6 @@ const handleExport = () => {
     opacity: 0.9;
 }
 
-/* ======================================= */
-/* TABLE STYLES */
-/* ======================================= */
 .user-table-wrapper {
     background-color: white;
     border-radius: 0.75rem;
@@ -363,4 +335,5 @@ const handleExport = () => {
 .action-icon-button:hover {
     background-color: #e5e7eb;
 }
+
 </style>

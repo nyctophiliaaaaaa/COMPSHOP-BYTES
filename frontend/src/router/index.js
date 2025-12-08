@@ -24,7 +24,6 @@ import AdminDashboardReports from '../views/AdminDashboard-Reports.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    // --- AUTH ROUTES ---
     { path: '/', name: 'login', component: LoginView },
     { path: '/signup', name: 'signup', component: SignupView },
     { path: '/forgot-password', name: 'forgot-password', component: ForgotPasswordView },
@@ -54,14 +53,12 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const userRole = localStorage.getItem('userRole'); 
   const publicPages = ['login', 'signup', 'forgot-password', 'enter-code', 'set-new-password'];
-  
-  // 1. If user is logged in and tries to go to a public page (Login), redirect them back
+
   if (publicPages.includes(to.name) && userRole) {
     const redirectName = (userRole === 'Staff' || userRole === 'Admin') ? 'admin-dashboard-profile' : 'dashboard';
     return next({ name: redirectName });
   }
 
-  // 2. If user is NOT logged in and tries to go to a protected page
   if (!publicPages.includes(to.name) && !userRole) {
     return next({ name: 'login' });
   }
@@ -80,3 +77,4 @@ router.beforeEach((to, from, next) => {
 
 
 export default router
+

@@ -117,25 +117,16 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router'; 
-// Import the component (assuming it's saved in src/components/AdminSidebar.vue)
 import AdminSidebar from '@/components/AdminSidebar.vue';
-
-// Router is kept here in case you need it for navigation within the main content
 const router = useRouter(); 
-
-// Asset imports for the dashboard content
 import buldakCarbonara from '@/assets/buldak-carbonara.png'; 
 import shinRamyun from '@/assets/buldak-rose.png'; 
 import tapsilog from '@/assets/burgersteak.png';          
 import cantonSweetnSpicy from '@/assets/canton-sweetnspicy.png'; 
 
-// Note: staffData and handleLogout are now defined inside AdminSidebar.vue
 </script>
 
 <style scoped>
-/* ======================================= */
-/* Only styles for the Main Content are kept */
-/* ======================================= */
 :root {
   --color-text-dark: #1f2937; 
   --color-text-secondary: #6b7280;
@@ -205,4 +196,5 @@ import cantonSweetnSpicy from '@/assets/canton-sweetnspicy.png';
     .row-full { grid-column: 1 / 3; }
     .row-two-column-grid { grid-column: 1 / 3; grid-template-columns: 1fr 1fr; }
 }
+
 </style>

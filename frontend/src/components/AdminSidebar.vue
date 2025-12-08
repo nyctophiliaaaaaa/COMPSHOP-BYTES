@@ -39,7 +39,7 @@
         :class="{ 'router-link-active': activeRouteName === 'admin-dashboard-purchase' }"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4H6zM3 6h18M16 10a4 4 0 01-8 0"/></svg>
-        Purchase
+        Completed Orders
       </router-link>
       
       <router-link 

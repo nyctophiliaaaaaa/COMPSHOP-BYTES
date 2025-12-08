@@ -6,29 +6,29 @@ import HeaderBar from '@/components/HeaderBar.vue'
 const router = useRouter()
 const route = useRoute()
 
-// Check if method is COD
+// Check payment method
 const isCod = computed(() => route.query.method === 'cod')
-// 🟢 Get total from query
+const isCashless = computed(() => route.query.method === 'qrph' || route.query.method === 'cashless')
+
+// Get total from query
 const totalAmount = computed(() => parseFloat(route.query.total || 0).toFixed(2))
 
 onMounted(() => {
-  // Clear the cart on success
+  // Clear the cart on success (moved here to ensure it only clears if successful)
   const userId = localStorage.getItem('userId')
   const cartKey = userId ? `cart_${userId}` : 'myCart'
   localStorage.removeItem(cartKey)
+  localStorage.removeItem('cartTotal')
 
+  // Auto-redirect to Dashboard after 5 seconds
   setTimeout(() => {
-    // 🟢 FORWARD TOTAL TO DASHBOARD
-    router.push({ 
-        path: '/dashboard', 
-        query: { 
-            orderPlaced: 'true', 
-            method: route.query.method,
-            total: route.query.total
-        } 
-    })
-  }, 4000)
+    router.push('/dashboard')
+  }, 5000)
 })
+
+const goToDashboard = () => {
+  router.push('/dashboard')
+}
 </script>
 
 <template>
@@ -36,34 +36,40 @@ onMounted(() => {
       <HeaderBar />
 
       <div class="card">
-        <div class="check-circle">✔</div>
+        <div class="check-circle" :class="{ 'pending-icon': isCashless }">
+           <span v-if="isCod">✔</span>
+           <span v-else>⏳</span>
+        </div>
 
       <h2 v-if="isCod">Order Placed Successfully!</h2>
-      <h2 v-else>Payment Successful!</h2>
+      <h2 v-else>Reference Submitted</h2>
 
       <div v-if="isCod" class="cod-details">
         <p><strong>Payment Method:</strong><br/>Cash on Delivery</p>
         <p><strong>Total:</strong><br/>₱ {{ totalAmount }}</p>
       </div>
 
-      <p v-else class="sub-title">Your order is now confirmed.</p>
+      <div v-else class="cashless-details">
+        <p class="sub-title">Waiting for Staff Verification</p>
+        <p class="description">
+          We have received your Reference Number. <br>
+          Please wait for our staff to verify the payment before your order begins preparing.
+        </p>
+      </div>
 
-      <h3>Order #A12-4391</h3>
-
-      <p v-if="!isCod" class="description">We've received your payment and started preparing your order.</p>
-
-      <div class="redirect-box">Redirecting to Dashboard...</div>
+      <button class="redirect-btn" @click="goToDashboard">
+        Go to Order Status
+      </button>
     </div>
   </div>
 </template>
 
 <style scoped>
-/* Responsive Payment Success Page */
 .success-container { 
   min-height: 100vh; 
   background-color: #f5f5f5; 
   display: flex; 
-  flex-direction: column;
+  flex-direction: column; 
   font-size: clamp(14px, 1vw + 10px, 16px);
 }
 
@@ -79,10 +85,11 @@ onMounted(() => {
   border: 1px solid #ddd; 
 }
 
+/* Green Check for COD */
 .check-circle { 
   width: clamp(55px, 7vw, 90px); 
   height: clamp(55px, 7vw, 90px); 
-  background-color: #ffcc66; 
+  background-color: #28a745; /* Green */
   color: white; 
   border-radius: 50%; 
   display: flex; 
@@ -92,18 +99,16 @@ onMounted(() => {
   margin: 0 auto clamp(1rem, 2vw, 1.8rem); 
 }
 
+/* Orange Hourglass for Cashless */
+.pending-icon {
+  background-color: #f59e0b; /* Orange */
+}
+
 h2 { 
   margin-bottom: clamp(1rem, 2vw, 1.8rem); 
   color: #000; 
   font-weight: 700; 
   font-size: clamp(1.3rem, 2vw, 1.9rem); 
-}
-
-h3 { 
-  margin-bottom: clamp(1.2rem, 2.5vw, 2.2rem); 
-  font-size: clamp(1.1rem, 1.6vw, 1.5rem); 
-  color: #000; 
-  font-weight: 600; 
 }
 
 .cod-details p { 
@@ -114,23 +119,31 @@ h3 {
 
 .sub-title { 
   color: #333; 
-  margin-bottom: clamp(1.2rem, 2.5vw, 2.2rem);
-  font-size: clamp(0.9rem, 1.1vw, 1.05rem);
+  font-weight: 600;
+  margin-bottom: clamp(0.5rem, 1vw, 1rem);
+  font-size: clamp(1rem, 1.2vw, 1.2rem);
 }
 
 .description { 
   color: #666; 
   font-size: clamp(0.8rem, 1vw, 1rem); 
+  line-height: 1.5;
   margin-bottom: clamp(1.8rem, 4vw, 3.5rem); 
 }
 
-.redirect-box { 
-  border: 1px solid #ffcc80; 
-  color: #333; 
-  padding: clamp(0.5rem, 1vw, 0.9rem) clamp(1.2rem, 2.5vw, 2.5rem); 
+.redirect-btn { 
+  background-color: #2d3446;
+  color: white; 
+  border: none;
+  padding: clamp(0.8rem, 1.5vw, 1rem) clamp(1.5rem, 3vw, 2rem); 
   border-radius: 20px; 
-  display: inline-block; 
-  font-size: clamp(0.75rem, 1vw, 0.95rem); 
+  font-weight: bold;
+  cursor: pointer;
+  font-size: clamp(0.8rem, 1vw, 1rem); 
   margin-top: clamp(0.6rem, 1.2vw, 1.1rem); 
+}
+
+.redirect-btn:hover {
+  background-color: #3b4559;
 }
 </style>

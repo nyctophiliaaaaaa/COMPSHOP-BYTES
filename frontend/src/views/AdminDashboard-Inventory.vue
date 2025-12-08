@@ -10,12 +10,12 @@
             
             <nav class="inventory-tabs">
                 <button 
-                    v-for="tab in tabs"
-                    :key="tab"
-                    :class="['tab-btn', { 'active': activeTab === tab }]"
-                    @click="activeTab = tab"
+                    v-for="category in categories"
+                    :key="category.category_id"
+                    :class="['tab-btn', { 'active': activeTab === category.name }]"
+                    @click="activeTab = category.name"
                 >
-                    {{ tab }}
+                    {{ category.name }}
                 </button>
             </nav>
 
@@ -37,7 +37,12 @@
                         <tr v-for="product in filteredProducts" :key="product.id">
                             <td>
                                 <div class="product-info">
-                                    <img :src="product.image_url" :alt="product.name" class="product-image-sm"/>
+                                    <img 
+                                        :src="`/images/${product.image_url}`" 
+                                        :alt="product.name" 
+                                        class="product-image-sm"
+                                        @error="$event.target.src = '/images/placeholder.png'"
+                                    />
                                     <span class="product-name-col">{{ product.name }}</span>
                                 </div>
                             </td>
@@ -51,13 +56,16 @@
                                 <div class="stock-controls">
                                     <button 
                                         class="control-btn minus-btn" 
-                                        @click="decreaseStock(product.id)"
-                                        :disabled="product.currentStock <= 0"
+                                        @click="updateStock(product, -1)"
+                                        :disabled="product.currentStock <= 0 || isUpdating"
                                     >-</button>
+                                    
                                     <span class="control-value">{{ product.currentStock }}</span>
+                                    
                                     <button 
                                         class="control-btn plus-btn" 
-                                        @click="increaseStock(product.id)"
+                                        @click="updateStock(product, 1)"
+                                        :disabled="isUpdating"
                                     >+</button>
                                 </div>
                             </td>
@@ -67,7 +75,8 @@
             </div>
 
             <div class="table-footer">
-                <p>Displaying {{ filteredProducts.length }} products in the {{ activeTab }} category.</p>
+                <p v-if="loading">Loading inventory...</p>
+                <p v-else>Displaying {{ filteredProducts.length }} products in the {{ activeTab }} category.</p>
             </div>
         </div>
 
@@ -76,74 +85,94 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, computed, onMounted } from 'vue';
+import axios from 'axios';
 import AdminSidebar from '@/components/AdminSidebar.vue';
 
-const router = useRouter();
-import tapsilog from '@/assets/tapsilog.png'; 
-import sisig from '@/assets/sisig.png';
-import chicken from '@/assets/chicken.png';
-import burgersteak from '@/assets/burgersteak.png';
-import buldakCarbonara from '@/assets/buldak-carbonara.png'; 
-import shinRamyun from '@/assets/shin-ramyun.png'; 
-import cantonSweetnSpicy from '@/assets/canton-sweetnspicy.png'; 
-import buldak2x from '@/assets/buldak-2X.png';
-import buldakCheese from '@/assets/buldak-cheese.png';
-import buldakRose from '@/assets/buldak-rose.png';
-import cantonChilimansi from '@/assets/canton-chilimansi.png';
-import cantonCalamansi from '@/assets/canton-calamansi.png';
-import jinRamen from '@/assets/jin-ramen.png';
-import coke from '@/assets/coke.png'; 
-import water from '@/assets/water.png';
-import dew from '@/assets/dew.png'; 
-import royal from '@/assets/royal.png';
-import nestea from '@/assets/nestea.png';
+// STATE
+const categories = ref([]); // fetched from DB
+const products = ref([]);   // fetched from DB
+const activeTab = ref('');  // will default to first category
+const loading = ref(true);
+const isUpdating = ref(false);
 
-const tabs = ['Meals', 'Noodles', 'Beverages'];
-const activeTab = ref('Meals'); // Default to show Meals first
+// MAPPER: Database ID -> Category Name
+const categoryMap = ref({});
 
-const products = ref([
-    { id: 101, name: 'Tapsilog', category: 'Meals', price: 150.00, currentStock: 150, image_url: tapsilog },
-    { id: 102, name: 'Sisig', category: 'Meals', price: 180.00, currentStock: 75, image_url: sisig },
-    { id: 103, name: 'Chicken', category: 'Meals', price: 130.00, currentStock: 120, image_url: chicken },
-    { id: 104, name: 'Burgersteak', category: 'Meals', price: 95.00, currentStock: 98, image_url: burgersteak },
-    { id: 201, name: 'Buldak 2x Spicy', category: 'Noodles', price: 85.00, currentStock: 15, image_url: buldak2x },
-    { id: 202, name: 'Buldak Carbonara', category: 'Noodles', price: 65.00, currentStock: 25, image_url: buldakCarbonara },
-    { id: 203, name: 'Buldak Cheese', category: 'Noodles', price: 70.00, currentStock: 18, image_url: buldakCheese },
-    { id: 204, name: 'Buldak Rosé', category: 'Noodles', price: 72.50, currentStock: 8, image_url: buldakRose },
-    { id: 205, name: 'Pancit Canton Calamansi', category: 'Noodles', price: 18.00, currentStock: 60, image_url: cantonCalamansi },
-    { id: 206, name: 'Pancit Canton Chilimansi', category: 'Noodles', price: 18.00, currentStock: 3, image_url: cantonChilimansi },
-    { id: 207, name: 'Pancit Canton Sweet & Spicy', category: 'Noodles', price: 18.00, currentStock: 40, image_url: cantonSweetnSpicy },
-    { id: 208, name: 'Jin Ramen', category: 'Noodles', price: 55.00, currentStock: 35, image_url: jinRamen },
-    { id: 209, name: 'Shin Ramyun', category: 'Noodles', price: 72.50, currentStock: 10, image_url: shinRamyun },
-    { id: 301, name: 'Mountain Dew', category: 'Beverages', price: 50.00, currentStock: 120, image_url: dew },
-    { id: 302, name: 'Coke', category: 'Beverages', price: 89.00, currentStock: 12, image_url: coke },
-    { id: 303, name: 'Bottled Water 500ml', category: 'Beverages', price: 25.00, currentStock: 200, image_url: water },
-    { id: 304, name: 'Royal', category: 'Beverages', price: 55.00, currentStock: 65, image_url: royal },
-    { id: 305, name: 'Nestea', category: 'Beverages', price: 40.00, currentStock: 50, image_url: nestea },
-]);
+onMounted(async () => {
+    await fetchData();
+});
+
+const fetchData = async () => {
+    try {
+        loading.value = true;
+
+        // 1. Fetch Categories
+        const catRes = await axios.get('http://localhost:3000/api/categories');
+        categories.value = catRes.data;
+        
+        // Build the map (e.g. {1: 'Meals', 2: 'Noodles'})
+        categories.value.forEach(cat => {
+            categoryMap.value[cat.category_id] = cat.name;
+        });
+
+        // Set default tab
+        if (categories.value.length > 0) {
+            activeTab.value = categories.value[0].name;
+        }
+
+        // 2. Fetch Menu Items
+        const menuRes = await axios.get('http://localhost:3000/api/menu');
+        
+        // Transform DB data to UI data
+        products.value = menuRes.data.map(item => ({
+            id: item.item_id,
+            name: item.name,
+            // Map the ID to the Name string using our map
+            category: categoryMap.value[item.category_id] || 'Uncategorized', 
+            price: item.price,
+            currentStock: item.stock, // from the new column we added
+            image_url: item.image_url // filename only (e.g. 'coke.png')
+        }));
+
+    } catch (error) {
+        console.error("Error loading inventory:", error);
+        alert("Failed to connect to backend.");
+    } finally {
+        loading.value = false;
+    }
+};
+
 const filteredProducts = computed(() => {
     return products.value.filter(p => p.category === activeTab.value);
 });
 
+// REAL-TIME STOCK UPDATE
+const updateStock = async (product, change) => {
+    // Optimistic UI Update (Update screen instantly)
+    const oldStock = product.currentStock;
+    product.currentStock += change;
+    isUpdating.value = true;
 
-const increaseStock = (productId) => {
-    const product = products.value.find(p => p.id === productId);
-    if (product) {
-        product.currentStock += 1;
-    }
-};
-
-const decreaseStock = (productId) => {
-    const product = products.value.find(p => p.id === productId);
-    if (product && product.currentStock > 0) {
-        product.currentStock -= 1;
+    try {
+        // Send to Backend
+        await axios.patch(`http://localhost:3000/api/menu/${product.id}/stock`, {
+            quantity: change
+        });
+        // Success!
+    } catch (error) {
+        console.error("Stock update failed", error);
+        // Revert on failure
+        product.currentStock = oldStock; 
+        alert("Failed to save stock update.");
+    } finally {
+        isUpdating.value = false;
     }
 };
 </script>
 
 <style scoped>
+/* Keeping your exact styles, they were good! */
 .kds-container {
     --color-dashboard-bg: #f5f5f5;
     --color-brand-primary: #ff724c;
@@ -196,7 +225,7 @@ const decreaseStock = (productId) => {
     cursor: pointer;
     transition: all 0.2s ease;
     border-bottom: 3px solid transparent;
-    margin-bottom: -2px; /* Pulls the border up to meet the bottom line */
+    margin-bottom: -2px; 
 }
 
 .tab-btn:hover {
@@ -209,7 +238,6 @@ const decreaseStock = (productId) => {
 }
 
 .inventory-header {
-    /* Changed from justify-content: space-between to flex-start or left align h2 */
     display: flex;
     align-items: center;
     padding: 1rem 1.5rem;
@@ -317,5 +345,4 @@ const decreaseStock = (productId) => {
     color: #6b7280;
     font-size: 0.9rem;
 }
-
 </style>

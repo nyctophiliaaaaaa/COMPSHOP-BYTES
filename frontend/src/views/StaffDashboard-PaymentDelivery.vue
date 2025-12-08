@@ -1,210 +1,199 @@
 <template>
-    <div class="orders-grid">
-      <div 
-        v-for="order in orders" 
-        :key="order.id" 
-        class="order-card"
-      >
-        <!-- HEADER -->
-        <div class="card-header">
-          <span class="header-title">
-              Order #{{ order.id }} - {{ order.paymentMethod === 'Cash' ? 'CASH PAYMENT' : 'DIGITAL PAYMENT (QR)' }}
-          </span>
+  <div class="staff-wrapper">
+    <h2 class="page-title">Ready for Serving & Payment</h2>
+
+    <div v-if="orders.length === 0" class="empty-state">
+      <p>No orders waiting for service.</p>
+    </div>
+
+    <div v-else class="orders-grid">
+      <div v-for="order in orders" :key="order.order_id" class="order-card">
+        
+        <div class="card-header" :class="order.payment_method === 'Cash' ? 'bg-orange' : 'bg-green'">
+          <div class="header-left">
+             <span class="header-title">
+                Order #{{ order.order_id }} - {{ order.payment_method.toUpperCase() }}
+             </span>
+             <span class="station-badge" v-if="order.station_number">
+                📍 {{ order.station_number }}
+             </span>
+          </div>
         </div>
-  
+
         <div class="card-body">
           <div class="customer-info">
-              <p><strong>Customer:</strong> {{ order.name }}</p>
-              <p><strong>Time Placed:</strong> {{ order.time }}</p>
-              <p><strong>Station:</strong> {{ order.station }}</p>
+              <p><strong>Customer:</strong> {{ order.users?.username }}</p>
+              <p><strong>Time:</strong> {{ formatDate(order.created_at) }}</p>
           </div>
-  
-          <div class="items-table">
-              <div class="table-head">
-                  <span>ITEMS</span><span>QTY</span><span>SUBTOTAL</span>
-              </div>
-              <div v-for="(item, index) in order.items" :key="index" class="table-row">
-                  <span class="item-name">{{ item.name }}</span>
-                  <span class="item-qty">{{ item.qty || '1' }}x</span>
-                  <span class="item-price">₱ {{ item.price ? item.price.toFixed(2) : '0.00' }}</span>
-              </div>
+
+          <div class="items-list-container">
+             <div v-for="(item, idx) in order.order_items" :key="idx" class="item-row">
+                <span class="item-qty">{{ item.quantity }}x</span>
+                <span class="item-name">{{ item.name }}</span>
+             </div>
           </div>
-  
+
           <div class="total-row">
               <span>TOTAL DUE:</span>
-              <span>₱ {{ order.total ? order.total.toFixed(2) : '0.00' }}</span>
+              <span>₱ {{ order.total_amount }}</span>
           </div>
-  
+
           <hr class="divider">
-  
-          <!-- CASH FLOW -->
-          <div v-if="order.paymentMethod === 'Cash'">
-              <div class="payment-input-section">
-                  <label>Cash Received: ₱</label>
-                  <input type="number" v-model.number="order.cashReceived" placeholder="0.00" class="cash-input" />
+
+          <div v-if="order.payment_method === 'Cash'" class="cash-section">
+              <p class="instruction">Ask customer for payment:</p>
+              
+              <div class="input-row">
+                  <label>Received:</label>
+                  <input 
+                    type="number" 
+                    v-model.number="order.cashReceived" 
+                    class="cash-input" 
+                    placeholder="0.00"
+                  />
               </div>
-              <div class="payment-info">
-                  <p><strong>Change:</strong> ₱ {{ calculateChange(order) }}</p>
+
+              <div class="change-display" :class="{ 'valid': calculateChange(order) >= 0 }">
+                  Change: ₱ {{ calculateChange(order) }}
               </div>
-          </div>
-  
-          <!-- DIGITAL FLOW -->
-          <div v-else>
-              <div class="payment-info">
-                  <!-- Dynamic Status based on isPaid -->
-                  <p><strong>Payment Status:</strong> 
-                      <span :class="order.isPaid ? 'success-text' : 'pending-text'">
-                          {{ order.isPaid ? 'Successful' : 'To be verified' }}
-                      </span>
-                  </p>
-                  <p><strong>Reference No.:</strong> {{ order.referenceNo || 'N/A' }}</p>
-                  <p><strong>Amount Paid:</strong> ₱ {{ order.total ? order.total.toFixed(2) : '0.00' }}</p>
-              </div>
-          </div>
-  
-          <!-- BUTTONS -->
-          <div class="action-buttons">
+
               <button 
-                  class="action-btn" 
-                  :class="getPaidBtnClass(order)" 
-                  @click="markAsPaid(order)" 
-                  :disabled="isPaidDisabled(order)"
+                  class="action-btn btn-cash" 
+                  @click="processCashPayment(order)"
+                  :disabled="(order.cashReceived || 0) < order.total_amount"
               >
-                  {{ order.isPaid ? 'PAID' : (order.paymentMethod === 'Cash' ? 'MARK AS PAID' : 'VERIFY PAYMENT') }}
-              </button>
-  
-              <button 
-                  class="action-btn" 
-                  :class="getDeliveredBtnClass(order)" 
-                  @click="markAsDelivered(order)" 
-                  :disabled="!order.isPaid"
-              >
-                  DELIVERED
+                  💵 Pay & Serve
               </button>
           </div>
-  
-          <div class="status-footer">
-              Status: <span :class="getStatusClass(order)">{{ getStatusText(order) }}</span>
+
+          <div v-else class="cashless-section">
+              <div class="paid-badge">ALREADY PAID</div>
+              <p>Ref: {{ order.payment_reference }}</p>
+              
+              <button 
+                  class="action-btn btn-serve" 
+                  @click="processServeOnly(order.order_id)"
+              >
+                  ✅ Serve Order
+              </button>
           </div>
+
         </div>
       </div>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    name: 'StaffDashboardPaymentDelivery',
-    props: { orders: { type: Array, required: true } },
-    emits: ['order-completed'],
-    watch: {
-      orders: {
-        handler(newVal) {
-          newVal.forEach(order => {
-            if (order.paymentMethod === 'Cash' && order.cashReceived === 0) {
-              order.cashReceived = null;
-            }
-          });
-        },
-        deep: true,
-        immediate: true
-      }
-    },
-    methods: {
-      calculateChange(order) {
-          if (!order.cashReceived) return '0.00';
-          const change = order.cashReceived - order.total;
-          return change > 0 ? change.toFixed(2) : '0.00';
-      },
-      isPaidDisabled(order) {
-          if (order.isPaid) return true;
-          if (order.paymentMethod === 'Cash') return (order.cashReceived || 0) < order.total;
-          return false; 
-      },
-      getPaidBtnClass(order) {
-          if (order.isPaid) return 'btn-completed';
-          if (order.paymentMethod === 'Cash') return (order.cashReceived || 0) >= order.total ? 'btn-active-primary' : 'btn-disabled';
-          return 'btn-active-primary';
-      },
-      getDeliveredBtnClass(order) {
-          if (!order.isPaid) return 'btn-disabled';
-          return 'btn-active-primary';
-      },
-      markAsPaid(order) { order.isPaid = true; },
-      markAsDelivered(order) {
-          if (!order.isPaid) return;
-          order.isDelivered = true;
-          this.$emit('order-completed', order);
-      },
-      getStatusText(order) {
-          if (order.isDelivered) return 'Delivered';
-          if (order.isPaid) return 'Ready for Delivery';
-          return 'Pending Payment';
-      },
-      getStatusClass(order) {
-          if (order.isDelivered) return 'text-green';
-          if (order.isPaid) return 'text-orange';
-          return 'text-red';
-      }
-    }
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue';
+import axios from 'axios';
+
+const orders = ref([]);
+const isLoading = ref(true);
+let pollingInterval = null;
+
+const fetchOrders = async () => {
+  try {
+    const res = await axios.get('http://localhost:3000/api/staff/orders/Ready');
+    
+    // Smart Merge to keep typed cash values
+    const mergedOrders = res.data.map(newOrder => {
+      const existingOrder = orders.value.find(o => o.order_id === newOrder.order_id);
+      return { 
+        ...newOrder, 
+        cashReceived: existingOrder ? existingOrder.cashReceived : null 
+      };
+    });
+
+    orders.value = mergedOrders;
+
+  } catch (e) { 
+    console.error(e); 
+  } finally {
+    isLoading.value = false;
   }
-  </script>
-  
-  <style scoped>
-  .orders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem; }
-  .order-card { background: white; border-radius: 0.8rem; box-shadow: 0 4px 15px rgba(0,0,0,0.08); overflow: hidden; border: 1px solid #eee; display: flex; flex-direction: column; }
-  .card-header { background: #FF724C; padding: 1rem; text-align: center; color: white; font-weight: 700; font-size: 1rem; text-transform: uppercase; }
-  .card-body { padding: 1.5rem; display: flex; flex-direction: column; flex-grow: 1; }
-  .customer-info p { margin: 0.3rem 0; font-size: 0.9rem; color: #333; }
-  .items-table { margin-top: 1rem; font-size: 0.85rem; }
-  .table-head { display: flex; justify-content: space-between; color: #888; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.75rem; letter-spacing: 0.5px; }
-  .table-row { display: flex; justify-content: space-between; margin-bottom: 0.4rem; color: #555; }
-  .item-name { flex: 2; }
-  .item-qty { flex: 0.5; text-align: center; }
-  .item-price { flex: 1; text-align: right; }
-  .total-row { display: flex; justify-content: space-between; margin-top: 1rem; font-weight: 800; font-size: 1rem; color: #1f2937; padding-top: 0.5rem; border-top: 1px solid #f3f4f6; }
-  .divider { border: none; border-top: 1px solid #e5e7eb; margin: 1.5rem 0; }
-  .payment-input-section { display: flex; align-items: center; gap: 10px; margin-bottom: 0.5rem; }
-  .payment-input-section label { font-weight: 700; font-size: 0.95rem; }
-  
-  .cash-input { 
-      border: 1px solid #d1d5db; 
-      border-radius: 4px; 
-      padding: 8px; 
-      width: 100px; 
-      font-weight: 700; 
-      text-align: right; 
-      -moz-appearance: textfield; 
-  }
-  .cash-input::-webkit-outer-spin-button,
-  .cash-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-  
-  .payment-info p { margin: 0.3rem 0; font-size: 0.95rem; color: #374151; }
-  .success-text { color: #10b981; font-weight: 700; }
-  .pending-text { color: #f59e0b; font-weight: 700; }
-  
-  .action-buttons { display: flex; gap: 1rem; margin-top: 2rem; }
-  .action-btn { flex: 1; padding: 0.8rem; border: none; border-radius: 8px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; color: white; }
-  
-  /* 🟢 UPDATED: Hover Effects added here */
-  .btn-active-primary { 
-      background-color: #FDBF50; 
-      color: #333; 
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
-  .btn-active-primary:hover {
-      background-color: #e5ac44; /* Darker yellow/orange */
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(253, 191, 80, 0.4);
-  }
-  
-  .btn-completed { background-color: #2D3446; cursor: default; }
-  .btn-disabled { background-color: #e5e7eb; color: #9ca3af; cursor: not-allowed; }
-  
-  .status-footer { margin-top: 1.5rem; text-align: center; font-size: 0.9rem; font-weight: 600; color: #4b5563; }
-  .text-orange { color: #f59e0b; }
-  .text-green { color: #10b981; }
-  .text-red { color: #ef4444; }
-  </style>
+};
+
+const calculateChange = (order) => {
+    if (!order.cashReceived) return '0.00';
+    const change = order.cashReceived - order.total_amount;
+    return change > 0 ? change.toFixed(2) : '0.00';
+};
+
+const processCashPayment = async (order) => {
+    if (!confirm(`Confirm receipt of ₱${order.cashReceived}?`)) return;
+
+    try {
+        await axios.patch(`http://localhost:3000/api/staff/orders/${order.order_id}/status`, {
+            status: 'Completed',
+            payment_status: 'Paid'
+        });
+        orders.value = orders.value.filter(o => o.order_id !== order.order_id);
+    } catch (e) { alert("Error processing payment."); }
+};
+
+const processServeOnly = async (orderId) => {
+    try {
+        await axios.patch(`http://localhost:3000/api/staff/orders/${orderId}/status`, {
+            status: 'Completed'
+        });
+        orders.value = orders.value.filter(o => o.order_id !== orderId);
+    } catch (e) { alert("Error updating status."); }
+};
+
+const formatDate = (d) => new Date(d).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+onMounted(() => {
+    fetchOrders();
+    pollingInterval = setInterval(fetchOrders, 5000);
+});
+onUnmounted(() => clearInterval(pollingInterval));
+</script>
+
+<style scoped>
+.staff-wrapper { padding: 1.5rem; }
+.orders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+.order-card { background: white; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); overflow: hidden; }
+
+/* Header Styling */
+.card-header { padding: 1rem; color: white; font-weight: bold; display: flex; align-items: center; justify-content: center; position: relative; }
+.header-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.bg-orange { background-color: #FF724C; }
+.bg-green { background-color: #10b981; }
+
+/* Station Badge */
+.station-badge { 
+    background-color: rgba(255, 255, 255, 0.25); 
+    padding: 3px 8px; 
+    border-radius: 12px; 
+    font-size: 0.9rem; 
+    font-weight: 800; 
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.card-body { padding: 1.5rem; }
+.customer-info p { margin: 5px 0; color: #444; }
+
+.items-list-container { background-color: #f9fafb; padding: 10px; border-radius: 6px; margin: 10px 0; border: 1px solid #eee; }
+.item-row { display: flex; font-size: 0.9rem; margin-bottom: 4px; }
+.item-qty { font-weight: bold; width: 30px; color: #2d3446; }
+.item-name { color: #555; }
+
+.total-row { display: flex; justify-content: space-between; font-weight: 800; margin-top: 1rem; color: #2d3446; font-size: 1.1rem; }
+.divider { border: 0; border-top: 1px solid #eee; margin: 15px 0; }
+
+.input-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.cash-input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 1.1rem; font-weight: bold; text-align: right; }
+.change-display { text-align: right; font-weight: bold; color: #888; margin-bottom: 15px; }
+.change-display.valid { color: #10b981; }
+
+.paid-badge { background: #d1fae5; color: #065f46; padding: 5px; text-align: center; font-weight: bold; border-radius: 4px; margin-bottom: 10px; }
+
+.action-btn { width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; color: white; font-size: 1rem; transition: background 0.2s; }
+.btn-cash { background-color: #2d3446; }
+.btn-cash:disabled { background-color: #ccc; cursor: not-allowed; }
+.btn-cash:hover:not(:disabled) { background-color: #1f2937; }
+.btn-serve { background-color: #10b981; }
+.btn-serve:hover { background-color: #059669; }
+</style>

@@ -1,181 +1,217 @@
 <template>
-  <div class="orders-grid">
-    <div 
-      v-for="order in orders" 
-      :key="order.id" 
-      class="order-card"
-    >
-      <div class="card-header">
-        <div class="header-id-station">
-          <span class="order-id">#{{ order.id }}</span>
-          <span class="order-station">{{ order.station }}</span>
-        </div>
-        <div class="header-time-name">
-          <span class="order-time">{{ order.time }}</span>
-          <span class="order-name">{{ order.name }}</span>
-        </div>
-      </div>
+  <div class="staff-wrapper">
+    <h2 class="page-title">Ready for Serving</h2>
 
-      <div class="card-items">
-        <div v-for="item in order.items" :key="item" class="item-row">
-          <span class="item-qty">1x</span>
-          <span>{{ item }}</span>
+    <div v-if="isLoading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading ready orders...</p>
+    </div>
+
+    <div v-else-if="orders.length === 0" class="empty-state">
+      <div class="empty-icon">🍽️</div>
+      <p>No orders ready to serve.</p>
+    </div>
+
+    <div v-else class="orders-grid">
+      <div v-for="order in orders" :key="order.order_id" class="order-card ready-card">
+        
+        <div class="card-header">
+          <div class="header-id-station">
+            <span class="order-id">#{{ order.order_id }}</span>
+            <span class="order-station">{{ order.users?.username || 'Guest' }}</span>
+          </div>
+          <div class="header-time-name">
+            <span class="order-time">{{ formatDate(order.created_at) }}</span>
+            <span class="order-total">₱{{ order.total_amount }}</span>
+          </div>
         </div>
-        
-        <hr class="divider">
-        
-        <div class="status-row">
+
+        <div class="card-items">
+          
+          <div class="item-row">
+            <span class="item-qty">1x</span>
+            <span>Order Bundle ({{ order.payment_method }})</span>
+          </div>
+          
+          <hr class="divider">
+          
+          <div class="status-row">
             <span class="status-label">Status:</span>
-            <span class="status-value ready-text">Completed</span>
-        </div>
-        <div class="status-row">
+            <span class="status-value ready-text">READY TO SERVE</span>
+          </div>
+          <div class="status-row">
             <span class="status-label">Payment:</span>
-            <span class="status-value" :class="{ 'cash-on-delivery': order.paymentStatus === 'Cash On Delivery' }">
-                {{ order.paymentStatus || 'PAID' }}
+            <span class="status-value" :class="{ 'unpaid-text': order.payment_status === 'Unpaid' }">
+                {{ order.payment_status || 'PAID' }}
             </span>
+          </div>
         </div>
+
+        <div class="card-action">
+          <button class="serve-btn" @click="markServed(order.order_id)">
+            ✅ Mark Served (Complete)
+          </button>
+        </div>
+
       </div>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'StaffDashboardReady',
-  props: {
-    orders: { type: Array, required: true }
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue';
+import axios from 'axios';
+
+const orders = ref([]);
+const isLoading = ref(true);
+let pollingInterval = null;
+
+// 1. Fetch Orders (Status: Ready)
+const fetchOrders = async () => {
+  try {
+    const response = await axios.get('http://localhost:3000/api/staff/orders/Ready');
+    orders.value = response.data;
+  } catch (error) {
+    console.error("Error fetching ready orders:", error);
+  } finally {
+    isLoading.value = false;
   }
-}
+};
+
+// 2. Mark as Completed
+const markServed = async (orderId) => {
+  if(!confirm("Has the customer received the food? This will complete the order.")) return;
+
+  try {
+    // Send to Backend
+    await axios.patch(`http://localhost:3000/api/staff/orders/${orderId}/status`, {
+      status: 'Completed'
+    });
+
+    // Remove from UI instantly
+    orders.value = orders.value.filter(o => o.order_id !== orderId);
+    
+  } catch (error) {
+    alert("Error updating order status.");
+  }
+};
+
+// Helper: Format Time
+const formatDate = (dateString) => {
+  return new Date(dateString).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+};
+
+// Auto-Refresh Logic
+onMounted(() => {
+  fetchOrders();
+  pollingInterval = setInterval(fetchOrders, 5000); // Check every 5s
+});
+
+onUnmounted(() => {
+  clearInterval(pollingInterval);
+});
 </script>
 
 <style scoped>
-.orders-grid { 
-    display: grid; 
-    grid-template-columns: repeat(4, 1fr); 
-    gap: 1.5rem; 
-    padding: 0; 
+.staff-wrapper {
+    padding: 1.5rem;
 }
 
+.page-title {
+    font-size: 1.8rem;
+    color: #2d3446;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #888;
+    background: #f9fafb;
+    border-radius: 12px;
+    border: 2px dashed #e5e7eb;
+}
+.empty-icon { font-size: 3rem; margin-bottom: 1rem; }
+
+/* Grid Layout */
+.orders-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+    gap: 1.5rem; 
+}
+
+/* Order Card */
 .order-card { 
     background-color: white; 
     border-radius: 0.5rem; 
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
     overflow: hidden; 
+    border-left: 5px solid #10b981; /* Green border for Ready status */
 }
 
+/* Header */
 .card-header { 
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
-    padding: 0.5rem 0.75rem; 
-    color: #FFFFFF; 
+    padding: 0.75rem; 
+    color: #333; 
     font-weight: 600; 
-    background-color: #FF724C; 
+    background-color: #f3f4f6;
+    border-bottom: 1px solid #e5e7eb;
 }
 
-.header-id-station { 
-    display: flex; 
-    align-items: center; 
-    gap: 0.75rem; 
-    font-weight: 700; 
-    font-size: 1rem; 
-}
+.header-id-station { display: flex; align-items: center; gap: 0.5rem; }
+.order-id { font-size: 1.1rem; font-weight: 800; color: #2d3446; }
+.order-station { font-size: 0.9rem; font-weight: 500; color: #555; }
 
-.order-station { 
-    font-size: 0.85rem; 
-    font-weight: 400; 
-    opacity: 0.9; 
-}
+.header-time-name { text-align: right; }
+.order-time { font-size: 0.8rem; color: #666; display: block; }
+.order-total { font-size: 0.9rem; color: #10b981; font-weight: 700; }
 
-.header-time-name { 
-    display: flex; 
-    flex-direction: column;
-    align-items: flex-end; 
-    line-height: 1.2; 
-}
-
-.order-time { 
-    font-size: 0.75rem; 
-    font-weight: 400; 
-    opacity: 0.8; 
-}
-
-.order-name { 
-    font-size: 0.85rem; 
-    font-weight: 500; 
-}
-
+/* Body */
 .card-items { 
     padding: 1rem; 
     font-size: 0.9rem; 
     display: flex; 
     flex-direction: column; 
-    gap: 0.75rem; 
+    gap: 0.5rem; 
 }
 
-.item-row { 
-    display: flex; 
-    margin: 0.1rem 0; 
-}
+.item-row { display: flex; gap: 0.5rem; color: #444; }
+.item-qty { font-weight: 700; }
 
-.item-qty { 
-    width: 2rem; 
-    min-width: 2rem; 
-    font-weight: 600; 
-}
+.divider { border: none; border-top: 1px solid #f0f0f0; margin: 0.5rem 0; }
 
-.divider { 
-    border: none; 
-    border-top: 1px solid #e5e7eb; 
-    margin: 0.5rem 0; 
-}
+.status-row { display: flex; justify-content: space-between; font-size: 0.85rem; }
+.status-label { font-weight: 600; color: #6b7280; }
+.status-value { font-weight: 700; }
 
-.status-row { 
-    display: flex; 
-    justify-content: space-between; 
-    font-size: 0.85rem; 
-    padding: 0.1rem 0; 
-}
+.ready-text { color: #10b981; } /* Green */
+.unpaid-text { color: #ef4444; } /* Red */
 
-.status-label { 
-    font-weight: 600; 
-    color: #4b5563; 
-}
+/* Footer / Action */
+.card-action { padding: 0.75rem; border-top: 1px solid #f0f0f0; background-color: #fafafa; }
 
-.status-value { 
+.serve-btn {
+    width: 100%; 
+    padding: 0.75rem 0; 
+    font-size: 0.9rem; 
     font-weight: 700; 
+    border-radius: 0.375rem;
+    color: white; 
+    background-color: #2d3446; /* Dark theme for contrast */
+    border: none; 
+    cursor: pointer; 
+    transition: background-color 0.15s ease-in-out;
 }
 
-.ready-text { 
-    color: #10b981; 
-}
+.serve-btn:hover { background-color: #1f2937; }
 
-.cash-on-delivery { 
-    color: #f59e0b; 
-}
-
-@media (max-width: 1250px) { 
-    .orders-grid { 
-        grid-template-columns: repeat(4, 1fr); 
-        } 
-    }
-
-@media (max-width: 1024px) { 
-    .orders-grid {
-        grid-template-columns: repeat(3, 1fr); 
-        } 
-    }
-
-@media (max-width: 768px) { 
-    .orders-grid {
-        grid-template-columns: repeat(2, 1fr); 
-        } 
-    }
-
-@media (max-width: 480px) { 
-    .orders-grid {
-        grid-template-columns: 1fr; 
-        } 
-    }
-    
+/* Responsive */
+@media (max-width: 1024px) { .orders-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 768px) { .orders-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .orders-grid { grid-template-columns: 1fr; } }
 </style>

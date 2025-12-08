@@ -85,9 +85,7 @@ import AdminSidebar from '../components/AdminSidebar.vue';
 </script>
 
 <style scoped>
-/* ======================================= */
-/* LAYOUT AND GLOBAL STYLES (MATCHING ADMIN THEME) */
-/* ======================================= */
+
 .kds-container {
     --color-dashboard-bg: #f5f5f5;
     --color-brand-primary: #ff724c;
@@ -119,9 +117,6 @@ import AdminSidebar from '../components/AdminSidebar.vue';
     margin-bottom: 1.5rem;
 }
 
-/* ======================================= */
-/* REPORTS LAYOUT */
-/* ======================================= */
 .reports-header-grid {
     display: grid;
     grid-template-columns: 1fr 1.5fr; /* Operations on left, Reviews on right */
@@ -214,9 +209,6 @@ import AdminSidebar from '../components/AdminSidebar.vue';
     margin: 0;
 }
 
-/* ======================================= */
-/* SALES REPORT PANEL (TABLE) */
-/* ======================================= */
 .sales-report-panel {
     background-color: white;
     border-radius: 0.75rem;
@@ -262,7 +254,6 @@ import AdminSidebar from '../components/AdminSidebar.vue';
     stroke: #065f46;
 }
 
-/* --- Sales Table Styles --- */
 .sales-table {
     width: 100%;
     border-collapse: collapse;
@@ -296,4 +287,5 @@ import AdminSidebar from '../components/AdminSidebar.vue';
     color: var(--color-negative);
     font-weight: 700;
 }
+
 </style>

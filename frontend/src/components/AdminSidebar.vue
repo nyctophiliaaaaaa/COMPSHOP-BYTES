@@ -117,20 +117,17 @@ const handleLogout = () => {
   flex-direction: column; align-items: center; text-align: center;
 }
 
-/* STYLES FOR THE INITIALS AVATAR */
 .initials-avatar {
   width: 90px; 
   height: 90px; 
   border-radius: 50%;
-  background-color: var(--color-text-dark); /* Dark background */
-  color: white; 
+  background-color: var(--color-text-dark);
   font-size: 2.25rem; 
   font-weight: 700;
   margin-bottom: 0.75rem; 
   display: flex;
   justify-content: center;
   align-items: center;
-  /* Orange branding ring */
   box-shadow: 0 0 0 2px var(--color-brand-primary); 
 }
 

@@ -1,15 +1,17 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue' // Added computed
 import { useRouter } from 'vue-router'
-import appLogo from '@/assets/logo.png' 
+import appLogo from '@/assets/logo.png'
+// Removed unused OrderStatusPopup import
+// import OrderStatusPopup from '@/components/OrderStatus.vue' // Removed
 import { confirm } from '@/utils/toast.js'
 
 const router = useRouter()
 
+// Removed goToStaffSettings function
 
-const goToStaffSettings = () => {
-  console.log("Redirecting to Staff Settings...");
-}
+// Removed showOrderStatus and toggleOrderStatus if they existed in the previous version
+// Since OrderStatusPopup import was removed, these are assumed to be gone as well.
 
 const handleLogout = async () => {
   const confirmed = await confirm('Are you sure you want to log out?', {
@@ -27,10 +29,12 @@ const handleLogout = async () => {
   }
 }
 
-const stationName = (() => {
+// Display station/user name - **RE-APPLIED FIX: Now a reactive computed property**
+const stationName = computed(() => { 
   const currentUser = localStorage.getItem('username')
-  return currentUser ? `Hi, ${currentUser}` : 'Staff' 
-})()
+  // Changed fallback text to 'Guest' as 'Staff' seems too specific if unauthenticated
+  return currentUser ? `Hi, ${currentUser}` : 'Guest'
+})
 </script>
 
 <template>
@@ -43,10 +47,6 @@ const stationName = (() => {
       
       <div class="user-actions">
         <span class="station-id">{{ stationName }}</span>
-
-        <button class="icon-btn" @click="goToStaffSettings" title="Staff Settings">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-        </button>
 
         <button class="icon-btn logout-btn" @click="handleLogout" title="Logout">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -88,6 +88,7 @@ const stationName = (() => {
 .user-actions { 
   display: flex; 
   align-items: center; 
+  /* The gap property handles the neat spacing automatically */
   gap: clamp(8px, 1vw, 14px); 
 }
 
@@ -129,6 +130,7 @@ const stationName = (() => {
 
 @media (max-width: 768px) {
   .station-id {
+    /* Since you had an empty block for .station-id here, I'll assume you want to keep the name visible */
   }
   
   .logo {

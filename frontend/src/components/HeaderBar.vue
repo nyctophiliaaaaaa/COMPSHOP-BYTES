@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue' 
 import { useRouter } from 'vue-router'
 import appLogo from '@/assets/logo.png'
 import OrderStatusPopup from '@/components/OrderStatus.vue'
@@ -25,11 +25,10 @@ const handleLogout = async () => {
   }
 }
 
-// Display station/user name
-const stationName = (() => {
+const stationName = computed(() => { 
   const currentUser = localStorage.getItem('username')
   return currentUser ? `Hi, ${currentUser}` : 'Guest'
-})()
+})
 </script>
 
 <template>
@@ -45,11 +44,14 @@ const stationName = (() => {
         <span class="station-id">{{ stationName }}</span>
 
         <button class="icon-btn" @click="goToCart" title="Cart">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
         </button>
 
         <button class="icon-btn" @click="toggleOrderStatus" title="Order Status">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 11 12 14 22 4"></polyline>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+          </svg>
         </button>
 
         <button class="icon-btn logout-btn" @click="handleLogout" title="Logout">
@@ -65,6 +67,7 @@ const stationName = (() => {
 </template>
 
 <style scoped>
+
 .top-bar {
   display: flex;
   justify-content: space-between;
@@ -131,7 +134,6 @@ const stationName = (() => {
   background-color: #ffe6e6; 
 }
 
-/* Responsive breakpoints */
 @media (max-width: 768px) {
   .station-id {
     display: none;

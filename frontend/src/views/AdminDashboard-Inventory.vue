@@ -81,15 +81,10 @@ import { useRouter } from 'vue-router';
 import AdminSidebar from '@/components/AdminSidebar.vue';
 
 const router = useRouter();
-
-// --- Static Product Image Imports (PATHS CORRECTED) ---
-// Meals
 import tapsilog from '@/assets/tapsilog.png'; 
 import sisig from '@/assets/sisig.png';
 import chicken from '@/assets/chicken.png';
 import burgersteak from '@/assets/burgersteak.png';
-
-// Noodles
 import buldakCarbonara from '@/assets/buldak-carbonara.png'; 
 import shinRamyun from '@/assets/shin-ramyun.png'; 
 import cantonSweetnSpicy from '@/assets/canton-sweetnspicy.png'; 
@@ -99,28 +94,20 @@ import buldakRose from '@/assets/buldak-rose.png';
 import cantonChilimansi from '@/assets/canton-chilimansi.png';
 import cantonCalamansi from '@/assets/canton-calamansi.png';
 import jinRamen from '@/assets/jin-ramen.png';
-
-// Beverages
 import coke from '@/assets/coke.png'; 
 import water from '@/assets/water.png';
 import dew from '@/assets/dew.png'; 
 import royal from '@/assets/royal.png';
 import nestea from '@/assets/nestea.png';
 
-
-// --- TAB STATE ---
 const tabs = ['Meals', 'Noodles', 'Beverages'];
 const activeTab = ref('Meals'); // Default to show Meals first
 
-
-// --- STATIC INVENTORY DATA (IMAGES MAPPED) ---
 const products = ref([
-    // MEALS (Category: Meals)
     { id: 101, name: 'Tapsilog', category: 'Meals', price: 150.00, currentStock: 150, image_url: tapsilog },
     { id: 102, name: 'Sisig', category: 'Meals', price: 180.00, currentStock: 75, image_url: sisig },
     { id: 103, name: 'Chicken', category: 'Meals', price: 130.00, currentStock: 120, image_url: chicken },
     { id: 104, name: 'Burgersteak', category: 'Meals', price: 95.00, currentStock: 98, image_url: burgersteak },
-    // NOODLES (Category: Noodles)
     { id: 201, name: 'Buldak 2x Spicy', category: 'Noodles', price: 85.00, currentStock: 15, image_url: buldak2x },
     { id: 202, name: 'Buldak Carbonara', category: 'Noodles', price: 65.00, currentStock: 25, image_url: buldakCarbonara },
     { id: 203, name: 'Buldak Cheese', category: 'Noodles', price: 70.00, currentStock: 18, image_url: buldakCheese },
@@ -130,21 +117,16 @@ const products = ref([
     { id: 207, name: 'Pancit Canton Sweet & Spicy', category: 'Noodles', price: 18.00, currentStock: 40, image_url: cantonSweetnSpicy },
     { id: 208, name: 'Jin Ramen', category: 'Noodles', price: 55.00, currentStock: 35, image_url: jinRamen },
     { id: 209, name: 'Shin Ramyun', category: 'Noodles', price: 72.50, currentStock: 10, image_url: shinRamyun },
-    // BEVERAGES (Category: Beverages)
     { id: 301, name: 'Mountain Dew', category: 'Beverages', price: 50.00, currentStock: 120, image_url: dew },
     { id: 302, name: 'Coke', category: 'Beverages', price: 89.00, currentStock: 12, image_url: coke },
     { id: 303, name: 'Bottled Water 500ml', category: 'Beverages', price: 25.00, currentStock: 200, image_url: water },
     { id: 304, name: 'Royal', category: 'Beverages', price: 55.00, currentStock: 65, image_url: royal },
     { id: 305, name: 'Nestea', category: 'Beverages', price: 40.00, currentStock: 50, image_url: nestea },
 ]);
-
-// --- FILTERED PRODUCT LIST ---
 const filteredProducts = computed(() => {
     return products.value.filter(p => p.category === activeTab.value);
 });
 
-
-// --- STOCK MANAGEMENT FUNCTIONS (Remain Interactive) ---
 
 const increaseStock = (productId) => {
     const product = products.value.find(p => p.id === productId);
@@ -162,9 +144,6 @@ const decreaseStock = (productId) => {
 </script>
 
 <style scoped>
-/* ======================================= */
-/* LAYOUT AND GLOBAL STYLES */
-/* ======================================= */
 .kds-container {
     --color-dashboard-bg: #f5f5f5;
     --color-brand-primary: #ff724c;
@@ -192,9 +171,6 @@ const decreaseStock = (productId) => {
     margin-bottom: 1.5rem;
 }
 
-/* ======================================= */
-/* INVENTORY SPECIFIC STYLES */
-/* ======================================= */
 .inventory-card {
     background-color: white;
     border-radius: 0.75rem;
@@ -232,8 +208,6 @@ const decreaseStock = (productId) => {
     border-bottom: 3px solid var(--color-brand-primary);
 }
 
-
-/* --- Header (Updated to remove space-between necessity) --- */
 .inventory-header {
     /* Changed from justify-content: space-between to flex-start or left align h2 */
     display: flex;
@@ -247,9 +221,7 @@ const decreaseStock = (productId) => {
     color: var(--color-text-dark);
     margin: 0;
 }
-/* REMOVED .add-product-button STYLES */
 
-/* --- Table Styles --- */
 .inventory-table-wrapper {
     overflow-x: auto;
 }
@@ -345,4 +317,5 @@ const decreaseStock = (productId) => {
     color: #6b7280;
     font-size: 0.9rem;
 }
+
 </style>

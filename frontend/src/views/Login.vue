@@ -1,3 +1,5 @@
+
+
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -14,10 +16,18 @@ const showPassword = ref(false)
 const isLoading = ref(false)
 const credentials = ref({ username: '', password: '' })
 
+// --- HARDCODED TEST CREDENTIALS ---
+
 const STAFF_USER = {
     username: 'teststaff',
     password: 'password123',
     role: 'Staff'
+};
+
+const ADMIN_USER = {
+    username: 'testadmin',
+    password: 'admin123',
+    role: 'Admin'
 };
 
 const toggleMode = () => {
@@ -28,24 +38,51 @@ const toggleMode = () => {
 const handleLogin = async () => {
     isLoading.value = true
     
+    // --- 1. TEST MODE LOGIN (Bypasses Backend) ---
+    // This allows you to log in with hardcoded Staff OR Admin credentials
     if (isStaffMode.value) {
+        
+        // CHECK FOR ADMIN MATCH
         if (
+            credentials.value.username === ADMIN_USER.username &&
+            credentials.value.password === ADMIN_USER.password
+        ) {
+            localStorage.setItem('userRole', ADMIN_USER.role);
+            localStorage.setItem('username', ADMIN_USER.username);
+            toast.success('Test Admin Login successful.');
+            
+            // Redirect to Admin Dashboard
+            router.push({ name: 'admin-dashboard-profile' });
+            
+            isLoading.value = false;
+            return;
+        }
+
+        // CHECK FOR STAFF MATCH
+        else if (
             credentials.value.username === STAFF_USER.username &&
             credentials.value.password === STAFF_USER.password
         ) {
             localStorage.setItem('userRole', STAFF_USER.role);
             localStorage.setItem('username', STAFF_USER.username);
             toast.success('Staff Login successful.');
-            router.push({ name: 'staff-dashboard' });
+            
+            // Redirect to Staff Orders
+            router.push({ name: 'staff-dashboard-legacy' });
+            
             isLoading.value = false;
             return;
-        } else if (credentials.value.username && credentials.value.password) {
-            toast.error('Invalid Staff Test Credentials.');
+        } 
+        
+        // INVALID TEST CREDENTIALS
+        else if (credentials.value.username && credentials.value.password) {
+            toast.error('Invalid Test Credentials. Try "testadmin" or "teststaff".');
             isLoading.value = false;
             return;
         }
     }
     
+    // --- 2. STANDARD API LOGIN (Real Backend) ---
     try {
         const response = await axios.post('http://localhost:3000/api/auth/login', {
             username: credentials.value.username,
@@ -59,8 +96,10 @@ const handleLogin = async () => {
         localStorage.setItem('userId', user.id);
         localStorage.setItem('username', user.username);
 
-        if (role === 'Admin' || role === 'Staff') {
-            router.push({ name: 'staff-dashboard' }); 
+        if (role === 'Admin') {
+            router.push({ name: 'admin-dashboard-profile' }); 
+        } else if (role === 'Staff') {
+            router.push({ name: 'staff-dashboard-legacy' }); 
         } else {
             router.push({ name: 'dashboard' }); 
         }
@@ -93,7 +132,7 @@ const handleLogin = async () => {
           <input 
             v-model="credentials.username" 
             type="text" 
-            :placeholder="isStaffMode ? 'Enter Staff Username' : 'Enter your username'" 
+            :placeholder="isStaffMode ? 'Enter your username' : 'Enter your username'" 
             required
           />
           <span class="asterisk">*</span>
@@ -117,7 +156,7 @@ const handleLogin = async () => {
         </div>
 
         <div class="links">
-          <router-link to="/signup">{{ isStaffMode ? 'Staff Recovery' : 'Create Account' }}</router-link>
+          <router-link to="/signup">{{ isStaffMode ? 'Recover Access' : 'Create Account' }}</router-link>
           <router-link to="/forgot-password">Forgot password?</router-link>
         </div>
 
@@ -128,9 +167,9 @@ const handleLogin = async () => {
       </form>
 
       <div class="footer">
-        <p>{{ isStaffMode ? 'Not a staff member?' : 'Are you a staff member?' }}</p>
+        <p>{{ isStaffMode ? 'Are you a customer?' : 'Are you a staff?' }}</p>
         <a href="#" @click.prevent="toggleMode" class="staff-link">
-          {{ isStaffMode ? 'Click here for Customer Login' : 'Click here to Login' }}
+          {{ isStaffMode ? 'Click here to Login' : 'Click here to Login' }}
         </a>
       </div>
 

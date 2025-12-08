@@ -63,7 +63,15 @@ router.beforeEach((to, from, next) => {
     return next({ name: 'login' });
   }
 
-  const staffPages = ['admin-dashboard-profile', 'admin-dashboard-inventory', 'admin-dashboard-purchase', 'admin-dashboard-users', 'admin-dashboard-reports', 'staff-dashboard-legacy', 'qr-codes']; 
+  const staffPages = [
+    'admin-dashboard-profile', 
+    'admin-dashboard-inventory', 
+    'admin-dashboard-purchase', 
+    'admin-dashboard-users', 
+    'admin-dashboard-reports', 
+    'staff-dashboard-legacy'
+  ]; 
+  
   if (to.name === 'dashboard' && (userRole === 'Staff' || userRole === 'Admin')) {
     return next({ name: 'admin-dashboard-profile' });
   }
@@ -77,4 +85,3 @@ router.beforeEach((to, from, next) => {
 
 
 export default router
-

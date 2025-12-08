@@ -43,7 +43,6 @@
 import { ref, computed } from 'vue';
 import AdminSidebar from '../components/AdminSidebar.vue'; 
 
-// --- MOCK PURCHASE DATA ---
 const purchasedItems = ref([
     { name: 'Tapa', quantity: '3 KG', total: 1440.00 },
     { name: 'Egg', quantity: '2 TRAYS', total: 640.10 },
@@ -61,9 +60,6 @@ const grandTotal = computed(() => {
 </script>
 
 <style scoped>
-/* ======================================= */
-/* LAYOUT AND GLOBAL STYLES */
-/* ======================================= */
 .kds-container {
     --color-dashboard-bg: #f5f5f5;
     --color-brand-primary: #ff724c;
@@ -92,9 +88,6 @@ const grandTotal = computed(() => {
     margin-bottom: 1.5rem;
 }
 
-/* ======================================= */
-/* PURCHASE SPECIFIC STYLES */
-/* ======================================= */
 .purchase-card {
     background-color: white;
     border-radius: 0.75rem;
@@ -104,9 +97,8 @@ const grandTotal = computed(() => {
     margin: 0 auto;
 }
 
-/* --- Receipt Header --- */
+
 .receipt-header {
-    /* Since we removed the receipt-label, we change this from space-between to flex-end */
     display: flex;
     justify-content: flex-end; /* ⭐ CHANGE: Aligns date to the right side ⭐ */
     align-items: center;
@@ -114,8 +106,6 @@ const grandTotal = computed(() => {
     border-bottom: 1px solid var(--color-border);
     margin-bottom: 1.5rem;
 }
-
-/* ❌ Removed .receipt-label CSS */
 
 .date-label {
     color: var(--color-text-secondary);
@@ -126,7 +116,6 @@ const grandTotal = computed(() => {
     background-size: 16px;
 }
 
-/* --- Receipt Table styles remain unchanged --- */
 .receipt-table {
     width: 100%;
     border-collapse: collapse;
@@ -160,8 +149,6 @@ const grandTotal = computed(() => {
 .total-col { width: 20%; }
 .text-right { text-align: right; }
 
-
-/* --- Receipt Footer (Total) styles remain unchanged --- */
 .receipt-footer {
     display: flex;
     justify-content: flex-end; 
@@ -182,4 +169,5 @@ const grandTotal = computed(() => {
     font-weight: 800;
     color: var(--color-brand-primary);
 }
+
 </style>

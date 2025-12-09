@@ -1,14 +1,21 @@
 <script setup>
+import { onMounted } from 'vue';
+onMounted(() => {
+  if (localStorage.getItem('showOrderStatusPopup') === 'true') {
+    isOrderPopupOpen.value = true;
+    localStorage.removeItem('showOrderStatusPopup');
+  }
+});
 import { ref, computed } from 'vue' 
 import { useRouter } from 'vue-router'
 import axios from 'axios' 
 import appLogo from '@/assets/logo.png'
-import OrderStatusPopup from '@/components/OrderStatus.vue'
+import OrderStatus from '@/components/OrderStatus.vue'
 import ReviewModal from '@/components/ReviewModal.vue' 
 import { confirm } from '@/utils/toast.js'
 
 const router = useRouter()
-const showOrderStatus = ref(false)
+const isOrderPopupOpen = ref(false)
 const showReviewModal = ref(false)
 const reviewOrderId = ref(null) 
 
@@ -16,8 +23,8 @@ const reviewOrderId = ref(null)
 const triggerReview = ref(0) 
 
 const toggleOrderStatus = () => { 
-    triggerReview.value = 0;
-    showOrderStatus.value = !showOrderStatus.value 
+  triggerReview.value = 0;
+  isOrderPopupOpen.value = !isOrderPopupOpen.value 
 }
 
 const toggleReviewModal = async () => {
@@ -65,12 +72,10 @@ const handleReviewDone = () => {
 
 <template>
   <div>
-    <OrderStatusPopup 
-        v-if="showOrderStatus" 
-        :isOpen="showOrderStatus"
-        @close="showOrderStatus = false"
-        :triggerReview="triggerReview" 
-        @reset-trigger="triggerReview = 0" 
+    <OrderStatus 
+      v-if="isOrderPopupOpen" 
+      :isOpen="isOrderPopupOpen"
+      @close="isOrderPopupOpen = false"
     />
 
     <ReviewModal

@@ -3,6 +3,7 @@ import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router'; 
 import axios from 'axios';
 import { toast } from '@/utils/toast.js';
+import { confirm } from '@/utils/toast.js';
 
 const router = useRouter(); 
 
@@ -73,7 +74,13 @@ const submitReview = async () => {
 
 const handleCancel = async () => {
     if (reviewForm.value.comment.trim()) {
-        if (window.confirm('Discard review?')) {
+        const confirmed = await confirm('Discard review?', {
+            title: 'Discard Review',
+            confirmText: 'Discard',
+            cancelText: 'Cancel',
+            type: 'warning'
+        });
+        if (confirmed) {
             emit('close');
         }
     } else {
@@ -102,7 +109,6 @@ const handleCancel = async () => {
         <textarea v-model="reviewForm.comment" placeholder="Tell us about your experience..." rows="3"></textarea>
         
         <div class="review-actions">
-            <button @click="handleCancel" class="cancel-btn" :disabled="isSubmitting">Cancel</button>
             <button 
                 @click="submitReview" 
                 :disabled="isSubmitting || !reviewForm.comment || reviewForm.rating === 0" 
@@ -110,6 +116,7 @@ const handleCancel = async () => {
             >
                 {{ isSubmitting ? 'Sending...' : 'Submit Review' }}
             </button>
+            <button @click="handleCancel" class="cancel-btn" :disabled="isSubmitting">Cancel</button>
         </div>
     </div>
   </div>

@@ -18,6 +18,15 @@ const totalAmount = computed(() => parseFloat(route.query.total || 0))
 const gcashQrSrc = computed(() => route.query.gcash || gcashImg)
 const mayaQrSrc = computed(() => route.query.maya || mayaImg)
 
+const gcashRecipient = {
+  name: 'Compshop Bytes',
+  accountNo: '0917-XXX-XXXX'
+}
+const mayaRecipient = {
+  name: 'Compshop Bytes',
+  accountNo: '0918-XXX-XXXX'
+}
+
 const handlePaymentSent = async () => {
   const refNum = referenceNumber.value.trim()
   if (refNum.length !== 12) { toast.warning('Invalid Reference Number'); return; }
@@ -62,10 +71,18 @@ const goBackToCheckout = () => router.push('/checkout')
         <div v-if="selectedMethod === 'GCash'" class="qr-card gcash-card">
           <h3 class="qr-title">GCash</h3>
           <div class="qr-placeholder-box"><img :src="gcashQrSrc" alt="GCash QR" class="qr-image" /></div>
+          <div class="recipient-info">
+            <p class="recipient-name">Recipient: <strong>{{ gcashRecipient.name }}</strong></p>
+            <p class="recipient-account">Account No.: <strong>{{ gcashRecipient.accountNo }}</strong></p>
+          </div>
         </div>
         <div v-if="selectedMethod === 'Maya'" class="qr-card maya-card">
           <h3 class="qr-title">Maya</h3>
           <div class="qr-placeholder-box"><img :src="mayaQrSrc" alt="Maya QR" class="qr-image" /></div>
+          <div class="recipient-info">
+            <p class="recipient-name">Recipient: <strong>{{ mayaRecipient.name }}</strong></p>
+            <p class="recipient-account">Account No.: <strong>{{ mayaRecipient.accountNo }}</strong></p>
+          </div>
         </div>
       </div>
       <div class="confirmation-section">
@@ -91,6 +108,8 @@ const goBackToCheckout = () => router.push('/checkout')
 .qr-grid { display: flex; justify-content: center; margin-bottom: 2rem; }
 .qr-card { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
 .qr-image { max-width: 200px; }
+.recipient-info { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #eee; text-align: center; }
+.recipient-name, .recipient-account { margin: 5px 0; color: #555; font-size: 0.9rem; }
 .confirmation-section { max-width: 500px; margin: 0 auto; background: white; padding: 2rem; border-radius: 10px; }
 .ref-input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; margin-top: 10px; }
 .bottom-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #2d3446; padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; color: white; }

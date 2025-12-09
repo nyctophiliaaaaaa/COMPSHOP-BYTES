@@ -24,6 +24,11 @@
               <p class="time-text">{{ formatDate(order.created_at) }}</p>
           </div>
 
+          <div class="station-info" v-if="order.station_number">
+              <span class="station-icon">📍</span>
+              <span><strong>Station:</strong> {{ order.station_number }}</span>
+          </div>
+
           <div class="items-list-container">
              <div v-for="(item, idx) in order.order_items" :key="idx" class="item-row">
                 <span class="item-qty">{{ item.quantity }}x</span>
@@ -193,6 +198,9 @@ onUnmounted(() => clearInterval(pollingInterval));
 .card-body { padding: 1rem; flex-grow: 1; }
 .customer-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.95rem; }
 .time-text { color: #888; font-size: 0.85rem; }
+
+.station-info { display: flex; align-items: center; gap: 6px; background: #fff7ed; border: 1px solid #fed7aa; padding: 8px 12px; border-radius: 6px; margin-bottom: 10px; font-size: 0.95rem; color: #c2410c; }
+.station-icon { font-size: 1.1rem; }
 
 .items-list-container { background-color: #f9fafb; padding: 8px; border-radius: 6px; border: 1px solid #eee; margin-bottom: 10px; }
 .item-row { display: flex; font-size: 0.9rem; margin-bottom: 3px; color: #444; }

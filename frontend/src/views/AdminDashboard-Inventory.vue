@@ -228,6 +228,7 @@ const updateStock = async (product, change) => {
     padding: 1rem 1.5rem;
     border-bottom: 1px solid var(--color-border);
 }
+
 .inventory-header h2 {
     font-size: 1.2rem;
     font-weight: 600;
@@ -238,11 +239,13 @@ const updateStock = async (product, change) => {
 .inventory-table-wrapper {
     overflow-x: auto;
 }
+
 .inventory-table {
     width: 100%;
     border-collapse: collapse;
     font-size: 0.95rem;
 }
+
 .inventory-table thead th {
     background-color: #f9fafb;
     color: #6b7280;
@@ -251,12 +254,15 @@ const updateStock = async (product, change) => {
     padding: 1rem 1.5rem;
     border-bottom: 1px solid var(--color-border);
 }
+
 .inventory-table tbody tr {
     border-bottom: 1px solid var(--color-border);
 }
+
 .inventory-table tbody tr:last-child {
     border-bottom: none;
 }
+
 .inventory-table tbody td {
     padding: 1rem 1.5rem;
     color: var(--color-text-dark);
@@ -266,6 +272,7 @@ const updateStock = async (product, change) => {
     display: flex;
     align-items: center;
 }
+
 .product-image-sm {
     width: 40px;
     height: 40px;
@@ -273,6 +280,7 @@ const updateStock = async (product, change) => {
     object-fit: cover;
     margin-right: 1rem;
 }
+
 .product-name-col {
     font-weight: 500;
 }
@@ -280,6 +288,7 @@ const updateStock = async (product, change) => {
 .text-center {
     text-align: center;
 }
+
 .low-stock {
     font-weight: 700;
     color: #dc3545;
@@ -294,6 +303,7 @@ const updateStock = async (product, change) => {
     justify-content: center;
     gap: 0.25rem;
 }
+
 .control-btn {
     background-color: #f3f4f6;
     border: 1px solid #d1d5db;
@@ -306,15 +316,23 @@ const updateStock = async (product, change) => {
     line-height: 1;
     transition: background-color 0.2s;
 }
+
 .control-btn:hover:not(:disabled) {
     background-color: #e5e7eb;
 }
+
 .control-btn:disabled {
     cursor: not-allowed;
     opacity: 0.5;
 }
-.plus-btn { color: var(--color-brand-primary); }
-.minus-btn { color: var(--color-text-dark); }
+
+.plus-btn { 
+    color: var(--color-brand-primary); 
+}
+
+.minus-btn { 
+    color: var(--color-text-dark); 
+}
 
 .control-value {
     font-weight: 600;
@@ -327,4 +345,5 @@ const updateStock = async (product, change) => {
     color: #6b7280;
     font-size: 0.9rem;
 }
+
 </style>

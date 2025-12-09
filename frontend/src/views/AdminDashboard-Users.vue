@@ -152,29 +152,128 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.kds-container { display: flex; min-height: 100vh; background-color: #f5f5f5; font-family: Arial, sans-serif; }
-.dashboard-main-content { flex-grow: 1; padding: 2rem; overflow-y: auto; position: relative; } /* Added relative position */
-.page-title { color: #1f2937; font-size: 2rem; margin: 0 0 1.5rem 0; }
-.user-management-actions { display: flex; justify-content: space-between; margin-bottom: 1.5rem; }
-.search-and-filters { display: flex; gap: 1rem; align-items: center; }
-.search-input { padding: 0.5rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; width: 250px; }
-.filter-select { padding: 0.5rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; }
-.export-button { background: white; border: 1px solid #e5e7eb; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; }
-.user-table-wrapper { background: white; border-radius: 0.75rem; box-shadow: 0 4px 10px rgba(0,0,0,0.08); overflow-x: auto; }
-.user-table { width: 100%; border-collapse: collapse; }
-.user-table th { text-align: left; padding: 1rem; background: #f7f7f7; font-weight: 700; color: #1f2937; }
-.user-table td { padding: 0.75rem; border-top: 1px solid #e5e7eb; }
-.status-tag { padding: 0.25rem 0.5rem; border-radius: 0.5rem; font-size: 0.85rem; font-weight: 600; }
-.status-tag.admin { background: #fee2e2; color: #991b1b; }
-.status-tag.staff { background: #d1fae5; color: #065f46; }
-.status-tag.customer { background: #e0f2fe; color: #0c4a6e; }
-.action-buttons { display: flex; gap: 0.5rem; }
-.action-icon-button { background: none; border: none; cursor: pointer; font-size: 1.2rem; }
+.kds-container { 
+    display: flex; 
+    min-height: 100vh; 
+    background-color: #f5f5f5; 
+    font-family: Arial, sans-serif; 
+}
+
+.dashboard-main-content { 
+    flex-grow: 1; 
+    padding: 2rem; 
+    overflow-y: auto; 
+    position: relative; 
+} 
+
+.page-title { 
+    color: #1f2937; 
+    font-size: 2rem; 
+    margin: 0 0 1.5rem 0; 
+}
+
+.user-management-actions { 
+    display: flex; 
+    justify-content: space-between; 
+    margin-bottom: 1.5rem; 
+}
+
+.search-and-filters { 
+    display: flex; 
+    gap: 1rem; 
+    align-items: center; 
+}
+
+.search-input { 
+    padding: 0.5rem; 
+    border: 1px solid #e5e7eb; 
+    border-radius: 0.5rem; 
+    width: 250px; 
+}
+
+.filter-select { 
+    padding: 0.5rem; 
+    border: 1px solid #e5e7eb; 
+    border-radius: 0.5rem; 
+}
+
+.export-button { 
+    background: white; 
+    border: 1px solid #e5e7eb; 
+    padding: 0.5rem 1rem; 
+    border-radius: 0.5rem; 
+    cursor: pointer; 
+}
+
+.user-table-wrapper { 
+    background: white; 
+    border-radius: 0.75rem; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08); 
+    overflow-x: auto; 
+}
+
+.user-table { 
+    width: 100%; 
+    border-collapse: collapse; 
+}
+
+.user-table th { 
+    text-align: left; 
+    padding: 1rem; 
+    background: #f7f7f7; 
+    font-weight: 700; 
+    color: #1f2937; 
+}
+
+.user-table td { 
+    padding: 0.75rem; 
+    border-top: 1px solid #e5e7eb; 
+}
+
+.status-tag { 
+    padding: 0.25rem 0.5rem; 
+    border-radius: 0.5rem; 
+    font-size: 0.85rem; 
+    font-weight: 600; 
+}
+
+.status-tag.admin { 
+    background: #fee2e2; 
+    color: #991b1b; 
+}
+
+.status-tag.staff { 
+    background: #d1fae5; 
+    color: #065f46; 
+}
+
+.status-tag.customer { 
+    background: #e0f2fe; 
+    color: #0c4a6e; 
+}
+
+.action-buttons { 
+    display: flex; 
+    gap: 0.5rem; 
+}
+
+.action-icon-button { 
+    background: none; 
+    border: none; 
+    cursor: pointer; 
+    font-size: 1.2rem; 
+}
 
 .modal-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
     background-color: rgba(0,0,0,0.5);
-    display: flex; justify-content: center; align-items: center;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
     z-index: 1000;
 }
 
@@ -188,29 +287,56 @@ onMounted(() => {
     animation: fadeIn 0.2s ease-out;
 }
 
-.modal-header h3 { margin-top: 0; color: #1f2937; margin-bottom: 1rem; }
-.modal-body p { color: #4b5563; margin-bottom: 2rem; line-height: 1.5; }
+.modal-header h3 { 
+    margin-top: 0; 
+    color: #1f2937; 
+    margin-bottom: 1rem; 
+}
 
-.modal-actions { display: flex; gap: 1rem; justify-content: center; }
+.modal-body p { 
+    color: #4b5563; 
+    margin-bottom: 2rem; 
+    line-height: 1.5; 
+}
+
+.modal-actions { 
+    display: flex; 
+    gap: 1rem; 
+    justify-content: center; 
+}
 
 .btn-cancel {
     padding: 0.75rem 1.5rem;
     background: #e5e7eb;
-    border: none; border-radius: 6px;
-    cursor: pointer; font-weight: 600; color: #374151;
+    border: none; 
+    border-radius: 6px;
+    cursor: pointer; 
+    font-weight: 600; 
+    color: #374151;
 }
 
 .btn-delete {
     padding: 0.75rem 1.5rem;
     background: #dc2626;
-    border: none; border-radius: 6px;
-    cursor: pointer; font-weight: 600; color: white;
+    border: none; 
+    border-radius: 6px;
+    cursor: pointer; 
+    font-weight: 600; 
+    color: white;
 }
-.btn-delete:hover { background: #b91c1c; }
-.btn-cancel:hover { background: #d1d5db; }
+
+.btn-delete:hover { 
+    background: #b91c1c; 
+}
+
+.btn-cancel:hover { 
+    background: #d1d5db; 
+}
 
 .toast-notification {
-    position: fixed; bottom: 2rem; right: 2rem;
+    position: fixed; 
+    bottom: 2rem; 
+    right: 2rem;
     background-color: #10b981; 
     color: white;
     padding: 1rem 1.5rem;
@@ -220,11 +346,23 @@ onMounted(() => {
     z-index: 2000;
 }
 
-.fade-enter-active, .fade-leave-active { transition: opacity 0.3s; }
-.fade-enter-from, .fade-leave-to { opacity: 0; }
+.fade-enter-active, .fade-leave-active { 
+    transition: opacity 0.3s; 
+}
+
+.fade-enter-from, .fade-leave-to { 
+    opacity: 0; 
+}
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { 
+        opacity: 0; 
+        transform: translateY(-10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
 }
+
 </style>

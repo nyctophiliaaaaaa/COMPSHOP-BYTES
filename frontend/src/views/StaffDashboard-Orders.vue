@@ -23,8 +23,8 @@
               <p><strong>Customer:</strong> {{ order.users?.username }}</p>
               <p class="time-text">{{ formatDate(order.created_at) }}</p>
           </div>
-
-          <div class="station-info" v-if="order.station_number">
+          
+        <div class="station-info" v-if="order.station_number">
               <span class="station-icon">📍</span>
               <span><strong>Station:</strong> {{ order.station_number }}</span>
           </div>
@@ -103,22 +103,30 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import axios from 'axios';
 
 const emit = defineEmits(['notify']);
-
 const orders = ref([]);
-const isLoading = ref(true);
-let pollingInterval = null;
+const isFirstLoad = ref(true); 
+const isProcessing = ref(false); 
+let pollingTimer = null;
 
 const showModal = ref(false);
 const selectedOrder = ref(null);
+const API_BASE = 'http://localhost:3000/api/staff';
 
-const fetchOrders = async () => {
+const fetchOrders = async (background = false) => {
   try {
-    const response = await axios.get('http://localhost:3000/api/staff/orders/Pending');
-    orders.value = response.data;
+    if (!background) isFirstLoad.value = true;
+    const response = await axios.get(`${API_BASE}/orders/Pending`);
+    orders.value = response.data.sort((a, b) => {
+      return new Date(b.created_at) - new Date(a.created_at);
+    });
+
   } catch (error) {
-    console.error(error);
+    console.error("Fetch Error:", error);
+    if (!background) {
+        emit('notify', { message: "Connection lost. Retrying...", type: 'error' });
+    }
   } finally {
-    isLoading.value = false;
+    isFirstLoad.value = false;
   }
 };
 
@@ -133,14 +141,15 @@ const closeModal = () => {
 };
 
 const processOrder = async () => {
-  if (!selectedOrder.value) return;
+  if (!selectedOrder.value || isProcessing.value) return;
+  
   const order = selectedOrder.value;
+  isProcessing.value = true; 
 
   try {
     let refCode = order.payment_reference;
-
     if (order.payment_method === 'Cash') {
-       refCode = `${Math.floor(1000 + Math.random() * 9000)}`;
+       refCode = `${Math.floor(10000000 + Math.random() * 90000000)}`;
     }
 
     const updates = { 
@@ -149,7 +158,7 @@ const processOrder = async () => {
         payment_reference: refCode 
     };
 
-    await axios.patch(`http://localhost:3000/api/staff/orders/${order.order_id}/status`, updates);
+    await axios.patch(`${API_BASE}/orders/${order.order_id}/status`, updates);
     
     orders.value = orders.value.filter(o => o.order_id !== order.order_id);
 
@@ -166,93 +175,322 @@ const processOrder = async () => {
       message: "Failed to update order status.", 
       type: 'error' 
     });
-    closeModal();
+  } finally {
+    isProcessing.value = false; 
   }
 };
 
-const formatDate = (d) => new Date(d).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+const formatDate = (d) => {
+    if (!d) return '';
+    return new Date(d).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+};
 
 onMounted(() => {
   fetchOrders();
-  pollingInterval = setInterval(fetchOrders, 5000);
+  pollingTimer = setInterval(() => {
+    fetchOrders(true);
+  }, 5000);
 });
 
-onUnmounted(() => clearInterval(pollingInterval));
+onUnmounted(() => {
+  if (pollingTimer) clearInterval(pollingTimer);
+});
 </script>
 
 <style scoped>
-.staff-wrapper { padding: 1.5rem; }
-.loading, .empty-state { text-align: center; padding: 2rem; color: #666; }
-.orders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
-.order-card { background: white; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; }
+.staff-wrapper { 
+  padding: 1.5rem; 
+}
 
-.card-header { padding: 0.8rem 1rem; color: white; display: flex; justify-content: space-between; align-items: center; }
-.bg-orange { background-color: #FF724C; }
-.bg-blue { background-color: #3b82f6; }   
+.loading, .empty-state { 
+  text-align: center; 
+  padding: 2rem; 
+  color: #666; 
+}
 
-.header-left { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.header-title { font-weight: 800; font-size: 1.1rem; }
-.header-method { font-size: 0.8rem; font-weight: 600; opacity: 0.9; border: 1px solid white; padding: 2px 6px; border-radius: 4px; }
-.station-badge { background: rgba(255,255,255,0.25); padding: 2px 8px; border-radius: 12px; font-size: 0.85rem; font-weight: 700; white-space: nowrap; }
+.orders-grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+  gap: 1.5rem; 
+}
 
-.card-body { padding: 1rem; flex-grow: 1; }
-.customer-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.95rem; }
-.time-text { color: #888; font-size: 0.85rem; }
+.order-card { 
+  background: white; 
+  border-radius: 8px; 
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+  overflow: hidden; 
+  display: flex; 
+  flex-direction: column; 
+}
 
-.station-info { display: flex; align-items: center; gap: 6px; background: #fff7ed; border: 1px solid #fed7aa; padding: 8px 12px; border-radius: 6px; margin-bottom: 10px; font-size: 0.95rem; color: #c2410c; }
-.station-icon { font-size: 1.1rem; }
+.card-header {
+   padding: 0.8rem 1rem; 
+   color: white; 
+   display: flex; 
+   justify-content: space-between; 
+   align-items: center; 
+  }
 
-.items-list-container { background-color: #f9fafb; padding: 8px; border-radius: 6px; border: 1px solid #eee; margin-bottom: 10px; }
-.item-row { display: flex; font-size: 0.9rem; margin-bottom: 3px; color: #444; }
-.item-qty { font-weight: bold; width: 30px; color: #2d3446; }
+.bg-orange { 
+  background-color: #FF724C; 
+}
 
-.total-row { display: flex; justify-content: space-between; font-weight: 800; font-size: 1.1rem; color: #2d3446; }
-.divider { border: 0; border-top: 1px solid #eee; margin: 12px 0; }
+.bg-blue { 
+  background-color: #3b82f6; 
+}   
 
-.ref-box { background: #eef2ff; border: 1px solid #c7d2fe; padding: 8px; border-radius: 4px; margin-bottom: 8px; display: flex; flex-direction: column; }
-.ref-label { font-size: 0.75rem; color: #4f46e5; font-weight: bold; text-transform: uppercase; }
-.ref-value { font-family: monospace; font-size: 1.1rem; color: #312e81; letter-spacing: 1px; }
+.header-left { 
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+  flex-wrap: wrap; 
+}
 
-.info-alert { font-size: 0.85rem; color: #d97706; background: #fffbeb; padding: 6px; border-radius: 4px; border-left: 3px solid #f59e0b; }
-.blue-alert { color: #1d4ed8; background: #eff6ff; border-left-color: #3b82f6; }
+.header-title { 
+  font-weight: 800; 
+  font-size: 1.1rem; 
+}
 
-.card-action { padding: 1rem; border-top: 1px solid #eee; background-color: #fafafa; }
-.prepare-btn { width: 100%; padding: 12px; font-weight: 700; border-radius: 6px; color: white; background-color: #2d3446; border: none; cursor: pointer; transition: background 0.2s; font-size: 1rem; }
-.prepare-btn:hover { background-color: #1f2937; }
+.header-method { 
+  font-size: 0.8rem; 
+  font-weight: 600; 
+  opacity: 0.9; 
+  border: 1px solid white; 
+  padding: 2px 6px; 
+  border-radius: 4px; 
+}
+
+.station-badge { 
+  background: rgba(255,255,255,0.25); 
+  padding: 2px 8px; 
+  border-radius: 12px; 
+  font-size: 0.85rem; 
+  font-weight: 700; 
+  white-space: nowrap; 
+}
+
+.card-body { 
+  padding: 1rem; flex-grow: 1; 
+}
+
+.customer-info { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  margin-bottom: 10px; 
+  font-size: 0.95rem; 
+}
+
+.time-text { 
+  color: #888; 
+  font-size: 0.85rem; 
+}
+
+.items-list-container { 
+  background-color: #f9fafb; 
+  padding: 8px; 
+  border-radius: 6px; 
+  border: 1px solid #eee; 
+  margin-bottom: 10px; 
+}
+
+.item-row { 
+  display: flex; 
+  font-size: 0.9rem; 
+  margin-bottom: 3px; 
+  color: #444; 
+}
+
+.item-qty { 
+  font-weight: bold; 
+  width: 30px; 
+  color: #2d3446; 
+}
+
+.total-row { 
+  display: flex; 
+  justify-content: space-between; 
+  font-weight: 800; 
+  font-size: 1.1rem; 
+  color: #2d3446; 
+}
+
+.divider { 
+  border: 0; 
+  border-top: 1px solid #eee; 
+  margin: 12px 0; 
+}
+
+.ref-box { 
+  background: #eef2ff; 
+  border: 1px solid #c7d2fe; 
+  padding: 8px; 
+  border-radius: 4px; 
+  margin-bottom: 8px; 
+  display: flex; 
+  flex-direction: column; 
+}
+
+.ref-label { 
+  font-size: 0.75rem; 
+  color: #4f46e5; 
+  font-weight: bold; 
+  text-transform: uppercase; 
+}
+
+.ref-value { 
+  font-family: monospace; 
+  font-size: 1.1rem; 
+  color: #312e81; 
+  letter-spacing: 1px; 
+}
+
+.info-alert { 
+  font-size: 0.85rem; 
+  color: #d97706; 
+  background: #fffbeb; 
+  padding: 6px; 
+  border-radius: 4px; 
+  border-left: 3px solid #f59e0b; 
+}
+
+.blue-alert { 
+  color: #1d4ed8; 
+  background: #eff6ff; 
+  border-left-color: #3b82f6; 
+}
+
+.card-action { 
+  padding: 1rem; 
+  border-top: 1px solid #eee; 
+  background-color: #fafafa; 
+}
+
+.prepare-btn { 
+  width: 100%; 
+  padding: 12px; 
+  font-weight: 700; 
+  border-radius: 6px; 
+  color: white; 
+  background-color: #2d3446; 
+  border: none; 
+  cursor: pointer; 
+  transition: background 0.2s; 
+  font-size: 1rem; 
+}
+
+.prepare-btn:hover { 
+  background-color: #1f2937; 
+}
 
 .modal-overlay {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  display: flex; justify-content: center; align-items: center;
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
   z-index: 10000;
 }
 
 .modal-content {
-  background: white; padding: 2rem; border-radius: 12px;
-  width: 90%; max-width: 420px; text-align: center;
+  background: white; 
+  padding: 2rem; 
+  border-radius: 12px;
+  width: 90%; 
+  max-width: 420px; 
+  text-align: center;
   box-shadow: 0 4px 20px rgba(0,0,0,0.2);
   animation: popIn 0.2s ease-out;
 }
 
-.modal-content h3 { margin-top: 0; color: #1f2937; font-size: 1.4rem; }
-.modal-body { margin: 1.5rem 0; color: #4b5563; }
+.modal-content h3 { 
+  margin-top: 0; 
+  color: #1f2937; 
+  font-size: 1.4rem; }
+.modal-body { 
+  margin: 1.5rem 0; 
+  color: #4b5563; 
+}
 
-.ref-verify-box { background: #eef2ff; padding: 1rem; border-radius: 8px; margin-top: 10px; border: 1px dashed #6366f1; }
-.ref-verify-box .label { font-size: 0.9rem; margin-bottom: 5px; color: #4338ca; }
-.ref-highlight { font-family: monospace; font-size: 1.8rem; color: #312e81; margin: 0; letter-spacing: 2px; }
+.ref-verify-box { 
+  background: #eef2ff; 
+  padding: 1rem; 
+  border-radius: 8px; 
+  margin-top: 10px; 
+  border: 1px dashed #6366f1; 
+}
 
-.cash-verify-box { background: #fffbeb; padding: 1rem; border-radius: 8px; margin-top: 10px; border: 1px dashed #f59e0b; color: #92400e; font-size: 0.9rem; }
+.ref-verify-box .label { 
+  font-size: 0.9rem; 
+  margin-bottom: 5px; 
+  color: #4338ca; 
+}
 
-.modal-actions { display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; }
+.ref-highlight { 
+  font-family: monospace; 
+  font-size: 1.8rem; 
+  color: #312e81; 
+  margin: 0; 
+  letter-spacing: 2px; 
+}
 
-.btn-cancel { padding: 0.75rem 1.5rem; background: #e5e7eb; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; color: #374151; transition: background 0.2s; }
-.btn-cancel:hover { background: #d1d5db; }
+.cash-verify-box { 
+  background: #fffbeb; 
+  padding: 1rem; 
+  border-radius: 8px; 
+  margin-top: 10px; 
+  border: 1px dashed #f59e0b; 
+  color: #92400e; 
+  font-size: 0.9rem; 
+}
 
-.btn-confirm-action { padding: 0.75rem 1.5rem; background: #2d3446; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; color: white; transition: background 0.2s; }
-.btn-confirm-action:hover { background: #1f2937; transform: scale(1.02); }
+.modal-actions { 
+  display: flex; 
+  gap: 1rem; 
+  justify-content: center; 
+  margin-top: 2rem; 
+}
+
+.btn-cancel { 
+  padding: 0.75rem 1.5rem; 
+  background: #e5e7eb; 
+  border: none; 
+  border-radius: 6px; 
+  cursor: pointer; 
+  font-weight: 600; 
+  color: #374151; 
+  transition: background 0.2s; 
+}
+
+.btn-cancel:hover { 
+  background: #d1d5db; 
+}
+
+.btn-confirm-action { 
+  padding: 0.75rem 1.5rem; 
+  background: #2d3446; 
+  border: none; 
+  border-radius: 6px; 
+  cursor: pointer; 
+  font-weight: 600; 
+  color: white; 
+  transition: background 0.2s; 
+}
+
+.btn-confirm-action:hover { 
+  background: #1f2937; 
+  transform: scale(1.02); 
+}
 
 @keyframes popIn {
-  from { transform: scale(0.9); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  from { 
+    transform: scale(0.9); 
+    opacity: 0; 
+  }
+
+  to { 
+    transform: scale(1); 
+    opacity: 1; 
+  }
 }
 </style>

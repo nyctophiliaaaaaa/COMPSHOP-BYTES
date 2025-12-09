@@ -20,14 +20,18 @@ const fetchSalesData = async () => {
             sales[monthName].count += 1;
         });
         monthlySales.value = sales;
-    } catch (error) { console.error("Error fetching sales:", error); }
+    } catch (error) { 
+        console.error("Error fetching sales:", error); 
+    }
 };
 
 const fetchReviews = async () => {
     try {
         const res = await axios.get('http://localhost:3000/api/reviews');
         reviews.value = res.data;
-    } catch (error) { console.error("Error fetching reviews:", error); }
+    } catch (error) { 
+        console.error("Error fetching reviews:", error); 
+    }
 };
 
 onMounted(() => {
@@ -106,12 +110,26 @@ onUnmounted(() => {
     --color-text-dark: #1f2937; 
     --color-border: #e5e7eb; 
     --color-gray-light: #f9fafb; 
-    display: flex; min-height: 100vh; max-height: 100vh; overflow: hidden; 
-    background-color: var(--color-dashboard-bg); font-family: Arial, sans-serif; 
+    display: flex; 
+    min-height: 100vh; 
+    max-height: 100vh; 
+    overflow: hidden; 
+    background-color: var(--color-dashboard-bg); 
+    font-family: Arial, sans-serif; 
 }
 
-.dashboard-main-content { flex-grow: 1; padding: 2rem; overflow-y: auto; }
-.page-title { color: var(--color-text-dark); font-size: 2rem; margin-top: 0; margin-bottom: 1.5rem; }
+.dashboard-main-content { 
+    flex-grow: 1; 
+    padding: 2rem; 
+    overflow-y: auto; 
+}
+
+.page-title { 
+    color: var(--color-text-dark); 
+    font-size: 2rem; 
+    margin-top: 0; 
+    margin-bottom: 1.5rem; 
+}
 
 .reporting-grid {
     display: grid;
@@ -134,8 +152,12 @@ onUnmounted(() => {
 }
 
 .card-title, .sales-report-title { 
-    font-size: 1.1rem; font-weight: 700; color: #1f2937;
-    margin: 0 0 1rem 0; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; 
+    font-size: 1.1rem; 
+    font-weight: 700; 
+    color: #1f2937;
+    margin: 0 0 1rem 0; 
+    border-bottom: 1px solid #eee; 
+    padding-bottom: 0.5rem; 
 }
 
 .review-scroll-area, .table-display {
@@ -152,6 +174,7 @@ onUnmounted(() => {
     margin-bottom: 10px;
     transition: transform 0.2s;
 }
+
 .review-box:hover {
     background-color: #fff;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
@@ -163,16 +186,19 @@ onUnmounted(() => {
     align-items: center;
     margin-bottom: 6px;
 }
+
 .reviewer-name {
     font-weight: 700;
     font-size: 0.9rem;
     color: #374151;
 }
+
 .review-stars {
     color: #ffb400;
     font-size: 0.85rem;
     letter-spacing: 1px;
 }
+
 .review-text { 
     font-style: italic;
     color: #555; 
@@ -181,18 +207,59 @@ onUnmounted(() => {
     line-height: 1.4;
 }
 
-.no-reviews { text-align: center; color: #888; padding: 20px; font-size: 0.9rem; }
-.sales-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; text-align: left; }
-.sales-table th { background-color: var(--color-gray-light); color: var(--color-text-dark); padding: 0.75rem 1rem; border-bottom: 2px solid var(--color-border); position: sticky; top: 0; }
-.sales-table td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--color-border); }
-.sales-table tbody tr:hover { background-color: #fff7f7; }
+.no-reviews { 
+    text-align: center; 
+    color: #888; 
+    padding: 20px; 
+    font-size: 0.9rem; 
+}
 
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #f1f1f1; }
-::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+.sales-table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    font-size: 0.95rem; 
+    text-align: left; 
+}
+
+.sales-table th { 
+    background-color: var(--color-gray-light); 
+    color: var(--color-text-dark); 
+    padding: 0.75rem 1rem; 
+    border-bottom: 2px solid var(--color-border); 
+    position: sticky; 
+    top: 0; 
+}
+
+.sales-table td { 
+    padding: 0.75rem 1rem; 
+    border-bottom: 1px solid var(--color-border); 
+}
+
+.sales-table tbody tr:hover { 
+    background-color: #fff7f7; 
+}
+
+::-webkit-scrollbar { 
+    width: 6px; 
+}
+
+::-webkit-scrollbar-track { 
+    background: #f1f1f1; 
+}
+
+::-webkit-scrollbar-thumb { 
+    background: #d1d5db; 
+    border-radius: 3px; 
+}
 
 @media (max-width: 900px) {
-    .reporting-grid { grid-template-columns: 1fr; height: auto; }
-    .report-card { height: 400px; }
+    .reporting-grid { 
+        grid-template-columns: 1fr; 
+        height: auto; 
+    }
+    .report-card { 
+        height: 400px; 
+    }
 }
+
 </style>

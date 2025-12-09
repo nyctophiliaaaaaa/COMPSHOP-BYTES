@@ -26,7 +26,7 @@ const tax = 12.00
 
 const form = ref({
   name: '',
-  stationNumber: 'Type your PC STATION NUMBER',
+  stationNumber: '',
   paymentMethod: 'cod', 
   notes: ''
 })
@@ -151,7 +151,7 @@ const goBackToCart = () => router.push('/cart')
           </div>
           <div class="form-group">
             <label>Station Number</label>
-            <input v-model="form.stationNumber" type="text" />
+            <input v-model="form.stationNumber" type="text" placeholder="Enter your PC station number" />
           </div>
           
           <div class="form-group">

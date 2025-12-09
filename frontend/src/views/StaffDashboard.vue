@@ -10,17 +10,17 @@
           :class="{ 'role-active': staffRole === 'Cashier' }" 
           @click="switchRole('Cashier')"
         >
-          💰 Cashier (Verify & Serve)
+          💰 Cashier 
         </button>
         <button 
           :class="{ 'role-active': staffRole === 'Kitchen' }" 
           @click="switchRole('Kitchen')"
         >
-          👨‍🍳 Kitchen (Cook)
+          👨‍🍳 Kitchen 
         </button>
       </div>
 
-      <div class="tabs-container"> 
+      <div class="tabs-container" v-if="staffRole === 'Cashier'">
         
         <div 
           v-if="staffRole === 'Cashier'"
@@ -28,7 +28,7 @@
           :class="{ 'tab-active': currentTab === 'Orders' }" 
           @click="currentTab = 'Orders'"
         >
-          New Orders (Verify)
+          New Orders 
         </div>
 
         <div 
@@ -89,29 +89,26 @@ import { ref } from 'vue';
 import HeaderStaff from '@/components/HeaderStaff.vue';
 import StaffDashboardOrders from './StaffDashboard-Orders.vue';
 import StaffDashboardPreparing from './StaffDashboard-Preparing.vue';
-import StaffDashboardReady from './StaffDashboard-PaymentDelivery.vue'; // Using your PaymentDelivery file
+import StaffDashboardReady from './StaffDashboard-PaymentDelivery.vue'; 
 import StaffDashboardCompleted from './StaffDashboard-Completed.vue';
 
-// State
-const staffRole = ref('Cashier'); // Default to Cashier now (Entry point)
+const staffRole = ref('Cashier'); 
 const currentTab = ref('Orders'); 
 
-// Logic
 const switchRole = (role) => {
   staffRole.value = role;
   
-  // Auto-switch to the main tab for that role
   if (role === 'Kitchen') {
-      currentTab.value = 'Preparing'; // Kitchen only cares about cooking
+      currentTab.value = 'Preparing'; 
   } else {
-      currentTab.value = 'Orders'; // Cashier starts by verifying orders
+      currentTab.value = 'Orders'; 
   }
 };
 
 const getTitle = () => {
   const titles = { 
-    'Orders': 'Incoming Orders (Pending Verification)', 
-    'Preparing': 'Kitchen Queue (Cooking)', 
+    'Orders': 'Incoming Orders', 
+    'Preparing': 'Kitchen Queue ', 
     'Ready': 'Ready for Serving', 
     'Completed': 'Order History' 
   };
@@ -125,7 +122,7 @@ const getTitle = () => {
 .staff-header-component { margin-bottom: 1.5rem;}
 .kds-main-content { max-width: 1200px; padding: 0 1rem 1rem 1rem; margin: 0 auto; }
 
-/* ROLE SWITCHER STYLES */
+
 .role-selector {
     display: flex;
     justify-content: center;

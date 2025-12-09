@@ -73,6 +73,7 @@
 <script setup>
 import { ref, defineProps } from 'vue';
 import { useRouter } from 'vue-router';
+import { confirm } from '@/utils/toast.js'; 
 
 const props = defineProps({
   activeRouteName: {
@@ -84,9 +85,20 @@ const props = defineProps({
 const router = useRouter();
 const staffData = ref({ role: 'Admin' });
 
-const handleLogout = () => {
-    localStorage.removeItem('userRole'); 
+const handleLogout = async () => {
+  const confirmed = await confirm('Are you sure you want to log out?', {
+    title: 'Logout',
+    confirmText: 'Logout',
+    cancelText: 'Cancel',
+    type: 'warning'
+  });
+  
+  if (confirmed) {
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('username');
     router.push('/');
+  }
 };
 </script>
 

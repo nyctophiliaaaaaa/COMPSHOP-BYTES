@@ -121,7 +121,6 @@ const handleAddToCart = () => {
   background-color: #e55a3a;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .image-container {
     height: 100px;

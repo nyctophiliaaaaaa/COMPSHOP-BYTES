@@ -86,7 +86,6 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import AdminSidebar from '@/components/AdminSidebar.vue';
 
-// --- STATE ---
 const stats = ref({
     totalProducts: 0,
     activeOrders: 0,
@@ -97,27 +96,22 @@ const stats = ref({
 
 const bestSellers = ref([]);
 
-// --- FETCH DATA (Logic remains the same as all data is still required) ---
 const fetchDashboardData = async () => {
     try {
-        // 1. Get Menu for Product Count & Stock
         const menuRes = await axios.get('http://localhost:3000/api/menu');
         const products = menuRes.data;
         stats.value.totalProducts = products.length;
         stats.value.totalStock = products.reduce((sum, item) => sum + item.stock, 0);
         stats.value.lowStock = products.filter(item => item.stock <= 10).length;
 
-        // 2. Get Users Count
         const userRes = await axios.get('http://localhost:3000/api/admin/users');
         stats.value.totalUsers = userRes.data.length;
 
-        // 3. Get Active Orders (Includes completed for sales/best sellers logic)
         const activeRes = await axios.get('http://localhost:3000/api/orders');
         stats.value.activeOrders = activeRes.data.filter(o => 
             ['pending', 'preparing', 'ready'].includes(o.status.toLowerCase())
         ).length;
 
-        // 4. Calculate Best Sellers (Simulated from Products list for now)
         bestSellers.value = products.slice(0, 4).map(p => ({
             name: p.name,
             count: Math.floor(Math.random() * 50) + 10 
@@ -134,7 +128,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* CORRECTED CSS VARIABLES SCOPE */
 .kds-container {
     --color-text-dark: #1f2937;
     --color-text-secondary: #6b7280;
@@ -165,14 +158,11 @@ onMounted(() => {
     display: flex; 
     flex-direction: column; 
     gap: 20px; 
-    /* Ensures grid handles remaining two rows correctly */
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
 .row-full { grid-column: 1 / -1; }
 .row-two-column-grid { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-
-/* Overview Metrics */
 .overview-metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
 .metric-box-sm { text-align: center; padding: 10px; border: 1px solid #e5e7eb; border-radius: 8px; display: flex; flex-direction: column; align-items: center; }
 
@@ -192,17 +182,13 @@ onMounted(() => {
 .metric-value-sm { font-size: 1.5rem; font-weight: 700; line-height: 1.2; }
 .metric-label-sm { font-size: 0.85rem; color: var(--color-text-secondary); }
 
-/* User Count */
 .user-count-content { display: flex; align-items: center; justify-content: center; flex-grow: 1; padding-bottom: 1rem; }
 .total-customers-value { font-size: 3.5rem; font-weight: 800; color: var(--color-brand-primary); line-height: 1; }
 .total-customers-label { font-size: 1rem; color: #6b7280; font-weight: 500; margin-top: 5px; }
 
-/* Best Sellers */
 .best-sellers-list-portrait { list-style-type: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr; gap: 10px; }
 .best-sellers-list-portrait li { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; font-size: 1rem; font-weight: 500; color: var(--color-text-dark); border-bottom: 1px solid #e5e7eb; }
 .item-name { flex-grow: 1; margin-right: 10px; font-size: 0.95rem; }
-
-/* Removed Expense vs Profit styles */
 
 @media (min-width: 768px) { .dashboard-grid { grid-template-columns: 1fr; } }
 @media (min-width: 1024px) { .dashboard-grid { grid-template-columns: 1fr 1fr; gap: 20px; } .row-full { grid-column: 1 / 3; } .row-two-column-grid { grid-column: 1 / 3; grid-template-columns: 1fr 1fr; } }

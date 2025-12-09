@@ -11,7 +11,6 @@ const code = ref('')
 const countdown = ref(30)
 let timer = null
 
-// Timer Logic
 const startTimer = () => {
     countdown.value = 30
     clearInterval(timer)
@@ -30,7 +29,7 @@ const handleVerifyCode = async () => {
         return
     }
 
-    const email = localStorage.getItem('resetEmail') // Get email from Step 1
+    const email = localStorage.getItem('resetEmail') 
     
     if (!email) {
       toast.error("Session expired. Please start over.");
@@ -39,13 +38,11 @@ const handleVerifyCode = async () => {
     }
 
     try {
-      // Call Backend to Verify
       await axios.post('http://localhost:3000/api/auth/verify-code', {
         email: email,
         code: code.value
       })
 
-      // If success
       toast.success('Code verified! Proceeding to set new password.')
       router.push('/set-new-password') 
     } catch (error) {
@@ -112,7 +109,6 @@ const goBack = () => router.push('/forgot-password')
 </template>
 
 <style scoped>
-/* Responsive Code Entry Page */
 .code-entry-container { 
   display: flex; 
   justify-content: center; 

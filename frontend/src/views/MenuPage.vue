@@ -4,11 +4,9 @@ import { useRouter, useRoute } from 'vue-router';
 import axios from 'axios';
 import { addToCart } from '@/utils/cart.js';
 
-// Components
 import HeaderBar from '@/components/HeaderBar.vue';
 import ProductCard from '@/components/ProductCard.vue';
 
-// Import static UI assets (Icons only)
 import categoriesIcon from '@/assets/categories-icon.jpg';
 import searchMagnifyIcon from '@/assets/search.jpg';
 import nextIcon from '@/assets/nextarrow.png';
@@ -23,14 +21,11 @@ const sortBy = ref('Popular');
 const currentPage = ref(1);
 const itemsPerPage = 14;
 
-// Categories
 const categories = ['All Items', 'Instant Noodles', 'Meals', 'Beverages'];
 
-// Products State
 const products = ref([]);
 const isLoading = ref(true);
 
-// Category ID to Name mapping
 const categoryMap = {
   1: 'Meals',
   2: 'Instant Noodles',
@@ -38,7 +33,6 @@ const categoryMap = {
 };
 
 onMounted(async () => {
-  // Fetch menu data from API
   try {
     const response = await axios.get('http://localhost:3000/api/menu');
     
@@ -57,7 +51,6 @@ onMounted(async () => {
   }
 });
 
-// Filtering & Sorting
 const filteredProducts = computed(() => {
   let items = products.value.filter(p => {
     const matchesSearch = p.name.toLowerCase().includes(searchQuery.value.toLowerCase());
@@ -74,7 +67,6 @@ const filteredProducts = computed(() => {
   return items;
 });
 
-// Pagination
 const totalPages = computed(() => Math.ceil(filteredProducts.value.length / itemsPerPage));
 
 const paginatedProducts = computed(() => {
@@ -94,12 +86,10 @@ const setPage = (page) => {
   currentPage.value = page;
 };
 
-// Reset page when filters change
 watch([searchQuery, selectedCategory], () => {
   currentPage.value = 1;
 });
 
-// Handle add to cart from ProductCard
 const handleAddToCart = (item) => {
   addToCart(item);
 };
@@ -109,7 +99,6 @@ const handleAddToCart = (item) => {
   <div class="menu-container">
     <HeaderBar />
     
-    <!-- Filter Bar -->
     <nav class="filter-bar">
       <div class="categories">
         <span class="cat-label">
@@ -132,7 +121,6 @@ const handleAddToCart = (item) => {
       </div>
     </nav>
     
-    <!-- Main Content -->
     <main class="content-area">
       <div class="content-header">
         <h2>{{ selectedCategory }}</h2>
@@ -146,12 +134,10 @@ const handleAddToCart = (item) => {
         </div>
       </div>
 
-      <!-- Loading State -->
       <div v-if="isLoading" class="loading-state">
         Loading Menu...
       </div>
 
-      <!-- Product Grid -->
       <div v-else class="product-grid">
         <ProductCard 
           v-for="item in paginatedProducts" 
@@ -161,7 +147,6 @@ const handleAddToCart = (item) => {
         />
       </div>
 
-      <!-- Pagination -->
       <div class="pagination" v-if="totalPages > 1">
         <button class="page-nav" @click="prevPage" :disabled="currentPage === 1">
           <img :src="backIcon" alt="Prev" class="nav-icon" />
@@ -197,7 +182,6 @@ const handleAddToCart = (item) => {
   font-size: var(--text-base);
 }
 
-/* Filter Bar */
 .filter-bar {
   display: flex;
   justify-content: space-between;
@@ -252,7 +236,6 @@ const handleAddToCart = (item) => {
   color: white;
 }
 
-/* Search */
 .search-wrapper {
   position: relative;
 }
@@ -283,7 +266,6 @@ const handleAddToCart = (item) => {
   opacity: 0.6;
 }
 
-/* Content Area */
 .content-area {
   padding: clamp(0.6rem, 1vw, 1rem) clamp(1rem, 1.5vw, 1.5rem);
   flex-grow: 1;
@@ -325,7 +307,6 @@ const handleAddToCart = (item) => {
   cursor: pointer;
 }
 
-/* Product Grid */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(clamp(140px, 12vw, 200px), 1fr));
@@ -333,7 +314,7 @@ const handleAddToCart = (item) => {
   margin-bottom: clamp(0.6rem, 1vw, 1rem);
 }
 
-/* Loading State */
+
 .loading-state {
   text-align: center;
   padding: clamp(2rem, 3.5vw, 3.5rem);
@@ -341,7 +322,6 @@ const handleAddToCart = (item) => {
   color: var(--color-text-muted);
 }
 
-/* Pagination */
 .pagination {
   display: flex;
   justify-content: center;
@@ -393,7 +373,6 @@ const handleAddToCart = (item) => {
   width: auto;
 }
 
-/* ========== RESPONSIVE BREAKPOINTS ========== */
 
 @media (max-width: 1024px) {
   .product-grid {

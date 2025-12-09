@@ -1,5 +1,4 @@
-// Custom Toast Notification System
-// Replaces browser's native alert() with styled popups
+
 
 /**
  * Show a toast notification
@@ -8,7 +7,6 @@
  * @param {number} duration - Duration in ms (default: 3000)
  */
 export function showToast(message, type = 'info', duration = 3000) {
-  // Find or create the toast container
   let container = document.querySelector('.toast-container');
   if (!container) {
     container = document.createElement('div');
@@ -16,11 +14,9 @@ export function showToast(message, type = 'info', duration = 3000) {
     document.body.appendChild(container);
   }
 
-  // Create toast element
   const toast = document.createElement('div');
   toast.className = `toast toast-${type}`;
   
-  // Icon based on type
   const icons = {
     success: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
@@ -54,27 +50,21 @@ export function showToast(message, type = 'info', duration = 3000) {
     </button>
   `;
 
-  // Add to container
   container.appendChild(toast);
 
-  // Trigger animation
   requestAnimationFrame(() => {
     toast.classList.add('toast-show');
   });
 
-  // Close button handler
   const closeBtn = toast.querySelector('.toast-close');
   closeBtn.addEventListener('click', () => removeToast(toast));
 
-  // Auto remove after duration
   const timeoutId = setTimeout(() => removeToast(toast), duration);
   
-  // Clear timeout if manually closed
   toast.dataset.timeoutId = timeoutId;
 }
 
 function removeToast(toast) {
-  // Clear the timeout
   if (toast.dataset.timeoutId) {
     clearTimeout(parseInt(toast.dataset.timeoutId));
   }
@@ -82,10 +72,8 @@ function removeToast(toast) {
   toast.classList.remove('toast-show');
   toast.classList.add('toast-hide');
   
-  // Remove from DOM after animation
   setTimeout(() => {
     toast.remove();
-    // Remove container if empty
     const container = document.querySelector('.toast-container');
     if (container && container.children.length === 0) {
       container.remove();
@@ -104,15 +92,13 @@ export function showConfirm(message, options = {}) {
     title = 'Confirm',
     confirmText = 'Yes',
     cancelText = 'Cancel',
-    type = 'warning' // 'warning', 'danger', 'info'
+    type = 'warning' 
   } = options;
 
   return new Promise((resolve) => {
-    // Create overlay
     const overlay = document.createElement('div');
     overlay.className = 'confirm-overlay';
     
-    // Type colors
     const colors = {
       warning: '#f59e0b',
       danger: '#ef4444',
@@ -121,7 +107,6 @@ export function showConfirm(message, options = {}) {
     
     const iconColor = colors[type] || colors.warning;
     
-    // Icons
     const icons = {
       warning: `<svg viewBox="0 0 24 24" fill="none" stroke="${iconColor}" stroke-width="2">
         <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
@@ -154,12 +139,10 @@ export function showConfirm(message, options = {}) {
 
     document.body.appendChild(overlay);
 
-    // Trigger animation
     requestAnimationFrame(() => {
       overlay.classList.add('confirm-show');
     });
 
-    // Handle buttons
     const confirmBtn = overlay.querySelector('.confirm-btn-confirm');
     const cancelBtn = overlay.querySelector('.confirm-btn-cancel');
 
@@ -175,12 +158,10 @@ export function showConfirm(message, options = {}) {
     confirmBtn.addEventListener('click', () => close(true));
     cancelBtn.addEventListener('click', () => close(false));
     
-    // Close on overlay click
     overlay.addEventListener('click', (e) => {
       if (e.target === overlay) close(false);
     });
     
-    // Close on Escape key
     const handleEscape = (e) => {
       if (e.key === 'Escape') {
         document.removeEventListener('keydown', handleEscape);
@@ -191,7 +172,6 @@ export function showConfirm(message, options = {}) {
   });
 }
 
-// Convenience methods
 export const toast = {
   success: (message, duration) => showToast(message, 'success', duration),
   error: (message, duration) => showToast(message, 'error', duration),

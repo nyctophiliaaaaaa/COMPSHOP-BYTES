@@ -7,7 +7,6 @@ import toast from '@/utils/toast.js'
 
 const router = useRouter()
 
-// REAL CART LOGIC
 const cartItems = ref([])
 const userId = ref(null)
 
@@ -39,7 +38,6 @@ const subtotal = computed(() => {
 const total = computed(() => subtotal.value + serviceFee + tax)
 
 const handlePlaceOrder = async () => {
-    // 1. Validation
     if (!form.value.name || !form.value.stationNumber) {
         toast.warning('Please fill in your name and station number.')
         return
@@ -57,9 +55,8 @@ const handlePlaceOrder = async () => {
         return
     }
 
-    // --- PREPARE ITEMS FOR DB (FIXED) ---
     const orderItems = cartItems.value.map(item => ({
-        item_id: item.id, // <-- ADDED CRITICAL ITEM ID FOR INVENTORY DEDUCTION
+        item_id: item.id, 
         name: item.name,
         quantity: item.quantity,
         price: item.price,
@@ -67,15 +64,14 @@ const handlePlaceOrder = async () => {
     }));
 
   if (form.value.paymentMethod === 'cod') {
-    // === COD FLOW ===
     try {
       await axios.post('http://localhost:3000/api/orders', {
         user_id: userId.value,
         total_amount: total.value,
         payment_method: 'Cash',
         payment_reference: 'N/A',
-        station_number: form.value.stationNumber, // <--- SENDING STATION
-        items: orderItems // <--- SENDING ITEMS
+        station_number: form.value.stationNumber, 
+        items: orderItems 
       })
 
       const cartKey = `cart_${userId.value}`
@@ -92,10 +88,8 @@ const handlePlaceOrder = async () => {
     }
 
   } else if (form.value.paymentMethod === 'qrph') {
-    // === CASHLESS FLOW ===
-    // Save items AND Station Number to temp storage for the next page
     localStorage.setItem('tempOrderItems', JSON.stringify(orderItems));
-    localStorage.setItem('tempStationNumber', form.value.stationNumber); // <--- SAVE FOR NEXT PAGE
+    localStorage.setItem('tempStationNumber', form.value.stationNumber); 
 
     router.push({ 
       path: '/qr-codes', 
@@ -190,7 +184,6 @@ const goBackToCart = () => router.push('/cart')
 </template>
 
 <style scoped>
-/* Keeping your exact styles */
 .checkout-container { min-height: 100vh; background-color: #f5f5f5; padding-bottom: 100px; font-family: sans-serif; }
 .back-btn-wrapper { display: flex; justify-content: flex-start; padding-top: clamp(1rem, 2vw, 1.8rem); max-width: clamp(900px, 80vw, 1200px); margin: 0 auto; padding-left: clamp(1rem, 2.5vw, 2.5rem); }
 .top-back-btn { background: none; border: none; color: #555; font-weight: 600; font-size: clamp(0.8rem, 1vw, 0.95rem); cursor: pointer; display: flex; align-items: center; padding: 0; }

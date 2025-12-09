@@ -31,15 +31,14 @@ const handleResetPassword = async () => {
   isLoading.value = true
 
   try {
-    // Call Backend to Update Password
     await axios.post('http://localhost:3000/api/auth/reset-password', {
       email: email,
       newPassword: newPassword.value
     })
 
     toast.success('Password has been successfully reset! Redirecting to login.')
-    localStorage.removeItem('resetEmail') // Clean up
-    router.push('/') // Back to Login
+    localStorage.removeItem('resetEmail') 
+    router.push('/') 
   } catch (error) {
     console.error(error)
     toast.error('Failed to reset password. Please try again.')
@@ -95,7 +94,6 @@ const goBack = () => router.push('/enter-code')
 </template>
 
 <style scoped>
-/* Responsive Set New Password Page */
 .container { 
   display: flex; 
   justify-content: center; 

@@ -13,15 +13,12 @@ const isLoading = ref(false)
 const handleSendCode = async () => {
   isLoading.value = true
   try {
-    // 1. Call Backend to generate code
     await axios.post('http://localhost:3000/api/auth/forgot-password', {
       email: email.value
     })
 
-    // 2. Save email locally so the next step knows who we are verifying
     localStorage.setItem('resetEmail', email.value)
     
-    // 3. Notify user (Simulation)
     toast.success('Code generated! Please check your VS Code Terminal (Backend).') 
     router.push('/enter-code') 
   } catch (error) {
@@ -64,7 +61,6 @@ const goBack = () => {
 </template>
 
 <style scoped>
-/* Responsive Forgot Password Page */
 .container { 
   display: flex; 
   justify-content: center; 

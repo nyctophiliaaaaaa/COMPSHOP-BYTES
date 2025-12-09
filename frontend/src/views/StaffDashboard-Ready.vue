@@ -49,7 +49,7 @@
 
         <div class="card-action">
           <button class="serve-btn" @click="markServed(order.order_id)">
-            ✅ Mark Served (Complete)
+            ✅ Mark Served
           </button>
         </div>
 
@@ -66,7 +66,6 @@ const orders = ref([]);
 const isLoading = ref(true);
 let pollingInterval = null;
 
-// 1. Fetch Orders (Status: Ready)
 const fetchOrders = async () => {
   try {
     const response = await axios.get('http://localhost:3000/api/staff/orders/Ready');
@@ -78,17 +77,14 @@ const fetchOrders = async () => {
   }
 };
 
-// 2. Mark as Completed
 const markServed = async (orderId) => {
   if(!confirm("Has the customer received the food? This will complete the order.")) return;
 
   try {
-    // Send to Backend
     await axios.patch(`http://localhost:3000/api/staff/orders/${orderId}/status`, {
       status: 'Completed'
     });
 
-    // Remove from UI instantly
     orders.value = orders.value.filter(o => o.order_id !== orderId);
     
   } catch (error) {
@@ -96,15 +92,13 @@ const markServed = async (orderId) => {
   }
 };
 
-// Helper: Format Time
 const formatDate = (dateString) => {
   return new Date(dateString).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 };
 
-// Auto-Refresh Logic
 onMounted(() => {
   fetchOrders();
-  pollingInterval = setInterval(fetchOrders, 5000); // Check every 5s
+  pollingInterval = setInterval(fetchOrders, 5000); 
 });
 
 onUnmounted(() => {
@@ -124,7 +118,7 @@ onUnmounted(() => {
     font-weight: 700;
 }
 
-/* Empty State */
+
 .empty-state {
     text-align: center;
     padding: 4rem 2rem;
@@ -135,23 +129,22 @@ onUnmounted(() => {
 }
 .empty-icon { font-size: 3rem; margin-bottom: 1rem; }
 
-/* Grid Layout */
+
 .orders-grid { 
     display: grid; 
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
     gap: 1.5rem; 
 }
 
-/* Order Card */
+
 .order-card { 
     background-color: white; 
     border-radius: 0.5rem; 
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
     overflow: hidden; 
-    border-left: 5px solid #10b981; /* Green border for Ready status */
+    border-left: 5px solid #10b981; 
 }
 
-/* Header */
 .card-header { 
     display: flex; 
     justify-content: space-between; 
@@ -171,7 +164,6 @@ onUnmounted(() => {
 .order-time { font-size: 0.8rem; color: #666; display: block; }
 .order-total { font-size: 0.9rem; color: #10b981; font-weight: 700; }
 
-/* Body */
 .card-items { 
     padding: 1rem; 
     font-size: 0.9rem; 
@@ -189,10 +181,9 @@ onUnmounted(() => {
 .status-label { font-weight: 600; color: #6b7280; }
 .status-value { font-weight: 700; }
 
-.ready-text { color: #10b981; } /* Green */
-.unpaid-text { color: #ef4444; } /* Red */
+.ready-text { color: #10b981; }
+.unpaid-text { color: #ef4444; } 
 
-/* Footer / Action */
 .card-action { padding: 0.75rem; border-top: 1px solid #f0f0f0; background-color: #fafafa; }
 
 .serve-btn {
@@ -202,7 +193,7 @@ onUnmounted(() => {
     font-weight: 700; 
     border-radius: 0.375rem;
     color: white; 
-    background-color: #2d3446; /* Dark theme for contrast */
+    background-color: #2d3446; 
     border: none; 
     cursor: pointer; 
     transition: background-color 0.15s ease-in-out;
@@ -210,7 +201,6 @@ onUnmounted(() => {
 
 .serve-btn:hover { background-color: #1f2937; }
 
-/* Responsive */
 @media (max-width: 1024px) { .orders-grid { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 768px) { .orders-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 480px) { .orders-grid { grid-template-columns: 1fr; } }

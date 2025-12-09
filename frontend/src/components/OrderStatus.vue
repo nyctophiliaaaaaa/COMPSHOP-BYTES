@@ -2,7 +2,6 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import axios from 'axios';
 
-// Prop to control if the main card is open
 const props = defineProps({
   isOpen: {
     type: Boolean,
@@ -12,34 +11,28 @@ const props = defineProps({
 
 const emit = defineEmits(['close']);
 
-// --- STATE ---
 const orders = ref([]);
 const isLoading = ref(true);
 const isMinimized = ref(false); 
 const isFirstLoad = ref(true); 
 let polling = null;
 
-// Toast Notification State
 const showToast = ref(false);
 const toastMessage = ref('');
-// ADDED BACK: Variable to track the timer
 let toastTimeout = null;
 
-// --- ACTIONS ---
 
 const triggerToast = (message) => {
     console.log("🔔 TOAST TRIGGERED:", message); 
     toastMessage.value = message;
     showToast.value = true;
     
-    // ADDED BACK: Auto-hide the Toast after 5 seconds
     if (toastTimeout) clearTimeout(toastTimeout);
     toastTimeout = setTimeout(() => {
         showToast.value = false;
     }, 6000);
 };
 
-// FETCH ORDERS (Runs in background)
 const fetchOrders = async () => {
   const userId = localStorage.getItem('userId');
   if (!userId) {
@@ -56,28 +49,23 @@ const fetchOrders = async () => {
             const matchingNewOrder = newOrders.find(n => n.order_id === oldOrder.order_id);
             const oldStatus = oldOrder.status.toLowerCase();
 
-            // SCENARIO A: Status Changed
             if (matchingNewOrder) {
                 const newStatus = matchingNewOrder.status.toLowerCase();
                 
                 if (oldStatus !== newStatus) {
-                    // 1. Confirmed (Pending -> Preparing)
                     if (oldStatus === 'pending' && newStatus === 'preparing') {
                          triggerToast(`Order #${matchingNewOrder.order_id} Confirmed! We are preparing it now. 🍳`);
                     }
 
-                    // 2. Ready
                     if (newStatus === 'ready') {
                         triggerToast(`Order #${matchingNewOrder.order_id} is Ready!`);
                     }
 
-                    // 3. Served
                     if (newStatus === 'served' || newStatus === 'completed') {
                         triggerToast(`Order #${matchingNewOrder.order_id} Served. Enjoy your meal! 😋`);
                     }
                 }
             } 
-            // SCENARIO B: Order Disappeared
             else {
                 if (oldStatus === 'ready' || oldStatus === 'preparing') {
                     triggerToast(`Order #${oldOrder.order_id} Served. Enjoy your meal! 😋`);
@@ -103,11 +91,9 @@ onMounted(() => {
 
 onUnmounted(() => {
     clearInterval(polling);
-    // Clear toast timer to prevent memory leaks
     if (toastTimeout) clearTimeout(toastTimeout);
 });
 
-// UI Actions
 const toggleMinimize = () => isMinimized.value = !isMinimized.value;
 const closePopup = () => emit('close');
 const closeToast = () => showToast.value = false;
@@ -208,7 +194,6 @@ const getStatusColor = (status) => {
 </template>
 
 <style scoped>
-/* --- TOAST STYLES --- */
 .top-toast {
     position: fixed;
     top: 80px; 
@@ -235,7 +220,6 @@ const getStatusColor = (status) => {
 .slide-down-enter-active, .slide-down-leave-active { transition: all 0.4s ease; }
 .slide-down-enter-from, .slide-down-leave-to { opacity: 0; transform: translate(-50%, -20px); }
 
-/* --- CARD STYLES --- */
 .component-wrapper { position: relative; z-index: 9999; }
 .backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 9998; }
 
@@ -255,7 +239,6 @@ const getStatusColor = (status) => {
     cursor: pointer;
 }
 
-/* Header & Content Styles */
 .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
 .status-header { font-weight: 800; font-size: 1.2rem; color: #2d3446; }
 .control-btn { background: #f0f0f0; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-weight: bold; color: #555; }

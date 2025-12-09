@@ -12,7 +12,6 @@ const router = useRouter()
 const showPassword = ref(false)
 const isLoading = ref(false)
 
-// Data binding
 const credentials = ref({ 
   username: '', 
   email: '', 
@@ -21,7 +20,6 @@ const credentials = ref({
 })
 
 const handleSignUp = async () => {
-  // 1. Validate Passwords Match
   if (credentials.value.password !== credentials.value.confirmPassword) {
     toast.warning('Passwords do not match')
     return
@@ -30,22 +28,17 @@ const handleSignUp = async () => {
   isLoading.value = true
 
   try {
-    // 2. Send Data to Backend
-    // This calls the /api/auth/register endpoint we made in server.js
     const response = await axios.post('http://localhost:3000/api/auth/register', {
       username: credentials.value.username,
       email: credentials.value.email,
       password: credentials.value.password
-      // role_id defaults to 3 (Customer) in the backend
     });
 
-    // 3. Handle Success
     toast.success('Account created successfully! Please login.');
-    router.push('/'); // Redirect to Login page to authenticate
+    router.push('/'); 
 
   } catch (error) {
     console.error(error);
-    // 4. Handle Errors (e.g., Username taken)
     if (error.response && error.response.data.error) {
       toast.error("Error: " + error.response.data.error);
     } else {
@@ -136,7 +129,6 @@ const handleSignUp = async () => {
 </template>
 
 <style scoped>
-/* Responsive Signup Page */
 .signup-container {
   display: flex;
   justify-content: center;

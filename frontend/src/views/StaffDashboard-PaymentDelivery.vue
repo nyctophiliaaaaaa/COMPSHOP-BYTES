@@ -59,7 +59,7 @@
 
               <button 
                   class="action-btn btn-cash" 
-                  @click="processCashPayment(order)"
+                  @click="openModal(order)"
                   :disabled="(order.cashReceived || 0) < order.total_amount"
               >
                   💵 Pay & Serve
@@ -72,7 +72,7 @@
               
               <button 
                   class="action-btn btn-serve" 
-                  @click="processServeOnly(order.order_id)"
+                  @click="openModal(order)"
               >
                   ✅ Serve Order
               </button>
@@ -81,22 +81,69 @@
         </div>
       </div>
     </div>
-  </div>
+
+    <div v-if="showModal" class="modal-overlay">
+      <div class="modal-content">
+        
+        <h3>{{ selectedOrder?.payment_method === 'Cash' ? 'Confirm Payment' : 'Confirm Serving' }}</h3>
+
+        <div class="modal-body">
+          
+          <div v-if="selectedOrder?.payment_method === 'Cash'">
+            <p>Confirm payment for Order #{{ selectedOrder.order_id }}?</p>
+            
+            <div class="summary-box">
+              <div class="row">
+                <span>Total Due:</span>
+                <strong>₱ {{ selectedOrder.total_amount }}</strong>
+              </div>
+              <div class="row received">
+                <span>Cash Received:</span>
+                <strong>₱ {{ selectedOrder.cashReceived }}</strong>
+              </div>
+              <div class="row change">
+                <span>Change:</span>
+                <strong>₱ {{ calculateChange(selectedOrder) }}</strong>
+              </div>
+            </div>
+          </div>
+
+          <div v-else>
+             <p>Mark <strong>Order #{{ selectedOrder?.order_id }}</strong> as served?</p>
+             <p class="sub-text">Customer has already paid via {{ selectedOrder?.payment_method }}.</p>
+          </div>
+
+        </div>
+        
+        <div class="modal-actions">
+          <button class="btn-cancel" @click="closeModal">Cancel</button>
+          <button class="btn-confirm-action" @click="processOrder">
+            Confirm
+          </button>
+        </div>
+
+      </div>
+    </div>
+    </div>
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import axios from 'axios';
 
+const emit = defineEmits(['notify']);
+
 const orders = ref([]);
 const isLoading = ref(true);
 let pollingInterval = null;
+
+const showModal = ref(false);
+const selectedOrder = ref(null);
 
 const fetchOrders = async () => {
   try {
     const res = await axios.get('http://localhost:3000/api/staff/orders/Ready');
     
-    // Smart Merge to keep typed cash values
     const mergedOrders = res.data.map(newOrder => {
       const existingOrder = orders.value.find(o => o.order_id === newOrder.order_id);
       return { 
@@ -120,25 +167,53 @@ const calculateChange = (order) => {
     return change > 0 ? change.toFixed(2) : '0.00';
 };
 
-const processCashPayment = async (order) => {
-    if (!confirm(`Confirm receipt of ₱${order.cashReceived}?`)) return;
 
-    try {
-        await axios.patch(`http://localhost:3000/api/staff/orders/${order.order_id}/status`, {
-            status: 'Completed',
-            payment_status: 'Paid'
-        });
-        orders.value = orders.value.filter(o => o.order_id !== order.order_id);
-    } catch (e) { alert("Error processing payment."); }
+const openModal = (order) => {
+  if (order.payment_method === 'Cash') {
+    const received = order.cashReceived || 0;
+    if (received < order.total_amount) {
+      emit('notify', { message: 'Insufficient payment amount!', type: 'error' });
+      return;
+    }
+  }
+  selectedOrder.value = order;
+  showModal.value = true;
 };
 
-const processServeOnly = async (orderId) => {
+const closeModal = () => {
+  showModal.value = false;
+  selectedOrder.value = null;
+};
+
+const processOrder = async () => {
+    if (!selectedOrder.value) return;
+    const order = selectedOrder.value;
+
     try {
-        await axios.patch(`http://localhost:3000/api/staff/orders/${orderId}/status`, {
-            status: 'Completed'
+        const updates = { status: 'Completed' };
+        
+        if (order.payment_method === 'Cash') {
+            updates.payment_status = 'Paid';
+        }
+
+        await axios.patch(`http://localhost:3000/api/staff/orders/${order.order_id}/status`, updates);
+
+        orders.value = orders.value.filter(o => o.order_id !== order.order_id);
+
+        emit('notify', { 
+          message: `Order #${order.order_id} served!`, 
+          type: 'success' 
         });
-        orders.value = orders.value.filter(o => o.order_id !== orderId);
-    } catch (e) { alert("Error updating status."); }
+
+        closeModal();
+
+    } catch (e) { 
+        emit('notify', { 
+          message: "Error updating order.", 
+          type: 'error' 
+        });
+        closeModal();
+    }
 };
 
 const formatDate = (d) => new Date(d).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -153,15 +228,13 @@ onUnmounted(() => clearInterval(pollingInterval));
 <style scoped>
 .staff-wrapper { padding: 1.5rem; }
 .orders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
-.order-card { background: white; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); overflow: hidden; }
+.order-card { background: white; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; }
 
-/* Header Styling */
 .card-header { padding: 1rem; color: white; font-weight: bold; display: flex; align-items: center; justify-content: center; position: relative; }
 .header-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
 .bg-orange { background-color: #FF724C; }
 .bg-green { background-color: #10b981; }
 
-/* Station Badge */
 .station-badge { 
     background-color: rgba(255, 255, 255, 0.25); 
     padding: 3px 8px; 
@@ -172,7 +245,7 @@ onUnmounted(() => clearInterval(pollingInterval));
     white-space: nowrap;
 }
 
-.card-body { padding: 1.5rem; }
+.card-body { padding: 1.5rem; flex-grow: 1; }
 .customer-info p { margin: 5px 0; color: #444; }
 
 .items-list-container { background-color: #f9fafb; padding: 10px; border-radius: 6px; margin: 10px 0; border: 1px solid #eee; }
@@ -196,4 +269,34 @@ onUnmounted(() => clearInterval(pollingInterval));
 .btn-cash:hover:not(:disabled) { background-color: #1f2937; }
 .btn-serve { background-color: #10b981; }
 .btn-serve:hover { background-color: #059669; }
+
+.modal-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 10000;
+}
+.modal-content {
+  background: white; padding: 2rem; border-radius: 12px;
+  width: 90%; max-width: 400px; text-align: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  animation: popIn 0.2s ease-out;
+}
+.modal-content h3 { margin-top: 0; color: #2d3748; }
+.modal-body { margin: 1.5rem 0; color: #4a5568; }
+
+.summary-box { background: #edf2f7; padding: 1rem; border-radius: 8px; margin-top: 1rem; }
+.summary-box .row { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+.summary-box .change { color: #38a169; border-top: 1px solid #cbd5e0; padding-top: 0.5rem; margin-top: 0.5rem; font-size: 1.1rem; }
+
+.modal-actions { display: flex; gap: 1rem; justify-content: center; margin-top: 1.5rem; }
+
+.btn-cancel { padding: 0.75rem 1.5rem; background: #e2e8f0; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; color: #4a5568; }
+.btn-confirm-action { padding: 0.75rem 1.5rem; background: #2d3446; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; color: white; }
+.btn-confirm-action:hover { background: #1f2937; transform: scale(1.02); }
+
+@keyframes popIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
 </style>

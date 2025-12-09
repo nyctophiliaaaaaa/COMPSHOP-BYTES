@@ -55,11 +55,9 @@ const grandTotal = computed(() => {
     return completedOrders.value.reduce((sum, item) => sum + parseFloat(item.total_amount), 0);
 });
 
-// Fetch Real Transactions
 const fetchTransactions = async () => {
     try {
         const res = await axios.get('http://localhost:3000/api/orders');
-        // Only show Completed or Served orders
         completedOrders.value = res.data.filter(o => 
             ['completed', 'served'].includes(o.status.toLowerCase())
         );
@@ -74,7 +72,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Kept your exact styles */
 .kds-container { --color-dashboard-bg: #f5f5f5; --color-brand-primary: #ff724c; --sidebar-width: 280px; --color-text-dark: #1f2937; --color-text-secondary: #6b7280; --color-border: #e5e7eb; display: flex; min-height: 100vh; max-height: 100vh; overflow: hidden; background-color: var(--color-dashboard-bg); font-family: Arial, sans-serif; }
 .dashboard-main-content { flex-grow: 1; padding: 2rem; overflow-y: auto; }
 .welcome-title { color: var(--color-text-dark); font-size: 2rem; margin-top: 0; margin-bottom: 1.5rem; }

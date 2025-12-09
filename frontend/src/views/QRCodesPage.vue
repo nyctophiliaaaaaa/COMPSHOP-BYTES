@@ -24,7 +24,6 @@ const handlePaymentSent = async () => {
   const userId = localStorage.getItem('userId');
   if (!userId) { toast.error("User session invalid."); return; }
 
-  // RETRIEVE ITEMS & STATION
   const storedItems = localStorage.getItem('tempOrderItems');
   const stationNum = localStorage.getItem('tempStationNumber'); 
   const orderItems = storedItems ? JSON.parse(storedItems) : [];
@@ -36,8 +35,8 @@ const handlePaymentSent = async () => {
       total_amount: totalAmount.value,
       payment_method: selectedMethod.value, 
       payment_reference: refNum,
-      station_number: stationNum, // <--- SENDING STATION
-      items: orderItems // <--- SENDING ITEMS
+      station_number: stationNum, 
+      items: orderItems 
     });
     localStorage.removeItem(`cart_${userId}`);
     localStorage.removeItem('tempOrderItems');
@@ -85,7 +84,6 @@ const goBackToCheckout = () => router.push('/checkout')
 </template>
 
 <style scoped>
-/* Same QR styles as before */
 .qr-container { min-height: 100vh; background-color: #f5f5f5; padding-bottom: 100px; font-family: sans-serif; }
 .back-btn-wrapper { display: flex; justify-content: flex-start; padding-top: 2rem; max-width: 800px; margin: 0 auto; padding-left: 2rem; }
 .top-back-btn { background: none; border: none; color: #555; font-weight: 600; cursor: pointer; }

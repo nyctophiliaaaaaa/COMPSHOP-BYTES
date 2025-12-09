@@ -16,7 +16,6 @@ const showPassword = ref(false)
 const isLoading = ref(false)
 const credentials = ref({ username: '', password: '' })
 
-// --- HARDCODED TEST CREDENTIALS ---
 
 const STAFF_USER = {
     username: 'teststaff',
@@ -38,11 +37,8 @@ const toggleMode = () => {
 const handleLogin = async () => {
     isLoading.value = true
     
-    // --- 1. TEST MODE LOGIN (Bypasses Backend) ---
-    // This allows you to log in with hardcoded Staff OR Admin credentials
     if (isStaffMode.value) {
         
-        // CHECK FOR ADMIN MATCH
         if (
             credentials.value.username === ADMIN_USER.username &&
             credentials.value.password === ADMIN_USER.password
@@ -51,14 +47,12 @@ const handleLogin = async () => {
             localStorage.setItem('username', ADMIN_USER.username);
             toast.success('Test Admin Login successful.');
             
-            // Redirect to Admin Dashboard
             router.push({ name: 'admin-dashboard-profile' });
             
             isLoading.value = false;
             return;
         }
 
-        // CHECK FOR STAFF MATCH
         else if (
             credentials.value.username === STAFF_USER.username &&
             credentials.value.password === STAFF_USER.password
@@ -67,14 +61,12 @@ const handleLogin = async () => {
             localStorage.setItem('username', STAFF_USER.username);
             toast.success('Staff Login successful.');
             
-            // Redirect to Staff Orders
             router.push({ name: 'staff-dashboard-legacy' });
             
             isLoading.value = false;
             return;
         } 
         
-        // INVALID TEST CREDENTIALS
         else if (credentials.value.username && credentials.value.password) {
             toast.error('Invalid Test Credentials. Try "testadmin" or "teststaff".');
             isLoading.value = false;
@@ -82,7 +74,6 @@ const handleLogin = async () => {
         }
     }
     
-    // --- 2. STANDARD API LOGIN (Real Backend) ---
     try {
         const response = await axios.post('http://localhost:3000/api/auth/login', {
             username: credentials.value.username,

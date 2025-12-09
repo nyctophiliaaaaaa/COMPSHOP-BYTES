@@ -6,21 +6,17 @@ import HeaderBar from '@/components/HeaderBar.vue'
 const router = useRouter()
 const route = useRoute()
 
-// Check payment method
 const isCod = computed(() => route.query.method === 'cod')
 const isCashless = computed(() => route.query.method === 'qrph' || route.query.method === 'cashless')
 
-// Get total from query
 const totalAmount = computed(() => parseFloat(route.query.total || 0).toFixed(2))
 
 onMounted(() => {
-  // Clear the cart on success (moved here to ensure it only clears if successful)
   const userId = localStorage.getItem('userId')
   const cartKey = userId ? `cart_${userId}` : 'myCart'
   localStorage.removeItem(cartKey)
   localStorage.removeItem('cartTotal')
 
-  // Auto-redirect to Dashboard after 5 seconds
   setTimeout(() => {
     router.push('/dashboard')
   }, 5000)
@@ -58,7 +54,7 @@ const goToDashboard = () => {
       </div>
 
       <button class="redirect-btn" @click="goToDashboard">
-        Go to Order Status
+        Back to Menu
       </button>
     </div>
   </div>
@@ -85,11 +81,10 @@ const goToDashboard = () => {
   border: 1px solid #ddd; 
 }
 
-/* Green Check for COD */
 .check-circle { 
   width: clamp(55px, 7vw, 90px); 
   height: clamp(55px, 7vw, 90px); 
-  background-color: #28a745; /* Green */
+  background-color: #28a745; 
   color: white; 
   border-radius: 50%; 
   display: flex; 
@@ -99,9 +94,8 @@ const goToDashboard = () => {
   margin: 0 auto clamp(1rem, 2vw, 1.8rem); 
 }
 
-/* Orange Hourglass for Cashless */
 .pending-icon {
-  background-color: #f59e0b; /* Orange */
+  background-color: #f59e0b;
 }
 
 h2 { 

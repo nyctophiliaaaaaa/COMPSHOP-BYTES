@@ -89,14 +89,12 @@ import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 import AdminSidebar from '@/components/AdminSidebar.vue';
 
-// STATE
-const categories = ref([]); // fetched from DB
-const products = ref([]);   // fetched from DB
-const activeTab = ref('');  // will default to first category
+const categories = ref([]); 
+const products = ref([]);  
+const activeTab = ref('');  
 const loading = ref(true);
 const isUpdating = ref(false);
 
-// MAPPER: Database ID -> Category Name
 const categoryMap = ref({});
 
 onMounted(async () => {
@@ -107,32 +105,26 @@ const fetchData = async () => {
     try {
         loading.value = true;
 
-        // 1. Fetch Categories
         const catRes = await axios.get('http://localhost:3000/api/categories');
         categories.value = catRes.data;
         
-        // Build the map (e.g. {1: 'Meals', 2: 'Noodles'})
         categories.value.forEach(cat => {
             categoryMap.value[cat.category_id] = cat.name;
         });
 
-        // Set default tab
         if (categories.value.length > 0) {
             activeTab.value = categories.value[0].name;
         }
 
-        // 2. Fetch Menu Items
         const menuRes = await axios.get('http://localhost:3000/api/menu');
         
-        // Transform DB data to UI data
         products.value = menuRes.data.map(item => ({
             id: item.item_id,
             name: item.name,
-            // Map the ID to the Name string using our map
             category: categoryMap.value[item.category_id] || 'Uncategorized', 
             price: item.price,
-            currentStock: item.stock, // from the new column we added
-            image_url: item.image_url // filename only (e.g. 'coke.png')
+            currentStock: item.stock, 
+            image_url: item.image_url 
         }));
 
     } catch (error) {
@@ -147,22 +139,17 @@ const filteredProducts = computed(() => {
     return products.value.filter(p => p.category === activeTab.value);
 });
 
-// REAL-TIME STOCK UPDATE
 const updateStock = async (product, change) => {
-    // Optimistic UI Update (Update screen instantly)
     const oldStock = product.currentStock;
     product.currentStock += change;
     isUpdating.value = true;
 
     try {
-        // Send to Backend
         await axios.patch(`http://localhost:3000/api/menu/${product.id}/stock`, {
             quantity: change
         });
-        // Success!
     } catch (error) {
         console.error("Stock update failed", error);
-        // Revert on failure
         product.currentStock = oldStock; 
         alert("Failed to save stock update.");
     } finally {
@@ -172,7 +159,6 @@ const updateStock = async (product, change) => {
 </script>
 
 <style scoped>
-/* Keeping your exact styles, they were good! */
 .kds-container {
     --color-dashboard-bg: #f5f5f5;
     --color-brand-primary: #ff724c;
@@ -207,7 +193,6 @@ const updateStock = async (product, change) => {
     overflow: hidden;
 }
 
-/* --- Tab Navigation Styles --- */
 .inventory-tabs {
     display: flex;
     border-bottom: 2px solid #f3f4f6;
@@ -277,7 +262,6 @@ const updateStock = async (product, change) => {
     color: var(--color-text-dark);
 }
 
-/* Product Info Column */
 .product-info {
     display: flex;
     align-items: center;
@@ -293,19 +277,17 @@ const updateStock = async (product, change) => {
     font-weight: 500;
 }
 
-/* Stock Status */
 .text-center {
     text-align: center;
 }
 .low-stock {
     font-weight: 700;
-    color: #dc3545; /* Red color for low stock */
+    color: #dc3545;
     padding: 0.2rem 0.5rem;
     background-color: #fce8e2;
     border-radius: 4px;
 }
 
-/* Stock Controls */
 .stock-controls {
     display: flex;
     align-items: center;

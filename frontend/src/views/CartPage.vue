@@ -19,7 +19,6 @@ onMounted(() => {
     cartItems.value = JSON.parse(storedCart);
   }
 
-  // Get the username from localStorage (saved during login)
   const currentUser = localStorage.getItem('username');
   
   if (currentUser) {
@@ -147,15 +146,12 @@ const handleCheckout = () => {
 </template>
 
 <style scoped>
-/* Responsive Cart Page */
 .cart-container {
   min-height: 100vh;
   background-color: #f0f2f5;
   font-family: var(--font-primary);
   font-size: var(--text-base);
 }
-
-/* header styles provided by HeaderBar component */
 
 .main-content {
   padding: clamp(1rem, 2.5vw, 2.5rem);
@@ -403,7 +399,6 @@ const handleCheckout = () => {
   color: #333; 
 }
 
-/* Responsive breakpoints */
 @media (max-width: 768px) {
   .cart-item-card {
     flex-direction: column;

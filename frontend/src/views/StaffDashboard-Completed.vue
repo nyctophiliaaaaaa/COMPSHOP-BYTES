@@ -88,7 +88,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
-import html2pdf from 'html2pdf.js'; // <--- IMPORT LIBRARY
+import html2pdf from 'html2pdf.js';
 
 const orders = ref([]);
 const showModal = ref(false);
@@ -111,17 +111,14 @@ const closeModal = () => {
     selectedOrder.value = null;
 };
 
-// 🟢 UPDATED PDF FUNCTION
 const downloadPDF = () => {
     const element = document.getElementById('receipt-content');
     
     const opt = {
-        margin:       0, // Set to 0 so we don't waste space
+        margin:       0, 
         filename:     `Receipt_Order_${selectedOrder.value.order_id}.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2, useCORS: true }, 
-        
-        // 🚨 CHANGE THIS LINE: Increased width from 80 to 105
         jsPDF:        { unit: 'mm', format: [105, 200], orientation: 'portrait' } 
     };
 
@@ -130,7 +127,6 @@ const downloadPDF = () => {
 </script>
 
 <style scoped>
-/* Main Layout Styles */
 .staff-wrapper { padding: 1.5rem; }
 .empty-state { text-align: center; padding: 2rem; color: #666; }
 .orders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
@@ -141,26 +137,22 @@ const downloadPDF = () => {
 .divider { border: none; border-top: 1px solid #e5e7eb; margin: 1rem 0; }
 .print-btn { margin-top: 1rem; width: 100%; padding: 0.8rem; background-color: #FDBF50; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; }
 
-/* === MODAL STYLES (The Overlay) === */
 .modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.7); 
     display: flex; flex-direction: column; 
-    justify-content: center; /* Center Vertically on Screen */
-    align-items: center;     /* Center Horizontally on Screen */
+    justify-content: center; 
+    align-items: center;    
     z-index: 9999;
 }
 
-/* === RECEIPT PAPER STYLES === */
 .receipt-paper {
     background: white; 
-    width: 320px; /* Fixed width for consistency */
+    width: 320px; 
     padding: 20px;
     font-family: 'Courier New', Courier, monospace; 
     box-shadow: 0 0 20px rgba(0,0,0,0.5);
     color: black;
-    
-    /* 🟢 CENTER IT AUTOMATICALLY */
     margin: 0 auto; 
 }
 
@@ -182,9 +174,8 @@ const downloadPDF = () => {
 .cancel-btn { padding: 10px 20px; background: #eee; border: none; cursor: pointer; border-radius: 5px; font-weight: bold; }
 .confirm-print-btn { padding: 10px 20px; background: #2d3446; color: white; border: none; cursor: pointer; border-radius: 5px; font-weight: bold; }
 
-/* === THE MAGIC PRINT CSS === */
 @media print {
-    body * { visibility: hidden; } /* Hide everything */
+    body * { visibility: hidden; } 
 
     .modal-overlay, .receipt-paper, .receipt-paper * {
         visibility: visible;
@@ -197,19 +188,15 @@ const downloadPDF = () => {
         width: 100%;
         height: 100%;
         background: none;
-        
-        /* 🟢 FORCE CENTER ALIGNMENT ON PAPER */
         display: flex;
         justify-content: center;
-        align-items: flex-start; /* Start at top of paper */
+        align-items: flex-start; 
         padding-top: 20px;
     }
 
     .receipt-paper {
         box-shadow: none;
-        border: 1px solid #ddd; /* Optional border for paper */
-        
-        /* 🟢 ENSURE IT STAYS CENTERED */
+        border: 1px solid #ddd; 
         margin: 0 auto; 
     }
 

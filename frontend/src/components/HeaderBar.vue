@@ -1,17 +1,18 @@
 <script setup>
 import { ref, computed } from 'vue' 
 import { useRouter } from 'vue-router'
-import axios from 'axios' // Keep axios imported for network calls if needed elsewhere
+import axios from 'axios' 
 import appLogo from '@/assets/logo.png'
 import OrderStatusPopup from '@/components/OrderStatus.vue'
 import ReviewModal from '@/components/ReviewModal.vue' 
+import { confirm } from '@/utils/toast.js'
 
 const router = useRouter()
 const showOrderStatus = ref(false)
 const showReviewModal = ref(false)
-const reviewOrderId = ref(null) // We set this to null
+const reviewOrderId = ref(null) 
 
-// Variables related to the ORDER STATUS POPUP (Kept for compatibility)
+
 const triggerReview = ref(0) 
 
 const toggleOrderStatus = () => { 
@@ -27,15 +28,23 @@ const toggleReviewModal = async () => {
         return;
     }
 
-    // Now that we confirmed the user is logged in, open the modal
+
     reviewOrderId.value = null; 
     showReviewModal.value = true;
 }
 
 const goToCart = () => { router.push('/cart') }
 
-const handleLogout = () => {
-  if(confirm('Are you sure you want to logout?')) {
+
+const handleLogout = async () => {
+  const confirmed = await confirm('Are you sure you want to log out?', {
+    title: 'Logout',
+    confirmText: 'Logout',
+    cancelText: 'Cancel',
+    type: 'warning'
+  })
+  
+  if (confirmed) {
     localStorage.removeItem('userRole')
     localStorage.removeItem('userId')
     localStorage.removeItem('username')
@@ -48,10 +57,9 @@ const stationName = computed(() => {
   return currentUser ? `Hi, ${currentUser}` : 'Guest'
 })
 
-// Handle successful submission from the ReviewModal
+
 const handleReviewDone = () => {
     showReviewModal.value = false;
-    // We don't need to refresh OrderStatus now since reviews are general
 }
 </script>
 

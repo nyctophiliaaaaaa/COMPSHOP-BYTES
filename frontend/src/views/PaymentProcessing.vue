@@ -10,7 +10,6 @@ const method = ref(route.query.method === 'maya' ? 'Maya' : 'GCash')
 
 onMounted(() => {
   setTimeout(() => {
-    // 🟢 FORWARD TOTAL TO SUCCESS PAGE
     router.push({ 
         path: '/payment-success', 
         query: { 
@@ -42,7 +41,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-/* Responsive Payment Processing Page */
 .process-container { 
   min-height: 100vh; 
   background-color: #f5f5f5; 
@@ -50,9 +48,6 @@ onMounted(() => {
   flex-direction: column;
   font-size: clamp(14px, 1vw + 10px, 16px);
 }
-
-.navbar { /* removed; HeaderBar provides header */ }
-.brand { /* removed; HeaderBar provides brand styles */ }
 
 .card { 
   background: white; 

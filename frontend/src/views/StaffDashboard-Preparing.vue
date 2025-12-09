@@ -1,6 +1,6 @@
 <template>
   <div class="staff-wrapper">
-    <h2 class="page-title">Kitchen (Preparing)</h2>
+    <h2 class="page-title">Preparing</h2>
 
     <div v-if="orders.length === 0" class="empty-state">
       <div class="empty-icon">👨‍🍳</div>
@@ -71,13 +71,11 @@ const fetchOrders = async () => {
   try {
     const response = await axios.get('http://localhost:3000/api/staff/orders/Preparing');
     
-    // Merge logic to keep checkbox state if order is already on screen
     const incomingOrders = response.data.map(newOrder => {
       const existingOrder = orders.value.find(o => o.order_id === newOrder.order_id);
       
       const mappedItems = newOrder.order_items ? newOrder.order_items.map((newItem, idx) => {
         let wasChecked = false;
-        // Try to preserve check state
         if (existingOrder && existingOrder.order_items[idx]) {
             wasChecked = existingOrder.order_items[idx].isChecked;
         }
@@ -103,7 +101,6 @@ const isOrderComplete = (order) => {
   return order.order_items.every(item => item.isChecked);
 };
 
-// Helper to get the note from the first item (since we save it globally)
 const getOrderNote = (order) => {
     if (order.order_items && order.order_items.length > 0) {
         return order.order_items[0].notes || '';
@@ -116,7 +113,6 @@ const markReady = async (orderId) => {
     await axios.patch(`http://localhost:3000/api/staff/orders/${orderId}/status`, {
       status: 'Ready'
     });
-    // Remove from UI instantly
     orders.value = orders.value.filter(o => o.order_id !== orderId);
   } catch (error) {
     alert("Error updating order.");
@@ -149,7 +145,6 @@ onUnmounted(() => clearInterval(pollingInterval));
 .card-items { padding: 1rem; flex-grow: 1; }
 .section-label { font-size: 0.8rem; color: #666; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: bold; }
 
-/* Checklist Styles */
 .checklist-item { display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #f0f0f0; cursor: pointer; transition: background 0.1s; }
 .checklist-item:last-child { border-bottom: none; }
 .checklist-item:hover { background-color: #f9f9f9; }

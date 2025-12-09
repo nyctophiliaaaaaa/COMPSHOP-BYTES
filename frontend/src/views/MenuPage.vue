@@ -1,4 +1,13 @@
 <script setup>
+import OrderStatus from '@/components/OrderStatus.vue';
+import { onMounted as onVueMounted, ref as vueRef } from 'vue';
+const showOrderStatusPopup = vueRef(false);
+onVueMounted(() => {
+  if (localStorage.getItem('showOrderStatusPopup') === 'true') {
+    showOrderStatusPopup.value = true;
+    localStorage.removeItem('showOrderStatusPopup');
+  }
+});
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import axios from 'axios';
@@ -98,6 +107,7 @@ const handleAddToCart = (item) => {
 <template>
   <div class="menu-container">
     <HeaderBar />
+    <OrderStatus v-if="showOrderStatusPopup" :isOpen="true" :autoMinimize="true" @close="showOrderStatusPopup = false" />
     
     <nav class="filter-bar">
       <div class="categories">

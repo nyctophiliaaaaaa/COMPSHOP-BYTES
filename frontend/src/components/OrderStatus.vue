@@ -3,10 +3,14 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import axios from 'axios';
 
 const props = defineProps({
-  isOpen: {
-    type: Boolean,
-    default: true
-  }
+    isOpen: {
+        type: Boolean,
+        default: true
+    },
+    autoMinimize: {
+        type: Boolean,
+        default: false
+    }
 });
 
 const emit = defineEmits(['close']);
@@ -85,8 +89,22 @@ const fetchOrders = async () => {
 };
 
 onMounted(() => {
-  fetchOrders();
-  polling = setInterval(fetchOrders, 2000); 
+    fetchOrders();
+    polling = setInterval(fetchOrders, 2000);
+    // If autoMinimize is true, show in center first then minimize after 5 seconds
+    if (props.autoMinimize) {
+        isMinimized.value = false;
+        setTimeout(() => {
+            isMinimized.value = true;
+        }, 5000);
+    } else {
+        // Auto-minimize after 5 seconds if not minimized
+        if (!isMinimized.value) {
+            setTimeout(() => {
+                isMinimized.value = true;
+            }, 5000);
+        }
+    }
 });
 
 onUnmounted(() => {

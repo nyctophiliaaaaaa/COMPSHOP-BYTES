@@ -18,11 +18,15 @@ onMounted(() => {
   localStorage.removeItem('cartTotal')
 
   setTimeout(() => {
+    // Set flag to show order status popup on menu page
+    localStorage.setItem('showOrderStatusPopup', 'true');
     router.push('/dashboard')
   }, 5000)
 })
 
 const goToDashboard = () => {
+  // Set flag to show order status popup on menu page
+  localStorage.setItem('showOrderStatusPopup', 'true');
   router.push('/dashboard')
 }
 </script>

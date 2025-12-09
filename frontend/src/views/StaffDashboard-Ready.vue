@@ -127,7 +127,10 @@ onUnmounted(() => {
     border-radius: 12px;
     border: 2px dashed #e5e7eb;
 }
-.empty-icon { font-size: 3rem; margin-bottom: 1rem; }
+.empty-icon { 
+  font-size: 3rem; 
+  margin-bottom: 1rem; 
+}
 
 
 .orders-grid { 
@@ -156,13 +159,39 @@ onUnmounted(() => {
     border-bottom: 1px solid #e5e7eb;
 }
 
-.header-id-station { display: flex; align-items: center; gap: 0.5rem; }
-.order-id { font-size: 1.1rem; font-weight: 800; color: #2d3446; }
-.order-station { font-size: 0.9rem; font-weight: 500; color: #555; }
+.header-id-station { 
+  display: flex; 
+  align-items: center; 
+  gap: 0.5rem; 
+}
 
-.header-time-name { text-align: right; }
-.order-time { font-size: 0.8rem; color: #666; display: block; }
-.order-total { font-size: 0.9rem; color: #10b981; font-weight: 700; }
+.order-id { 
+  font-size: 1.1rem; 
+  font-weight: 800; 
+  color: #2d3446; 
+}
+
+.order-station { 
+  font-size: 0.9rem; 
+  font-weight: 500; 
+  color: #555; 
+}
+
+.header-time-name { 
+  text-align: right;
+ }
+
+.order-time { 
+  font-size: 0.8rem; 
+  color: #666; 
+  display: block; 
+}
+
+.order-total { 
+  font-size: 0.9rem; 
+  color: #10b981; 
+  font-weight: 700; 
+}
 
 .card-items { 
     padding: 1rem; 
@@ -172,19 +201,49 @@ onUnmounted(() => {
     gap: 0.5rem; 
 }
 
-.item-row { display: flex; gap: 0.5rem; color: #444; }
-.item-qty { font-weight: 700; }
+.item-row { 
+  display: flex; 
+  gap: 0.5rem; 
+  color: #444; 
+}
 
-.divider { border: none; border-top: 1px solid #f0f0f0; margin: 0.5rem 0; }
+.item-qty { 
+  font-weight: 700; 
+}
 
-.status-row { display: flex; justify-content: space-between; font-size: 0.85rem; }
-.status-label { font-weight: 600; color: #6b7280; }
-.status-value { font-weight: 700; }
+.divider { 
+  border: none; 
+  border-top: 1px solid #f0f0f0; 
+  margin: 0.5rem 0; 
+}
 
-.ready-text { color: #10b981; }
-.unpaid-text { color: #ef4444; } 
+.status-row { 
+  display: flex; 
+  justify-content: space-between; 
+  font-size: 0.85rem; 
+}
 
-.card-action { padding: 0.75rem; border-top: 1px solid #f0f0f0; background-color: #fafafa; }
+.status-label { 
+  font-weight: 600; 
+  color: #6b7280; 
+}
+
+.status-value { 
+  font-weight: 700; 
+}
+
+.ready-text { 
+  color: #10b981;
+ }
+.unpaid-text { 
+  color: #ef4444; 
+} 
+
+.card-action { 
+  padding: 0.75rem; 
+  border-top: 1px solid #f0f0f0; 
+  background-color: #fafafa; 
+}
 
 .serve-btn {
     width: 100%; 
@@ -199,9 +258,24 @@ onUnmounted(() => {
     transition: background-color 0.15s ease-in-out;
 }
 
-.serve-btn:hover { background-color: #1f2937; }
+.serve-btn:hover { 
+  background-color: #1f2937; 
+}
 
-@media (max-width: 1024px) { .orders-grid { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 768px) { .orders-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 480px) { .orders-grid { grid-template-columns: 1fr; } }
+@media (max-width: 1024px) { 
+  .orders-grid { 
+    grid-template-columns: repeat(3, 1fr); 
+  } 
+}
+@media (max-width: 768px) { 
+  .orders-grid { 
+    grid-template-columns: repeat(2, 1fr); 
+  } 
+}
+
+@media (max-width: 480px) { 
+  .orders-grid { 
+    grid-template-columns: 1fr;
+  }
+}
 </style>

@@ -172,7 +172,9 @@ const openModal = (order) => {
   if (order.payment_method === 'Cash') {
     const received = order.cashReceived || 0;
     if (received < order.total_amount) {
-      emit('notify', { message: 'Insufficient payment amount!', type: 'error' });
+      emit('notify', { 
+        message: 'Insufficient payment amount!', type: 'error' 
+      });
       return;
     }
   }
@@ -226,14 +228,50 @@ onUnmounted(() => clearInterval(pollingInterval));
 </script>
 
 <style scoped>
-.staff-wrapper { padding: 1.5rem; }
-.orders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
-.order-card { background: white; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; }
+.staff-wrapper { 
+  padding: 1.5rem; 
+}
 
-.card-header { padding: 1rem; color: white; font-weight: bold; display: flex; align-items: center; justify-content: center; position: relative; }
-.header-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
-.bg-orange { background-color: #FF724C; }
-.bg-green { background-color: #10b981; }
+.orders-grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+  gap: 1.5rem; 
+}
+
+.order-card { 
+  background: white; 
+  border-radius: 8px; 
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+  overflow: hidden; 
+  display: flex; 
+  flex-direction: column; 
+}
+
+.card-header { 
+  padding: 1rem; 
+  color: white; 
+  font-weight: bold; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  position: relative; 
+}
+
+.header-left { 
+  display: flex; 
+  align-items: center; 
+  gap: 10px; 
+  flex-wrap: wrap; 
+  justify-content: center; 
+}
+
+.bg-orange { 
+  background-color: #FF724C; 
+}
+
+.bg-green { 
+  background-color: #10b981; 
+}
 
 .station-badge { 
     background-color: rgba(255, 255, 255, 0.25); 
@@ -245,58 +283,217 @@ onUnmounted(() => clearInterval(pollingInterval));
     white-space: nowrap;
 }
 
-.card-body { padding: 1.5rem; flex-grow: 1; }
-.customer-info p { margin: 5px 0; color: #444; }
+.card-body { 
+  padding: 1.5rem; 
+  flex-grow: 1; 
+}
 
-.items-list-container { background-color: #f9fafb; padding: 10px; border-radius: 6px; margin: 10px 0; border: 1px solid #eee; }
-.item-row { display: flex; font-size: 0.9rem; margin-bottom: 4px; }
-.item-qty { font-weight: bold; width: 30px; color: #2d3446; }
-.item-name { color: #555; }
+.customer-info p {
+   margin: 5px 0; 
+   color: #444; 
+  }
 
-.total-row { display: flex; justify-content: space-between; font-weight: 800; margin-top: 1rem; color: #2d3446; font-size: 1.1rem; }
-.divider { border: 0; border-top: 1px solid #eee; margin: 15px 0; }
+.items-list-container { 
+  background-color: #f9fafb; 
+  padding: 10px; 
+  border-radius: 6px; 
+  margin: 10px 0; 
+  border: 1px solid #eee; 
+}
 
-.input-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-.cash-input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 1.1rem; font-weight: bold; text-align: right; }
-.change-display { text-align: right; font-weight: bold; color: #888; margin-bottom: 15px; }
-.change-display.valid { color: #10b981; }
+.item-row { 
+  display: flex; 
+  font-size: 0.9rem; 
+  margin-bottom: 4px; 
+}
 
-.paid-badge { background: #d1fae5; color: #065f46; padding: 5px; text-align: center; font-weight: bold; border-radius: 4px; margin-bottom: 10px; }
+.item-qty { 
+  font-weight: bold; 
+  width: 30px; 
+  color: #2d3446; 
+}
 
-.action-btn { width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; color: white; font-size: 1rem; transition: background 0.2s; }
-.btn-cash { background-color: #2d3446; }
-.btn-cash:disabled { background-color: #ccc; cursor: not-allowed; }
-.btn-cash:hover:not(:disabled) { background-color: #1f2937; }
-.btn-serve { background-color: #10b981; }
-.btn-serve:hover { background-color: #059669; }
+.item-name { 
+  color: #555; 
+}
+
+.total-row { 
+  display: flex; 
+  justify-content: space-between; 
+  font-weight: 800; 
+  margin-top: 1rem; 
+  color: #2d3446; 
+  font-size: 1.1rem; 
+}
+
+.divider { 
+  border: 0; 
+  border-top: 1px solid #eee; 
+  margin: 15px 0; 
+}
+
+.input-row { 
+  display: flex; 
+  align-items: center; 
+  gap: 10px; 
+  margin-bottom: 10px; 
+}
+
+.cash-input { 
+  width: 100%; 
+  padding: 8px; 
+  border: 1px solid #ccc; 
+  border-radius: 4px; 
+  font-size: 1.1rem; 
+  font-weight: bold; 
+  text-align: right; 
+}
+
+.change-display { 
+  text-align: right; 
+  font-weight: bold; 
+  color: #888; 
+  margin-bottom: 
+  15px; 
+}
+
+.change-display.valid { 
+  color: #10b981; 
+}
+
+.paid-badge { 
+  background: #d1fae5; 
+  color: #065f46; 
+  padding: 5px; 
+  text-align: center; 
+  font-weight: bold; 
+  border-radius: 4px; 
+  margin-bottom: 10px; 
+}
+
+.action-btn { 
+  width: 100%; 
+  padding: 12px; 
+  border: none; 
+  border-radius: 6px; 
+  font-weight: bold; 
+  cursor: pointer; 
+  color: white; 
+  font-size: 1rem; 
+  transition: background 0.2s; 
+}
+
+.btn-cash { 
+  background-color: #2d3446; 
+}
+
+.btn-cash:disabled { 
+  background-color: #ccc; 
+  cursor: not-allowed; 
+}
+
+.btn-cash:hover:not(:disabled) { 
+  background-color: #1f2937; 
+}
+
+.btn-serve { 
+  background-color: #10b981; 
+}
+
+.btn-serve:hover { 
+  background-color: #059669; 
+}
 
 .modal-overlay {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  display: flex; justify-content: center; align-items: center;
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
   z-index: 10000;
 }
+
 .modal-content {
-  background: white; padding: 2rem; border-radius: 12px;
-  width: 90%; max-width: 400px; text-align: center;
+  background: white; 
+  padding: 2rem; 
+  border-radius: 12px;
+  width: 90%; 
+  max-width: 400px; 
+  text-align: center;
   box-shadow: 0 4px 20px rgba(0,0,0,0.2);
   animation: popIn 0.2s ease-out;
 }
-.modal-content h3 { margin-top: 0; color: #2d3748; }
-.modal-body { margin: 1.5rem 0; color: #4a5568; }
 
-.summary-box { background: #edf2f7; padding: 1rem; border-radius: 8px; margin-top: 1rem; }
-.summary-box .row { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
-.summary-box .change { color: #38a169; border-top: 1px solid #cbd5e0; padding-top: 0.5rem; margin-top: 0.5rem; font-size: 1.1rem; }
+.modal-content h3 { 
+  margin-top: 0; 
+  color: #2d3748; 
+}
 
-.modal-actions { display: flex; gap: 1rem; justify-content: center; margin-top: 1.5rem; }
+.modal-body { 
+  margin: 1.5rem 0; 
+  color: #4a5568; 
+}
 
-.btn-cancel { padding: 0.75rem 1.5rem; background: #e2e8f0; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; color: #4a5568; }
-.btn-confirm-action { padding: 0.75rem 1.5rem; background: #2d3446; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; color: white; }
-.btn-confirm-action:hover { background: #1f2937; transform: scale(1.02); }
+.summary-box { 
+  background: #edf2f7; 
+  padding: 1rem; 
+  border-radius: 8px; 
+  margin-top: 1rem; 
+}
+
+.summary-box .row { 
+  display: flex; 
+  justify-content: space-between; 
+  margin-bottom: 0.5rem; 
+}
+
+.summary-box .change { 
+  color: #38a169; 
+  border-top: 1px solid #cbd5e0; 
+  padding-top: 0.5rem; 
+  margin-top: 0.5rem; 
+  font-size: 1.1rem; 
+}
+
+.modal-actions { 
+  display: flex; 
+  gap: 1rem; 
+  justify-content: center; 
+  margin-top: 1.5rem; 
+}
+
+.btn-cancel { 
+  padding: 0.75rem 1.5rem; 
+  background: #e2e8f0; 
+  border: none; 
+  border-radius: 6px; 
+  cursor: pointer; 
+  font-weight: 600; 
+  color: #4a5568; 
+}
+
+.btn-confirm-action { 
+  padding: 0.75rem 1.5rem; 
+  background: #2d3446; 
+  border: none; 
+  border-radius: 6px; 
+  cursor: pointer; 
+  font-weight: 600; 
+  color: white; 
+}
+
+.btn-confirm-action:hover { 
+  background: #1f2937; 
+  transform: scale(1.02); 
+}
 
 @keyframes popIn {
-  from { transform: scale(0.9); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  from { 
+    transform: scale(0.9); opacity: 0; 
+  }
+
+  to { 
+    transform: scale(1); opacity: 1; 
+  }
 }
 </style>

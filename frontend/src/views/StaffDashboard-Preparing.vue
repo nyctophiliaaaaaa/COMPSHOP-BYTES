@@ -130,37 +130,174 @@ onUnmounted(() => clearInterval(pollingInterval));
 </script>
 
 <style scoped>
-.staff-wrapper { padding: 1.5rem; }
-.page-title { font-size: 1.5rem; color: #2d3446; margin-bottom: 1rem; }
-.empty-state { text-align: center; padding: 3rem; color: #888; background: #f9fafb; border-radius: 8px; }
-.empty-icon { font-size: 3rem; margin-bottom: 10px; }
+.staff-wrapper { 
+  padding: 1.5rem; 
+}
 
-.orders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
-.order-card { background: white; border-radius: 0.5rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); overflow: hidden; border-left: 5px solid #3b82f6; display: flex; flex-direction: column; }
+.page-title { 
+  font-size: 1.5rem; 
+  color: #2d3446; 
+  margin-bottom: 1rem; 
+}
 
-.card-header { display: flex; justify-content: space-between; padding: 0.75rem; background-color: #3b82f6; color: white; font-weight: bold; align-items: center; }
-.order-id { font-size: 1.1rem; }
-.station-badge { background: rgba(0,0,0,0.2); padding: 2px 8px; border-radius: 12px; font-size: 0.9rem; margin-left: 8px; }
+.empty-state { 
+  text-align: center; 
+  padding: 3rem; 
+  color: #888; 
+  background: #f9fafb; 
+  border-radius: 8px; 
+}
 
-.card-items { padding: 1rem; flex-grow: 1; }
-.section-label { font-size: 0.8rem; color: #666; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: bold; }
+.empty-icon { 
+  font-size: 3rem; 
+  margin-bottom: 10px; 
+}
 
-.checklist-item { display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #f0f0f0; cursor: pointer; transition: background 0.1s; }
-.checklist-item:last-child { border-bottom: none; }
-.checklist-item:hover { background-color: #f9f9f9; }
-.checklist-item.checked { background-color: #f0fdf4; }
-.checklist-item.checked .item-name { text-decoration: line-through; color: #aaa; }
+.orders-grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fill, 
+  minmax(300px, 1fr)); 
+  gap: 1.5rem; 
+}
 
-.checkbox { width: 24px; height: 24px; border: 2px solid #ddd; border-radius: 4px; margin-right: 12px; display: flex; align-items: center; justify-content: center; background: white; flex-shrink: 0; }
-.checklist-item.checked .checkbox { background-color: #10b981; border-color: #10b981; color: white; font-size: 14px; }
+.order-card { 
+  background: white; 
+  border-radius: 0.5rem; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  overflow: hidden; border-left: 5px solid #3b82f6; 
+  display: flex; 
+  flex-direction: column; 
+}
 
-.item-details { display: flex; flex-direction: column; }
-.qty { font-weight: 800; color: #2d3446; margin-right: 5px; }
+.card-header { 
+  display: flex; 
+  justify-content: space-between; 
+  padding: 0.75rem; 
+  background-color: #3b82f6; 
+  color: white; 
+  font-weight: bold; 
+  align-items: center; 
+}
 
-.order-note-box { background-color: #fffbeb; border: 1px solid #fcd34d; color: #92400e; padding: 10px; margin: 0 1rem 1rem 1rem; border-radius: 6px; font-size: 0.9rem; font-style: italic; }
+.order-id { 
+  font-size: 1.1rem; 
+}
 
-.card-action { padding: 0.75rem; border-top: 1px solid #eee; background: #fafafa; }
-.done-btn { width: 100%; padding: 0.8rem; font-weight: 700; border-radius: 0.375rem; color: white; background-color: #10b981; border: none; cursor: pointer; transition: 0.2s; }
-.done-btn:hover { background-color: #059669; }
-.done-btn.disabled { background-color: #e5e7eb; color: #9ca3af; cursor: not-allowed; }
+.station-badge { 
+  background: rgba(0,0,0,0.2); 
+  padding: 2px 8px; 
+  border-radius: 12px; 
+  font-size: 0.9rem; 
+  margin-left: 8px; 
+}
+
+.card-items { 
+  padding: 1rem; 
+  flex-grow: 1; 
+}
+
+.section-label { 
+  font-size: 0.8rem; 
+  color: #666; 
+  margin-bottom: 0.5rem; 
+  text-transform: uppercase; 
+  letter-spacing: 0.5px; 
+  font-weight: bold; 
+}
+
+.checklist-item { 
+  display: flex; 
+  align-items: center; 
+  padding: 10px; 
+  border-bottom: 1px solid #f0f0f0; 
+  cursor: pointer; 
+  transition: background 0.1s; 
+}
+
+.checklist-item:last-child { 
+  border-bottom: none; 
+}
+
+.checklist-item:hover { 
+  background-color: #f9f9f9; 
+}
+
+.checklist-item.checked { 
+  background-color: #f0fdf4; 
+}
+
+.checklist-item.checked .item-name { 
+  text-decoration: line-through; 
+  color: #aaa; 
+}
+
+.checkbox { 
+  width: 24px; 
+  height: 24px; 
+  border: 2px solid #ddd; 
+  border-radius: 4px; 
+  margin-right: 12px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  background: white; 
+  flex-shrink: 0; 
+}
+
+.checklist-item.checked .checkbox { 
+  background-color: #10b981; 
+  border-color: #10b981; 
+  color: white; 
+  font-size: 14px; 
+}
+
+.item-details { 
+  display: flex; 
+  flex-direction: column; 
+}
+.qty { 
+  font-weight: 800; 
+  color: #2d3446; 
+  margin-right: 5px; 
+}
+
+.order-note-box { 
+  background-color: #fffbeb; 
+  border: 1px solid #fcd34d; 
+  color: #92400e; 
+  padding: 10px; 
+  margin: 0 1rem 1rem 1rem; 
+  border-radius: 6px; 
+  font-size: 0.9rem; 
+  font-style: italic; 
+}
+
+.card-action { 
+  padding: 0.75rem; 
+  border-top: 1px solid #eee; 
+  background: #fafafa; 
+}
+
+.done-btn { 
+  width: 100%; 
+  padding: 0.8rem; 
+  font-weight: 700; 
+  border-radius: 0.375rem; 
+  color: white; 
+  background-color: #10b981; 
+  border: none; 
+  cursor: pointer; 
+  transition: 0.2s; 
+}
+
+.done-btn:hover { 
+  background-color: #059669; 
+}
+
+.done-btn.disabled { 
+  background-color: #e5e7eb; 
+  color: #9ca3af; 
+  cursor: not-allowed; 
+  }
+  
 </style>

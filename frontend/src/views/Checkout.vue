@@ -39,7 +39,7 @@ const total = computed(() => subtotal.value + serviceFee + tax)
 
 const handlePlaceOrder = async () => {
     if (!form.value.name || !form.value.stationNumber) {
-        toast.warning('Please fill in your name and station number.')
+        toast.warning('Please fill in your station number.')
         return
     }
 
